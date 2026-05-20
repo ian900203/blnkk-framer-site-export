@@ -4,10 +4,12 @@ This repository is a migration snapshot of the current BLNKK Framer website.
 
 It preserves the live Framer-rendered HTML for the first four priority pages:
 
-- `pages/home/index.html` from `https://www.blnkk.biz/`
-- `pages/tw/index.html` from `https://www.blnkk.biz/tw`
-- `pages/csa/index.html` from `https://www.blnkk.biz/csa`
-- `pages/protocol/index.html` from `https://www.blnkk.biz/protocol`
+- `home.html` from `https://www.blnkk.biz/`
+- `tw.html` from `https://www.blnkk.biz/tw`
+- `csa.html` from `https://www.blnkk.biz/csa`
+- `protocol.html` from `https://www.blnkk.biz/protocol`
+
+The original local export also keeps a folder-based layout under `pages/*/index.html`; `pages/home/index.html` has already been added on GitHub as a nested example.
 
 ## Purpose
 
@@ -17,9 +19,9 @@ This is not yet a rebuilt app. The exported files are live-site captures that pr
 
 ## Snapshot Files
 
-- `manifest.json`: URL, local file path, byte size, SHA-256, and key marker counts for each page.
-- `pages/*/index.html`: raw captured HTML for each live page.
-- `docs/framer-custom-code-notes.md`: notes about the Home/CSA custom-code issue fixed before this export.
+- `manifest.json`: URL, local capture path, byte size, SHA-256, and key marker counts for each page.
+- `home.html`, `tw.html`, `csa.html`, `protocol.html`: raw captured HTML for each live page.
+- `framer-custom-code-notes.md`: notes about the Home/CSA custom-code issue fixed before this export.
 
 ## Recommended Next Step
 
