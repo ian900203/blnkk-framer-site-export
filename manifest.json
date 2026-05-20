@@ -1,0 +1,87 @@
+{
+  "snapshot_created_at_utc": "2026-05-20T19:57:40Z",
+  "source": "Framer live site",
+  "domain": "https://www.blnkk.biz",
+  "pages": [
+    {
+      "name": "home",
+      "path": "/",
+      "url": "https://www.blnkk.biz/",
+      "file": "pages/home/index.html",
+      "bytes": 158259,
+      "sha256": "fc1765e0d38e046c9ecf45b7a6a508d84736f13ff1294c226798044771ea8590",
+      "marker_counts": {
+        "SPECIFY. SCREEN. SOURCE.": 1,
+        "BLNKK BUYER INTAKE": 1,
+        "Non-PRC / NDAA-Aware Supplier Matching": 1,
+        "Frequently Asked Questions": 0,
+        "NDAA 889 READY": 1,
+        "CSA": 5,
+        "Protocol": 0,
+        "blnkk-home-hide-csa": 0,
+        "display\\\",\\\"none": 0,
+        "height\\\",\\\"0": 0
+      }
+    },
+    {
+      "name": "tw",
+      "path": "/tw",
+      "url": "https://www.blnkk.biz/tw",
+      "file": "pages/tw/index.html",
+      "bytes": 151753,
+      "sha256": "eaf31385125a483a8cde0cfb4e37434011a4c3d8df1a943372031dc5c84ef6bb",
+      "marker_counts": {
+        "SPECIFY. SCREEN. SOURCE.": 0,
+        "BLNKK BUYER INTAKE": 0,
+        "Non-PRC / NDAA-Aware Supplier Matching": 0,
+        "Frequently Asked Questions": 0,
+        "NDAA 889 READY": 1,
+        "CSA": 5,
+        "Protocol": 0,
+        "blnkk-home-hide-csa": 0,
+        "display\\\",\\\"none": 0,
+        "height\\\",\\\"0": 0
+      }
+    },
+    {
+      "name": "csa",
+      "path": "/csa",
+      "url": "https://www.blnkk.biz/csa",
+      "file": "pages/csa/index.html",
+      "bytes": 135865,
+      "sha256": "b4600a67e53b71df7ed9b8e2496562ad2b9de27a40404183faeb2476d8b209dc",
+      "marker_counts": {
+        "SPECIFY. SCREEN. SOURCE.": 0,
+        "BLNKK BUYER INTAKE": 0,
+        "Non-PRC / NDAA-Aware Supplier Matching": 0,
+        "Frequently Asked Questions": 0,
+        "NDAA 889 READY": 0,
+        "CSA": 13,
+        "Protocol": 0,
+        "blnkk-home-hide-csa": 4,
+        "display\\\",\\\"none": 0,
+        "height\\\",\\\"0": 0
+      }
+    },
+    {
+      "name": "protocol",
+      "path": "/protocol",
+      "url": "https://www.blnkk.biz/protocol",
+      "file": "pages/protocol/index.html",
+      "bytes": 100269,
+      "sha256": "4ac631e9e8d3483be4cb3ab1e3f83fe005d255c72127c8c21496e81859200e58",
+      "marker_counts": {
+        "SPECIFY. SCREEN. SOURCE.": 0,
+        "BLNKK BUYER INTAKE": 0,
+        "Non-PRC / NDAA-Aware Supplier Matching": 0,
+        "Frequently Asked Questions": 0,
+        "NDAA 889 READY": 1,
+        "CSA": 5,
+        "Protocol": 0,
+        "blnkk-home-hide-csa": 0,
+        "display\\\",\\\"none": 0,
+        "height\\\",\\\"0": 0
+      }
+    }
+  ]
+}
