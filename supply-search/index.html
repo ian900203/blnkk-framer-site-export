@@ -174,6 +174,12 @@
       background: #111827;
     }
 
+    .button.cta-primary {
+      min-height: 54px;
+      padding-inline: 24px;
+      font-size: 15px;
+    }
+
     .hero-inner {
       position: relative;
       z-index: 1;
@@ -426,6 +432,32 @@
     .workspace:hover {
       transform: translateY(-2px);
       box-shadow: 0 30px 80px rgba(9, 15, 31, .12);
+    }
+
+    .workspace-cta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-top: 22px;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 12px 34px rgba(9, 15, 31, .055);
+    }
+
+    .workspace-cta p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .workspace-cta strong {
+      display: block;
+      color: var(--ink);
+      font-size: 16px;
     }
 
     .workspace-top {
@@ -702,11 +734,12 @@
       justify-content: space-between;
       align-items: center;
       gap: 28px;
-      padding: 34px;
-      border: 1px solid var(--line);
+      padding: clamp(30px, 5vw, 56px);
+      border: 1px solid rgba(255, 255, 255, .12);
       border-radius: 8px;
-      background: #fff;
-      box-shadow: var(--shadow);
+      color: #fff;
+      background: var(--ink);
+      box-shadow: 0 30px 90px rgba(9, 15, 31, .18);
     }
 
     .cta h2 {
@@ -718,8 +751,29 @@
     .cta p {
       margin: 14px 0 0;
       max-width: 680px;
-      color: var(--muted);
+      color: rgba(255, 255, 255, .74);
       line-height: 1.65;
+    }
+
+    .cta .kicker {
+      color: #93c5fd;
+    }
+
+    .cta-actions {
+      display: grid;
+      gap: 10px;
+      min-width: 230px;
+    }
+
+    .cta-actions .button.primary {
+      min-height: 56px;
+      font-size: 15px;
+    }
+
+    .cta-note {
+      color: rgba(255, 255, 255, .58);
+      font-size: 13px;
+      text-align: center;
     }
 
     footer {
@@ -777,6 +831,7 @@
 
       .hero-actions,
       .cta,
+      .workspace-cta,
       .footer-inner,
       .workspace-top {
         align-items: stretch;
@@ -909,10 +964,9 @@
         <img class="logo-name" src="https://framerusercontent.com/images/UrrwUbK41hrsjeYDyQOYXxbrZPQ.png?width=2045&amp;height=444" alt="BLNKK">
       </a>
       <div class="nav-links">
-        <a href="#how">How it works</a>
         <a href="#workspace">Workspace</a>
         <a href="#model">Score model</a>
-        <a class="button" href="/csa.html">Open workspace</a>
+        <a class="button" href="/csa.html">Start search</a>
       </div>
     </nav>
 
@@ -925,7 +979,7 @@
         then help you choose who to meet.
       </p>
       <div class="hero-actions">
-        <a class="button primary" href="/csa.html">Start sourcing</a>
+        <a class="button primary cta-primary" href="/csa.html">Start supplier search</a>
         <a class="button" href="#workspace">See the workspace</a>
       </div>
       <div class="tags" aria-label="Key points">
@@ -962,40 +1016,6 @@
   </section>
 
   <main>
-    <section class="section snap-panel" id="how">
-      <div class="section-head">
-        <div class="kicker">How It Works</div>
-        <h2>A sourcing team with an AI front door.</h2>
-        <p>
-          The first product should not feel like a passive directory. It should feel like a
-          reviewed sourcing workflow that starts moving as soon as the buyer submits a brief.
-        </p>
-      </div>
-      <div class="steps">
-        <article class="step">
-          <div class="step-num">1</div>
-          <div>
-            <h3>Brief once</h3>
-            <p>Capture component type, specs, MOQ, certifications, timeline, excluded regions, and NDA needs in one guided intake.</p>
-          </div>
-        </article>
-        <article class="step">
-          <div class="step-num">2</div>
-          <div>
-            <h3>Source and score</h3>
-            <p>Search BLNKK records, supplier websites, public certificates, trade signals, and substitute categories in parallel.</p>
-          </div>
-        </article>
-        <article class="step">
-          <div class="step-num">3</div>
-          <div>
-            <h3>Review, then meet</h3>
-            <p>BLNKK reviews the match logic, gates sensitive data, and turns the shortlist into warm supplier outreach.</p>
-          </div>
-        </article>
-      </div>
-    </section>
-
     <section class="workspace-band snap-panel" id="workspace">
       <div class="section">
         <div class="section-head">
@@ -1085,6 +1105,13 @@
             </aside>
           </div>
         </div>
+        <div class="workspace-cta">
+          <p>
+            <strong>Already know the part or subsystem?</strong>
+            Start with a brief and let BLNKK narrow the supplier path.
+          </p>
+          <a class="button dark" href="/csa.html">Start supplier search</a>
+        </div>
       </div>
     </section>
 
@@ -1117,75 +1144,19 @@
     </section>
 
     <section class="section snap-panel">
-      <div class="price">
-        <div>
-          <div class="kicker">Commercial MVP</div>
-          <h2>Charge for reviewed supplier outcomes, not software seats.</h2>
-          <p>
-            Keep the first version service-led. Buyers submit briefs with low friction, then
-            BLNKK monetizes reviewed shortlist packages, warm introductions, or ongoing sourcing retainers.
-          </p>
-        </div>
-        <div class="pricing-row">
-          <div class="pricing-chip">
-            <strong>Free brief</strong>
-            <span>Capture demand and qualify buyer intent.</span>
-          </div>
-          <div class="pricing-chip">
-            <strong>Reviewed shortlist</strong>
-            <span>Paid once BLNKK validates matches.</span>
-          </div>
-          <div class="pricing-chip">
-            <strong>Warm intro</strong>
-            <span>Optional success or project fee.</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section snap-panel" id="faq">
-      <div class="section-head">
-        <div class="kicker">Buyer Questions</div>
-        <h2>FAQ for the first public version.</h2>
-      </div>
-      <div class="faq-grid">
-        <article class="faq">
-          <h3>What can BLNKK source?</h3>
-          <p>Electronics, subsystems, EMS and PCBA, batteries, RF, mechanical parts, and manufacturing capabilities where Taiwan suppliers are a strong fit.</p>
-        </article>
-        <article class="faq">
-          <h3>How are suppliers verified?</h3>
-          <p>The AI gathers signals, then BLNKK reviews ownership, capability fit, public evidence, and sensitivity before introductions.</p>
-        </article>
-        <article class="faq">
-          <h3>What happens to confidential details?</h3>
-          <p>Buyer-sensitive fields stay gated until BLNKK approves the disclosure path and the buyer chooses to move forward.</p>
-        </article>
-        <article class="faq">
-          <h3>How fast is the first shortlist?</h3>
-          <p>The MVP target is first signals within 48 hours after the brief is complete, with deeper verification available as a paid review.</p>
-        </article>
-        <article class="faq">
-          <h3>Is this Taiwan-only?</h3>
-          <p>Taiwan is the starting wedge. The same workflow can expand to trusted allied supplier markets as the dataset grows.</p>
-        </article>
-        <article class="faq">
-          <h3>What happens after the shortlist?</h3>
-          <p>The buyer chooses who they want to meet. BLNKK reviews the path and helps turn qualified matches into supplier conversations.</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="section snap-panel">
       <div class="cta">
         <div>
-          <h2>Tell BLNKK the part. Get a reviewed supplier path.</h2>
+          <div class="kicker">Ready To Source</div>
+          <h2>Tell BLNKK the part. We will help find who to meet.</h2>
           <p>
-            Start with a clear buyer brief, then move into the Supply Search workspace where
-            AI matching and BLNKK review turn supplier signals into next steps.
+            Brief once. BLNKK searches the database, checks supplier signals, gates sensitive
+            details, and turns the shortlist into reviewed supplier conversations.
           </p>
         </div>
-        <a class="button dark" href="/csa.html">Open workspace</a>
+        <div class="cta-actions">
+          <a class="button primary" href="/csa.html">Start supplier search</a>
+          <span class="cta-note">Begin with a part, subsystem, or manufacturing need.</span>
+        </div>
       </div>
     </section>
   </main>
@@ -1263,7 +1234,7 @@
       metricValues.forEach(prepareMetric);
 
       const targets = document.querySelectorAll(
-        ".metrics-head, .proof-item, .section-head, .step, .workspace, .model-card, .price, .faq, .cta"
+        ".metrics-head, .proof-item, .section-head, .workspace, .workspace-cta, .model-card, .cta"
       );
 
       const observer = new IntersectionObserver((entries) => {
