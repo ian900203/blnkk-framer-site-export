@@ -1249,6 +1249,17 @@
         metricValues.forEach((metric, index) => animateMetric(metric, 220 + index * 180));
       };
 
+      const metricsAreInFocus = () => {
+        if (!metricsPanel) return false;
+        const rect = metricsPanel.getBoundingClientRect();
+        return rect.top < window.innerHeight * .66 && rect.bottom > window.innerHeight * .34;
+      };
+
+      const scheduleMetricSequence = () => {
+        if (metricsStarted || !metricsAreInFocus()) return;
+        setTimeout(runMetricSequence, 260);
+      };
+
       metricValues.forEach(prepareMetric);
 
       const targets = document.querySelectorAll(
@@ -1284,12 +1295,15 @@
 
       const metricsObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting || entry.intersectionRatio < .78) return;
-          setTimeout(runMetricSequence, 260);
+          if (!entry.isIntersecting) return;
+          scheduleMetricSequence();
         });
-      }, { threshold: [.78] });
+      }, { threshold: [.18, .34, .5] });
 
       if (metricsPanel) metricsObserver.observe(metricsPanel);
+      window.addEventListener("scroll", scheduleMetricSequence, { passive: true });
+      window.addEventListener("resize", scheduleMetricSequence);
+      scheduleMetricSequence();
     })();
   </script>
 </body>
