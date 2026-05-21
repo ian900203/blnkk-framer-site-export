@@ -29,6 +29,12 @@
       scroll-snap-type: y mandatory;
     }
 
+    @media (min-width: 900px) and (pointer: fine) {
+      html {
+        scroll-snap-type: none;
+      }
+    }
+
     body {
       margin: 0;
       color: var(--ink);
@@ -1319,6 +1325,7 @@
         const startTop = window.scrollY;
         const distance = targetTop - startTop;
         if (Math.abs(distance) < 8) {
+          window.scrollTo(0, Math.round(targetTop));
           if (onDone) onDone();
           return;
         }
@@ -1332,6 +1339,7 @@
             snapFrame = requestAnimationFrame(step);
             return;
           }
+          window.scrollTo(0, Math.round(targetTop));
           if (onDone) onDone();
         };
 
@@ -1371,7 +1379,11 @@
           }, { panel: null, top: 0, distance: Infinity });
 
           if (nearest.panel && nearest.distance < window.innerHeight * .48) {
-            animateScrollTo(nearest.top);
+            isSnapping = true;
+            animateScrollTo(nearest.top, () => {
+              isSnapping = false;
+              lastSnapEnd = performance.now();
+            });
           }
         }, 90);
       }, { passive: true });
