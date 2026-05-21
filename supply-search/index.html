@@ -25,6 +25,10 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-snap-type: y proximity;
+    }
+
     body {
       margin: 0;
       color: var(--ink);
@@ -40,7 +44,7 @@
 
     .hero {
       position: relative;
-      min-height: 92vh;
+      min-height: 100svh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -219,7 +223,7 @@
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 1px;
       width: min(1160px, calc(100% - 40px));
-      margin: -66px auto 0;
+      margin: 0 auto;
       overflow: hidden;
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -235,7 +239,7 @@
     }
 
     .proof-item.is-visible {
-      animation: proofSnap .58s var(--motion) both;
+      animation: proofSnap .72s var(--motion) both;
     }
 
     .proof-item strong {
@@ -245,7 +249,7 @@
     }
 
     .proof-item.is-visible strong {
-      animation: metricPop .72s var(--motion) both;
+      animation: metricPop .86s var(--motion) both;
     }
 
     .proof-item span {
@@ -257,7 +261,38 @@
     }
 
     .section {
+      min-height: 100svh;
+      display: grid;
+      align-content: center;
       padding: 96px 0;
+    }
+
+    .snap-panel {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+
+    .metrics-panel {
+      min-height: 100svh;
+      display: grid;
+      align-content: center;
+      padding: 108px 0;
+      background:
+        radial-gradient(circle at 18% 16%, rgba(37, 99, 235, .08), transparent 28%),
+        var(--soft);
+    }
+
+    .metrics-head {
+      width: min(1160px, calc(100% - 40px));
+      margin: 0 auto 28px;
+    }
+
+    .metrics-head h2 {
+      max-width: 760px;
+      margin: 10px 0 0;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.02;
+      letter-spacing: 0;
     }
 
     .section-head {
@@ -707,7 +742,7 @@
       }
 
       .hero {
-        min-height: 860px;
+        min-height: 100svh;
         background:
           linear-gradient(180deg, rgba(9, 15, 31, .94), rgba(9, 15, 31, .78) 48%, rgba(9, 15, 31, .58)),
           var(--hero-image) 62% center / cover;
@@ -734,30 +769,36 @@
       }
 
       .section {
-        padding: 72px 0;
+        min-height: 100svh;
+        padding: 88px 0;
+      }
+
+      .metrics-panel {
+        min-height: 100svh;
+        padding: 88px 0;
       }
     }
 
     .reveal {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(38px) scale(.985);
     }
 
     .reveal.is-visible {
       opacity: 1;
-      transform: translateY(0);
-      transition: opacity .48s var(--motion), transform .48s var(--motion);
+      transform: translateY(0) scale(1);
+      transition: opacity .7s var(--motion), transform .7s var(--motion);
     }
 
     @keyframes proofSnap {
       0% {
         opacity: 0;
-        transform: translateY(22px) scale(.98);
+        transform: translateY(42px) scale(.96);
       }
 
-      62% {
+      58% {
         opacity: 1;
-        transform: translateY(-3px) scale(1.01);
+        transform: translateY(-8px) scale(1.025);
       }
 
       100% {
@@ -769,12 +810,12 @@
     @keyframes metricPop {
       0% {
         opacity: .35;
-        transform: translateY(8px) scale(.94);
+        transform: translateY(14px) scale(.9);
       }
 
-      70% {
+      68% {
         opacity: 1;
-        transform: translateY(-1px) scale(1.04);
+        transform: translateY(-3px) scale(1.08);
       }
 
       100% {
@@ -800,7 +841,7 @@
   </style>
 </head>
 <body>
-  <header class="hero">
+  <header class="hero snap-panel">
     <nav class="nav" aria-label="Primary">
       <a class="brand" href="/">
         <span class="mark" aria-hidden="true"></span>
@@ -834,27 +875,33 @@
     </div>
   </header>
 
-  <section class="proof" aria-label="BLNKK Supply Search proof points">
-    <div class="proof-item">
-      <strong class="metric-value" data-count-to="1303">1,303</strong>
-      <span>supplier records ready for AI-assisted matching</span>
+  <section class="metrics-panel snap-panel" aria-label="BLNKK Supply Search proof points">
+    <div class="metrics-head">
+      <div class="kicker">Supplier Signal Layer</div>
+      <h2>Start with the numbers that make the shortlist move.</h2>
     </div>
-    <div class="proof-item">
-      <strong class="metric-value" data-count-to="48" data-suffix="h">48h</strong>
-      <span>target time to first reviewed signal set</span>
-    </div>
-    <div class="proof-item">
-      <strong>NDA</strong>
-      <span>sensitive buyer information stays review-gated</span>
-    </div>
-    <div class="proof-item">
-      <strong class="metric-value" data-count-to="3" data-suffix="+">3+</strong>
-      <span>qualified supplier paths per validated brief</span>
+    <div class="proof">
+      <div class="proof-item">
+        <strong class="metric-value" data-count-to="1303">1,303</strong>
+        <span>supplier records ready for AI-assisted matching</span>
+      </div>
+      <div class="proof-item">
+        <strong class="metric-value" data-count-to="48" data-suffix="h">48h</strong>
+        <span>target time to first reviewed signal set</span>
+      </div>
+      <div class="proof-item">
+        <strong>NDA</strong>
+        <span>sensitive buyer information stays review-gated</span>
+      </div>
+      <div class="proof-item">
+        <strong class="metric-value" data-count-to="3" data-suffix="+">3+</strong>
+        <span>qualified supplier paths per validated brief</span>
+      </div>
     </div>
   </section>
 
   <main>
-    <section class="section" id="how">
+    <section class="section snap-panel" id="how">
       <div class="section-head">
         <div class="kicker">How It Works</div>
         <h2>A sourcing team with an AI front door.</h2>
@@ -888,7 +935,7 @@
       </div>
     </section>
 
-    <section class="workspace-band" id="workspace">
+    <section class="workspace-band snap-panel" id="workspace">
       <div class="section">
         <div class="section-head">
           <div class="kicker">Product Surface</div>
@@ -980,7 +1027,7 @@
       </div>
     </section>
 
-    <section class="section" id="model">
+    <section class="section snap-panel" id="model">
       <div class="section-head">
         <div class="kicker">Score Model</div>
         <h2>Turn supplier discovery into a reviewable shortlist.</h2>
@@ -1008,7 +1055,7 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="section snap-panel">
       <div class="price">
         <div>
           <div class="kicker">Commercial MVP</div>
@@ -1035,7 +1082,7 @@
       </div>
     </section>
 
-    <section class="section" id="faq">
+    <section class="section snap-panel" id="faq">
       <div class="section-head">
         <div class="kicker">Buyer Questions</div>
         <h2>FAQ for the first public version.</h2>
@@ -1068,7 +1115,7 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="section snap-panel">
       <div class="cta">
         <div>
           <h2>Tell BLNKK the part. Get a reviewed supplier path.</h2>
@@ -1126,30 +1173,81 @@
       };
 
       const targets = document.querySelectorAll(
-        ".proof-item, .section-head, .step, .workspace, .model-card, .price, .faq, .cta"
+        ".metrics-head, .proof-item, .section-head, .step, .workspace, .model-card, .price, .faq, .cta"
       );
 
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           entry.target.classList.add("is-visible");
-          animateMetric(entry.target.querySelector(".metric-value"));
+          const delay = Number(entry.target.dataset.revealDelay) || 0;
+          setTimeout(() => animateMetric(entry.target.querySelector(".metric-value")), delay);
           observer.unobserve(entry.target);
         });
       }, { threshold: 0.2, rootMargin: "0px 0px -28px 0px" });
 
       targets.forEach((node, index) => {
         node.classList.add("reveal");
-        node.style.transitionDelay = `${Math.min(index % 3, 2) * 70}ms`;
+        const siblingIndex = node.parentElement ? [...node.parentElement.children].indexOf(node) : index;
+        const delay = node.classList.contains("proof-item")
+          ? siblingIndex * 95
+          : Math.min(index % 3, 2) * 70;
+        node.dataset.revealDelay = String(delay);
+        node.style.transitionDelay = `${delay}ms`;
+        node.style.animationDelay = `${delay}ms`;
+        const metric = node.querySelector(".metric-value");
+        if (metric) metric.style.animationDelay = `${delay + 80}ms`;
         const rect = node.getBoundingClientRect();
         if (rect.top < window.innerHeight * .92) {
           node.classList.add("is-visible");
-          animateMetric(node.querySelector(".metric-value"));
+          setTimeout(() => animateMetric(node.querySelector(".metric-value")), delay);
           return;
         }
         prepareMetric(node.querySelector(".metric-value"));
         observer.observe(node);
       });
+
+      const canSnap = matchMedia("(min-width: 900px) and (pointer: fine)").matches;
+      if (!canSnap) return;
+
+      const panels = [...document.querySelectorAll(".snap-panel")];
+      let snapTimer = 0;
+
+      const easeInOutCubic = (t) => t < .5
+        ? 4 * t * t * t
+        : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+      const animateScrollTo = (targetTop) => {
+        const startTop = window.scrollY;
+        const distance = targetTop - startTop;
+        if (Math.abs(distance) < 18) return;
+        const duration = Math.min(760, Math.max(420, Math.abs(distance) * .48));
+        const start = performance.now();
+
+        const step = (now) => {
+          const progress = Math.min((now - start) / duration, 1);
+          window.scrollTo(0, startTop + distance * easeInOutCubic(progress));
+          if (progress < 1) requestAnimationFrame(step);
+        };
+
+        requestAnimationFrame(step);
+      };
+
+      window.addEventListener("scroll", () => {
+        clearTimeout(snapTimer);
+        snapTimer = setTimeout(() => {
+          const current = window.scrollY;
+          const nearest = panels.reduce((best, panel) => {
+            const top = panel.getBoundingClientRect().top + window.scrollY;
+            const distance = Math.abs(top - current);
+            return distance < best.distance ? { panel, top, distance } : best;
+          }, { panel: null, top: 0, distance: Infinity });
+
+          if (nearest.panel && nearest.distance < window.innerHeight * .34) {
+            animateScrollTo(nearest.top);
+          }
+        }, 90);
+      }, { passive: true });
     })();
   </script>
 </body>
