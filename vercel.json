@@ -1,0 +1,26 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/home.html"
+    },
+    {
+      "source": "/home",
+      "destination": "/home.html"
+    },
+    {
+      "source": "/tw",
+      "destination": "/tw.html"
+    },
+    {
+      "source": "/csa",
+      "destination": "/csa.html"
+    },
+    {
+      "source": "/protocol",
+      "destination": "/protocol.html"
+    }
+  ]
+}
