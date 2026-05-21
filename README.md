@@ -55,14 +55,16 @@ Set these in Vercel before treating Admin or form submission as production-ready
 - `SUPABASE_ANON_KEY`: public Supabase anon/publishable key for public read/RPC paths.
 - `SUPABASE_SERVICE_ROLE_KEY`: private server-only key for Admin summaries and buyer request inserts.
 - `BLNKK_ADMIN_TOKEN`: private password-like token entered in `/admin` before loading protected Admin data.
+- `GOOGLE_APPS_SCRIPT_URL`: private server-only Google Apps Script Web App URL used to mirror buyer intake submissions into Google Sheets.
 
 Never expose `SUPABASE_SERVICE_ROLE_KEY` in browser code or committed files.
+Never commit `GOOGLE_APPS_SCRIPT_URL`; keep it in Vercel Environment Variables.
 
 Current API routes:
 
 - `/api/health`: public Supabase connectivity check and safe public counts.
 - `/api/supplier-match`: public POST endpoint for supplier shortlist results.
-- `/api/buyer-requests`: public POST endpoint for CSA/Protocol intake submissions; server-side only.
+- `/api/buyer-requests`: public POST endpoint for CSA/Protocol intake submissions; server-side only. Inserts into Supabase first, then mirrors to Google Sheets when `GOOGLE_APPS_SCRIPT_URL` is configured.
 - `/api/admin-summary`: protected Admin summary; requires `Authorization: Bearer <BLNKK_ADMIN_TOKEN>`.
 - `/api/admin-settings`: protected Admin settings load/save; requires `Authorization: Bearer <BLNKK_ADMIN_TOKEN>`.
 
