@@ -12,6 +12,43 @@ function cleanText(value, maxLength = 4000) {
   return String(value || "").trim().slice(0, maxLength);
 }
 
+async function syncGoogleSheet(body, requestPayload, request) {
+  const url = process.env.GOOGLE_APPS_SCRIPT_URL;
+  if (!url) return { ok: false, skipped: true, reason: "GOOGLE_APPS_SCRIPT_URL is not configured." };
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ...body,
+      ...requestPayload,
+      source: "vercel_api",
+      supabase_buyer_request_id: request.id,
+      supabase_created_at: request.created_at,
+      supabase_status: request.status,
+    }),
+  });
+
+  const text = await response.text();
+  let data = null;
+  try {
+    data = text ? JSON.parse(text) : null;
+  } catch (_) {
+    data = text ? { text: text.slice(0, 500) } : null;
+  }
+
+  if (!response.ok) {
+    return {
+      ok: false,
+      status: response.status,
+      error: data?.error || data?.message || `Google Apps Script returned ${response.status}`,
+      data,
+    };
+  }
+
+  return { ok: true, status: response.status, data };
+}
+
 module.exports = async function handler(req, res) {
   if (allowCors(req, res)) return;
   if (req.method !== "POST") return sendJson(res, 405, { ok: false, error: "POST only." });
@@ -82,7 +119,17 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    sendJson(res, 200, { ok: true, data: request });
+    let googleSheet = { ok: false, skipped: true, reason: "Not attempted." };
+    try {
+      googleSheet = await syncGoogleSheet(body, requestPayload, request);
+    } catch (error) {
+      googleSheet = {
+        ok: false,
+        error: error.message || "Google Sheet sync failed.",
+      };
+    }
+
+    sendJson(res, 200, { ok: true, data: request, google_sheet: googleSheet });
   } catch (error) {
     handleError(res, error);
   }
