@@ -45,6 +45,26 @@ This is not yet a rebuilt app. The exported files are live-site captures that pr
 - `home.html`, `tw.html`, `csa.html`, `protocol.html`: raw captured HTML for each live page.
 - `framer-custom-code-notes.md`: notes about the Home/CSA custom-code issue fixed before this export.
 - `admin/index.html`: Admin v0 preview for launch readiness, CSA intake, matching review, and meeting pipeline planning.
+- `api/*`: Vercel API routes for Supabase health, supplier matching, buyer requests, and protected Admin data.
+
+## Supabase / Vercel Environment
+
+Set these in Vercel before treating Admin or form submission as production-ready:
+
+- `SUPABASE_URL`: `https://wldesafdtscwvaikpmkq.supabase.co`
+- `SUPABASE_ANON_KEY`: public Supabase anon/publishable key for public read/RPC paths.
+- `SUPABASE_SERVICE_ROLE_KEY`: private server-only key for Admin summaries and buyer request inserts.
+- `BLNKK_ADMIN_TOKEN`: private password-like token entered in `/admin` before loading protected Admin data.
+
+Never expose `SUPABASE_SERVICE_ROLE_KEY` in browser code or committed files.
+
+Current API routes:
+
+- `/api/health`: public Supabase connectivity check and safe public counts.
+- `/api/supplier-match`: public POST endpoint for supplier shortlist results.
+- `/api/buyer-requests`: public POST endpoint for CSA/Protocol intake submissions; server-side only.
+- `/api/admin-summary`: protected Admin summary; requires `Authorization: Bearer <BLNKK_ADMIN_TOKEN>`.
+- `/api/admin-settings`: protected Admin settings load/save; requires `Authorization: Bearer <BLNKK_ADMIN_TOKEN>`.
 
 ## Recommended Next Step
 
