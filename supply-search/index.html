@@ -7,25 +7,21 @@
   <meta name="description" content="BLNKK Supply Search helps UAS buyers brief, source, score, review, and meet qualified Taiwan supplier candidates.">
   <style>
     :root {
-      --ink: #0b1020;
-      --muted: #657083;
-      --line: #dfe5ec;
+      --ink: #090f1f;
+      --muted: #667085;
+      --line: #e5e7eb;
       --paper: #ffffff;
-      --soft: #f5f7fa;
+      --soft: #f6f7f9;
       --blue: #2563eb;
-      --green: #0f8a5f;
-      --lime: #c7f36b;
-      --cyan: #67d8ef;
-      --amber: #ffc857;
-      --shadow: 0 18px 60px rgba(11, 16, 32, .14);
+      --blue-soft: #eff6ff;
+      --blue-line: #bfdbfe;
+      --green: #047857;
+      --shadow: 0 22px 70px rgba(9, 15, 31, .10);
+      --motion: cubic-bezier(.2, .8, .2, 1);
     }
 
     * {
       box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
     }
 
     body {
@@ -49,8 +45,17 @@
       overflow: hidden;
       color: #fff;
       background:
-        linear-gradient(90deg, rgba(5, 10, 24, .88), rgba(5, 10, 24, .54) 52%, rgba(5, 10, 24, .2)),
+        linear-gradient(90deg, rgba(9, 15, 31, .88), rgba(9, 15, 31, .62) 55%, rgba(9, 15, 31, .18)),
         url("https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=2200&q=85") center / cover;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 68% 38%, rgba(255, 255, 255, .22), transparent 30%);
+      opacity: .55;
+      pointer-events: none;
     }
 
     .hero::after {
@@ -118,6 +123,14 @@
       color: #fff;
       background: rgba(255, 255, 255, .12);
       backdrop-filter: blur(12px);
+      transition: transform .2s var(--motion), background .2s var(--motion), border-color .2s var(--motion), box-shadow .2s var(--motion);
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255, 255, 255, .48);
+      background: rgba(255, 255, 255, .18);
+      box-shadow: 0 14px 34px rgba(9, 15, 31, .18);
     }
 
     .button.primary {
@@ -126,9 +139,17 @@
       border-color: #fff;
     }
 
+    .button.primary:hover {
+      background: #f8fafc;
+    }
+
     .button.dark {
       background: var(--ink);
       border-color: var(--ink);
+    }
+
+    .button.dark:hover {
+      background: #111827;
     }
 
     .hero-inner {
@@ -142,7 +163,7 @@
 
     .eyebrow,
     .kicker {
-      color: var(--lime);
+      color: #93c5fd;
       font-size: 12px;
       font-weight: 850;
       letter-spacing: .18em;
@@ -155,14 +176,16 @@
       font-size: clamp(48px, 8vw, 92px);
       line-height: .96;
       letter-spacing: 0;
+      animation: heroRise .58s var(--motion) both;
     }
 
     .hero-copy {
       max-width: 650px;
       margin: 28px 0 0;
-      color: rgba(255, 255, 255, .82);
+      color: rgba(255, 255, 255, .9);
       font-size: 19px;
       line-height: 1.65;
+      animation: heroRise .58s var(--motion) .05s both;
     }
 
     .hero-actions {
@@ -184,9 +207,10 @@
       border: 1px solid rgba(255, 255, 255, .28);
       border-radius: 999px;
       color: rgba(255, 255, 255, .82);
-      background: rgba(255, 255, 255, .09);
+      background: rgba(255, 255, 255, .08);
       font-size: 13px;
       font-weight: 700;
+      backdrop-filter: blur(12px);
     }
 
     .proof {
@@ -201,13 +225,14 @@
       border: 1px solid var(--line);
       border-radius: 8px;
       background: var(--line);
-      box-shadow: var(--shadow);
+      box-shadow: 0 24px 70px rgba(9, 15, 31, .12);
     }
 
     .proof-item {
       min-height: 132px;
       padding: 24px;
       background: #fff;
+      transition: transform .22s var(--motion), box-shadow .22s var(--motion);
     }
 
     .proof-item strong {
@@ -264,7 +289,20 @@
       border: 1px solid var(--line);
       border-radius: 8px;
       background: var(--paper);
-      box-shadow: 0 12px 34px rgba(11, 16, 32, .06);
+      box-shadow: 0 12px 34px rgba(9, 15, 31, .045);
+      transition: transform .22s var(--motion), box-shadow .22s var(--motion), border-color .22s var(--motion);
+    }
+
+    .proof-item:hover,
+    .step:hover,
+    .model-card:hover,
+    .faq:hover,
+    .pricing-chip:hover,
+    .supplier:hover,
+    .brief-item:hover {
+      transform: translateY(-3px);
+      border-color: #d1d5db;
+      box-shadow: 0 18px 48px rgba(9, 15, 31, .08);
     }
 
     .step {
@@ -281,8 +319,8 @@
       display: grid;
       place-items: center;
       border-radius: 8px;
-      color: var(--ink);
-      background: var(--lime);
+      color: var(--blue);
+      background: var(--blue-soft);
       font-weight: 900;
     }
 
@@ -313,6 +351,12 @@
       border-radius: 8px;
       background: #f8fafc;
       box-shadow: var(--shadow);
+      transition: transform .24s var(--motion), box-shadow .24s var(--motion);
+    }
+
+    .workspace:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 30px 80px rgba(9, 15, 31, .12);
     }
 
     .workspace-top {
@@ -383,7 +427,7 @@
       padding: 5px 8px;
       border-radius: 999px;
       color: var(--green);
-      background: #e8f8ef;
+      background: #ecfdf3;
       font-size: 11px;
       font-weight: 800;
     }
@@ -474,8 +518,8 @@
 
     .count {
       color: var(--blue);
-      border: 1px solid #bfdbfe;
-      background: #eff6ff;
+      border: 1px solid var(--blue-line);
+      background: var(--blue-soft);
       border-radius: 999px;
       padding: 6px 10px;
       font-size: 12px;
@@ -533,7 +577,7 @@
       padding: 7px 10px;
       border-radius: 999px;
       color: #0b4d76;
-      background: #e6f7fb;
+      background: var(--blue-soft);
       font-size: 12px;
       font-weight: 850;
     }
@@ -551,7 +595,7 @@
     }
 
     .price .kicker {
-      color: var(--lime);
+      color: #93c5fd;
     }
 
     .price h2 {
@@ -681,6 +725,44 @@
 
       .section {
         padding: 72px 0;
+      }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity .48s var(--motion), transform .48s var(--motion);
+    }
+
+    @keyframes heroRise {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
       }
     }
   </style>
@@ -974,5 +1056,34 @@
       <span>AI sourcing agency concept - Taiwan supplier discovery</span>
     </div>
   </footer>
+  <script>
+    (() => {
+      const motionOK = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!motionOK || !("IntersectionObserver" in window)) return;
+
+      const targets = document.querySelectorAll(
+        ".proof-item, .section-head, .step, .workspace, .model-card, .price, .faq, .cta"
+      );
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.14, rootMargin: "0px 0px -40px 0px" });
+
+      targets.forEach((node, index) => {
+        node.classList.add("reveal");
+        node.style.transitionDelay = `${Math.min(index % 3, 2) * 70}ms`;
+        const rect = node.getBoundingClientRect();
+        if (rect.top < window.innerHeight * .92) {
+          node.classList.add("is-visible");
+          return;
+        }
+        observer.observe(node);
+      });
+    })();
+  </script>
 </body>
 </html>
