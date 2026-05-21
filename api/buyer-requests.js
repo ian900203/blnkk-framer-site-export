@@ -22,6 +22,7 @@ async function syncGoogleSheet(body, requestPayload, request) {
     body: JSON.stringify({
       ...body,
       ...requestPayload,
+      type: cleanText(body.google_sheet_type || body.type, 80) || "buyer",
       source: "vercel_api",
       supabase_buyer_request_id: request.id,
       supabase_created_at: request.created_at,
