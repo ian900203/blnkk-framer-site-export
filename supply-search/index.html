@@ -91,23 +91,31 @@
     }
 
     .brand {
+      --logo-icon-size: 30px;
+      --logo-wordmark-height: 18px;
       display: inline-flex;
       align-items: center;
-      gap: 9px;
+      gap: 8px;
     }
 
     .logo-icon {
       display: block;
-      width: 30px;
-      height: 30px;
+      width: var(--logo-icon-size);
+      height: var(--logo-icon-size);
       object-fit: contain;
     }
 
     .logo-name {
       display: block;
       width: auto;
-      height: 16px;
+      height: var(--logo-wordmark-height);
       object-fit: contain;
+    }
+
+    .side .brand {
+      --logo-icon-size: 24px;
+      --logo-wordmark-height: 14px;
+      gap: 7px;
     }
 
     .brand.on-light .logo-icon,
