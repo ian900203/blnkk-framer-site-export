@@ -365,6 +365,12 @@ html, body, #main, [data-framer-root], [data-framer-root] > div, [data-framer-ro
 </script>
 <!-- SnippetEnd: blnkk-brand-rename -->
 
+<!-- Snippet: blnkk-supply-search-positioning -->
+<script>
+(()=>{if(!/\/csa(?:\/|\.html)?$/.test(location.pathname)||window.__blnkkSupplySearchPositioning)return;window.__blnkkSupplySearchPositioning=1;const meta="BLNKK Supply Search helps UAS buyers discover, score, and meet supplier candidates, with review support for origin, ownership, and production-readiness gaps.";function exact(oldText,newText){const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement&&n.parentElement.closest("script,style")?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});let n;while(n=w.nextNode()){if((n.nodeValue||"").trim()===oldText)n.nodeValue=n.nodeValue.replace(oldText,newText)}}function heroLabel(){let h=[...document.querySelectorAll("h1")].find(x=>/Find, score, and meet UAS suppliers/.test(x.textContent||""));let card=h&&h.parentElement;if(!card)return;[...card.childNodes].forEach(n=>{if(n.nodeType===1&&n.textContent.trim()==="BLNKK")n.textContent="BLNKK Supply Search"})}function run(){document.title="BLNKK Supply Search";document.querySelectorAll('meta[name="description"],meta[property="og:description"],meta[name="twitter:description"]').forEach(m=>m.setAttribute("content",meta));exact("BLNKK workspace","Supply Search workspace");heroLabel()}let d=0;function tick(){clearTimeout(d);d=setTimeout(run,90)}new MutationObserver(tick).observe(document.documentElement,{childList:1,subtree:1,characterData:1});addEventListener("load",tick);run()})()
+</script>
+<!-- SnippetEnd: blnkk-supply-search-positioning -->
+
     <!-- End of bodyEnd -->
 </body>
 </html>
