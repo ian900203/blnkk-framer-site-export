@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BLNKK Supply Search</title>
+  <meta name="description" content="BLNKK Supply Search helps UAS buyers brief, source, score, review, and meet qualified Taiwan supplier candidates.">
+  <style>
+    :root {
+      --ink: #0b1020;
+      --muted: #657083;
+      --line: #dfe5ec;
+      --paper: #ffffff;
+      --soft: #f5f7fa;
+      --blue: #2563eb;
+      --green: #0f8a5f;
+      --lime: #c7f36b;
+      --cyan: #67d8ef;
+      --amber: #ffc857;
+      --shadow: 0 18px 60px rgba(11, 16, 32, .14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--soft);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      color: #fff;
+      background:
+        linear-gradient(90deg, rgba(5, 10, 24, .88), rgba(5, 10, 24, .54) 52%, rgba(5, 10, 24, .2)),
+        url("https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=2200&q=85") center / cover;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 140px;
+      background: linear-gradient(180deg, rgba(245, 247, 250, 0), var(--soft));
+      pointer-events: none;
+    }
+
+    .nav,
+    .hero-inner,
+    .section,
+    .footer-inner {
+      width: min(1160px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 76px;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 800;
+      letter-spacing: .16em;
+    }
+
+    .mark {
+      width: 22px;
+      height: 22px;
+      border: 2px solid currentColor;
+      border-radius: 6px;
+      transform: rotate(45deg);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      color: rgba(255, 255, 255, .78);
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 18px;
+      border: 1px solid rgba(255, 255, 255, .25);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      background: rgba(255, 255, 255, .12);
+      backdrop-filter: blur(12px);
+    }
+
+    .button.primary {
+      color: var(--ink);
+      background: #fff;
+      border-color: #fff;
+    }
+
+    .button.dark {
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: grid;
+      align-content: center;
+      padding: 76px 0 132px;
+    }
+
+    .eyebrow,
+    .kicker {
+      color: var(--lime);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 780px;
+      margin: 18px 0 0;
+      font-size: clamp(48px, 8vw, 92px);
+      line-height: .96;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 650px;
+      margin: 28px 0 0;
+      color: rgba(255, 255, 255, .82);
+      font-size: 19px;
+      line-height: 1.65;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 32px;
+    }
+
+    .tag {
+      padding: 9px 12px;
+      border: 1px solid rgba(255, 255, 255, .28);
+      border-radius: 999px;
+      color: rgba(255, 255, 255, .82);
+      background: rgba(255, 255, 255, .09);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .proof {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      width: min(1160px, calc(100% - 40px));
+      margin: -66px auto 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .proof-item {
+      min-height: 132px;
+      padding: 24px;
+      background: #fff;
+    }
+
+    .proof-item strong {
+      display: block;
+      font-size: 30px;
+      line-height: 1;
+    }
+
+    .proof-item span {
+      display: block;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .section {
+      padding: 96px 0;
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 34px;
+    }
+
+    .section h2 {
+      margin: 10px 0 0;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .section-head p,
+    .lead {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .kicker {
+      color: var(--blue);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .step,
+    .model-card,
+    .faq,
+    .pricing-chip {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 12px 34px rgba(11, 16, 32, .06);
+    }
+
+    .step {
+      min-height: 260px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .step-num {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      color: var(--ink);
+      background: var(--lime);
+      font-weight: 900;
+    }
+
+    .step h3,
+    .model-card h3,
+    .faq h3 {
+      margin: 22px 0 0;
+      font-size: 22px;
+    }
+
+    .step p,
+    .model-card p,
+    .faq p,
+    .pricing-chip span {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .workspace-band {
+      background: #fff;
+      border-block: 1px solid var(--line);
+    }
+
+    .workspace {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+      box-shadow: var(--shadow);
+    }
+
+    .workspace-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .workspace-top strong {
+      font-size: 18px;
+    }
+
+    .workspace-top span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 230px 1fr 330px;
+      min-height: 520px;
+    }
+
+    .side,
+    .signals-pane {
+      padding: 18px;
+      background: #f0f3f7;
+    }
+
+    .side-title {
+      margin: 22px 0 10px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .brief-item {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      margin-bottom: 10px;
+    }
+
+    .brief-item strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brief-item span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .status {
+      display: inline-flex;
+      margin-top: 10px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      color: var(--green);
+      background: #e8f8ef;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .main-pane {
+      padding: 24px;
+      border-inline: 1px solid var(--line);
+      background: #f8fafc;
+    }
+
+    .intake-card,
+    .ask,
+    .input-preview,
+    .supplier {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .intake-card {
+      padding: 22px;
+    }
+
+    .intake-card h3 {
+      margin: 8px 0 0;
+      font-size: 24px;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .field {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: #344054;
+      background: #f8fafc;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .ask {
+      margin-top: 18px;
+      padding: 18px;
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    .input-preview {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-top: 18px;
+      padding: 12px;
+      color: var(--muted);
+    }
+
+    .input-preview button {
+      border: 0;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--ink);
+      padding: 10px 16px;
+      font-weight: 800;
+    }
+
+    .signals-pane {
+      background: #f8fafc;
+    }
+
+    .signal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .signal-head h3 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .count {
+      color: var(--blue);
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .supplier {
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .supplier-top {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .supplier strong {
+      font-size: 15px;
+    }
+
+    .score {
+      padding: 5px 8px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--ink);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .supplier p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .model-grid,
+    .faq-grid,
+    .pricing-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .model-card,
+    .faq,
+    .pricing-chip {
+      padding: 22px;
+    }
+
+    .model-token {
+      display: inline-flex;
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: #0b4d76;
+      background: #e6f7fb;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .price {
+      display: grid;
+      grid-template-columns: .95fr 1.05fr;
+      gap: 36px;
+      align-items: center;
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .price .kicker {
+      color: var(--lime);
+    }
+
+    .price h2 {
+      margin: 10px 0 0;
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.04;
+    }
+
+    .price p {
+      color: rgba(255, 255, 255, .74);
+      line-height: 1.7;
+    }
+
+    .pricing-row {
+      grid-template-columns: 1fr;
+    }
+
+    .pricing-chip {
+      background: rgba(255, 255, 255, .08);
+      border-color: rgba(255, 255, 255, .15);
+    }
+
+    .pricing-chip strong,
+    .pricing-chip span {
+      display: block;
+    }
+
+    .pricing-chip span {
+      margin-top: 6px;
+      color: rgba(255, 255, 255, .72);
+    }
+
+    .cta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 28px;
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .cta h2 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.05;
+    }
+
+    .cta p {
+      margin: 14px 0 0;
+      max-width: 680px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    footer {
+      padding: 34px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      background: #fff;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 980px) {
+      .nav-links {
+        display: none;
+      }
+
+      .proof,
+      .steps,
+      .model-grid,
+      .faq-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .workspace-grid,
+      .price {
+        grid-template-columns: 1fr;
+      }
+
+      .main-pane {
+        border-inline: 0;
+        border-block: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav,
+      .hero-inner,
+      .section,
+      .footer-inner,
+      .proof {
+        width: min(100% - 28px, 1160px);
+      }
+
+      .hero {
+        min-height: 860px;
+      }
+
+      .hero-actions,
+      .cta,
+      .footer-inner,
+      .workspace-top {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .proof,
+      .steps,
+      .model-grid,
+      .faq-grid,
+      .field-row {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        padding: 72px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="/">
+        <span class="mark" aria-hidden="true"></span>
+        <span>BLNKK</span>
+      </a>
+      <div class="nav-links">
+        <a href="#how">How it works</a>
+        <a href="#workspace">Workspace</a>
+        <a href="#model">Score model</a>
+        <a class="button" href="/csa.html">Open workspace</a>
+      </div>
+    </nav>
+
+    <div class="hero-inner">
+      <div class="eyebrow">BLNKK Supply Search</div>
+      <h1>Vetted Taiwan suppliers, on demand.</h1>
+      <p class="hero-copy">
+        Brief BLNKK once. We turn your part requirement into supplier-ready signals,
+        search the BLNKK database and trusted public sources, review the shortlist,
+        then help you choose who to meet.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="/csa.html">Start sourcing</a>
+        <a class="button" href="#workspace">See the workspace</a>
+      </div>
+      <div class="tags" aria-label="Key points">
+        <span class="tag">Human-reviewed shortlist</span>
+        <span class="tag">NDA-gated buyer details</span>
+        <span class="tag">Non-PRC supplier path</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="proof" aria-label="BLNKK Supply Search proof points">
+    <div class="proof-item">
+      <strong>1,303</strong>
+      <span>supplier records ready for AI-assisted matching</span>
+    </div>
+    <div class="proof-item">
+      <strong>48h</strong>
+      <span>target time to first reviewed signal set</span>
+    </div>
+    <div class="proof-item">
+      <strong>NDA</strong>
+      <span>sensitive buyer information stays review-gated</span>
+    </div>
+    <div class="proof-item">
+      <strong>3+</strong>
+      <span>qualified supplier paths per validated brief</span>
+    </div>
+  </section>
+
+  <main>
+    <section class="section" id="how">
+      <div class="section-head">
+        <div class="kicker">How It Works</div>
+        <h2>A sourcing team with an AI front door.</h2>
+        <p>
+          The first product should not feel like a passive directory. It should feel like a
+          reviewed sourcing workflow that starts moving as soon as the buyer submits a brief.
+        </p>
+      </div>
+      <div class="steps">
+        <article class="step">
+          <div class="step-num">1</div>
+          <div>
+            <h3>Brief once</h3>
+            <p>Capture component type, specs, MOQ, certifications, timeline, excluded regions, and NDA needs in one guided intake.</p>
+          </div>
+        </article>
+        <article class="step">
+          <div class="step-num">2</div>
+          <div>
+            <h3>Source and score</h3>
+            <p>Search BLNKK records, supplier websites, public certificates, trade signals, and substitute categories in parallel.</p>
+          </div>
+        </article>
+        <article class="step">
+          <div class="step-num">3</div>
+          <div>
+            <h3>Review, then meet</h3>
+            <p>BLNKK reviews the match logic, gates sensitive data, and turns the shortlist into warm supplier outreach.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="workspace-band" id="workspace">
+      <div class="section">
+        <div class="section-head">
+          <div class="kicker">Product Surface</div>
+          <h2>The buyer sees the work in one place.</h2>
+          <p>
+            The workspace keeps the intake, clarification questions, supplier signals, score
+            model, and review gate visible, so the outcome is legible before the intro happens.
+          </p>
+        </div>
+
+        <div class="workspace" aria-label="BLNKK Supply Search workspace concept">
+          <div class="workspace-top">
+            <strong>RF data-link supplier search</strong>
+            <span>AI sourcing conversation - BLNKK review required</span>
+          </div>
+          <div class="workspace-grid">
+            <aside class="side">
+              <a class="brand" href="#" style="color: var(--ink); font-size: 15px;">
+                <span class="mark" aria-hidden="true"></span>
+                <span>BLNKK</span>
+              </a>
+              <div class="side-title">Sourcing briefs</div>
+              <div class="brief-item">
+                <strong>RF data-link suppliers</strong>
+                <span>Non-PRC modules for UAV applications.</span>
+                <div class="status">Shortlist ready</div>
+              </div>
+              <div class="brief-item">
+                <strong>Flight controller PCBA</strong>
+                <span>Small-batch samples, documentation support.</span>
+                <div class="status" style="color:#805d0c;background:#fff4cf;">Needs specs</div>
+              </div>
+              <div class="brief-item">
+                <strong>Battery / BMS options</strong>
+                <span>Pack integration and export support.</span>
+                <div class="status" style="color:#647085;background:#eceff3;">Draft</div>
+              </div>
+            </aside>
+
+            <section class="main-pane">
+              <div class="intake-card">
+                <div class="kicker">Step 2 of 5</div>
+                <h3>Confirm the must-have supplier signals.</h3>
+                <div class="field-row">
+                  <div class="field">Frequency band: 900 MHz / 2.4 GHz</div>
+                  <div class="field">Region exclusion: PRC-owned suppliers</div>
+                  <div class="field">MOQ: prototype batch accepted</div>
+                  <div class="field">Evidence: datasheet + export history</div>
+                </div>
+              </div>
+              <div class="ask">
+                Do you need the supplier to support custom firmware, or is a catalog RF module acceptable for the first prototype?
+              </div>
+              <div class="input-preview">
+                <span>Reply with a constraint, file, or target spec...</span>
+                <button type="button">Send</button>
+              </div>
+            </section>
+
+            <aside class="signals-pane">
+              <div class="signal-head">
+                <h3>Recommended candidates</h3>
+                <span class="count">3 found</span>
+              </div>
+              <div class="supplier">
+                <div class="supplier-top">
+                  <strong>Taipei RF Systems Co.</strong>
+                  <span class="score">92%</span>
+                </div>
+                <p>Matched on RF module capability, UAV adjacent projects, and small-batch support. Public evidence found in product sheets.</p>
+              </div>
+              <div class="supplier">
+                <div class="supplier-top">
+                  <strong>Hsinchu Embedded Link</strong>
+                  <span class="score">86%</span>
+                </div>
+                <p>Strong firmware fit and hardware integration history. Needs BLNKK review before buyer details are revealed.</p>
+              </div>
+              <div class="supplier">
+                <div class="supplier-top">
+                  <strong>2 gated alternates</strong>
+                  <span class="score">Review</span>
+                </div>
+                <p>Supplier names stay hidden until BLNKK validates ownership, export sensitivity, and disclosure rules.</p>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="model">
+      <div class="section-head">
+        <div class="kicker">Score Model</div>
+        <h2>Turn supplier discovery into a reviewable shortlist.</h2>
+        <p>
+          Buyers can understand why a supplier is recommended, what still needs review, and
+          which candidates are ready for a meeting.
+        </p>
+      </div>
+      <div class="model-grid">
+        <article class="model-card">
+          <span class="model-token">Ownership</span>
+          <h3>UBO and origin</h3>
+          <p>Flag ownership, factory region, excluded jurisdictions, and buyer-sensitive disclosure constraints.</p>
+        </article>
+        <article class="model-card">
+          <span class="model-token">Production</span>
+          <h3>Factory readiness</h3>
+          <p>Score production equipment, sample-build support, volume readiness, and documentation quality.</p>
+        </article>
+        <article class="model-card">
+          <span class="model-token">Risk</span>
+          <h3>BOM and systems exposure</h3>
+          <p>Review BOM exposure, cyber or network stack, monitoring systems, and evidence gaps before outreach.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="price">
+        <div>
+          <div class="kicker">Commercial MVP</div>
+          <h2>Charge for reviewed supplier outcomes, not software seats.</h2>
+          <p>
+            Keep the first version service-led. Buyers submit briefs with low friction, then
+            BLNKK monetizes reviewed shortlist packages, warm introductions, or ongoing sourcing retainers.
+          </p>
+        </div>
+        <div class="pricing-row">
+          <div class="pricing-chip">
+            <strong>Free brief</strong>
+            <span>Capture demand and qualify buyer intent.</span>
+          </div>
+          <div class="pricing-chip">
+            <strong>Reviewed shortlist</strong>
+            <span>Paid once BLNKK validates matches.</span>
+          </div>
+          <div class="pricing-chip">
+            <strong>Warm intro</strong>
+            <span>Optional success or project fee.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="section-head">
+        <div class="kicker">Buyer Questions</div>
+        <h2>FAQ for the first public version.</h2>
+      </div>
+      <div class="faq-grid">
+        <article class="faq">
+          <h3>What can BLNKK source?</h3>
+          <p>Electronics, subsystems, EMS and PCBA, batteries, RF, mechanical parts, and manufacturing capabilities where Taiwan suppliers are a strong fit.</p>
+        </article>
+        <article class="faq">
+          <h3>How are suppliers verified?</h3>
+          <p>The AI gathers signals, then BLNKK reviews ownership, capability fit, public evidence, and sensitivity before introductions.</p>
+        </article>
+        <article class="faq">
+          <h3>What happens to confidential details?</h3>
+          <p>Buyer-sensitive fields stay gated until BLNKK approves the disclosure path and the buyer chooses to move forward.</p>
+        </article>
+        <article class="faq">
+          <h3>How fast is the first shortlist?</h3>
+          <p>The MVP target is first signals within 48 hours after the brief is complete, with deeper verification available as a paid review.</p>
+        </article>
+        <article class="faq">
+          <h3>Is this Taiwan-only?</h3>
+          <p>Taiwan is the starting wedge. The same workflow can expand to trusted allied supplier markets as the dataset grows.</p>
+        </article>
+        <article class="faq">
+          <h3>What happens after the shortlist?</h3>
+          <p>The buyer chooses who they want to meet. BLNKK reviews the path and helps turn qualified matches into supplier conversations.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="cta">
+        <div>
+          <h2>Tell BLNKK the part. Get a reviewed supplier path.</h2>
+          <p>
+            Start with a clear buyer brief, then move into the Supply Search workspace where
+            AI matching and BLNKK review turn supplier signals into next steps.
+          </p>
+        </div>
+        <a class="button dark" href="/csa.html">Open workspace</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <strong>BLNKK Supply Search</strong>
+      <span>AI sourcing agency concept - Taiwan supplier discovery</span>
+    </div>
+  </footer>
+</body>
+</html>
