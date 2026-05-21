@@ -93,17 +93,26 @@
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 11px;
-      font-weight: 800;
-      letter-spacing: .16em;
+      gap: 9px;
     }
 
-    .mark {
-      width: 22px;
-      height: 22px;
-      border: 2px solid currentColor;
-      border-radius: 6px;
-      transform: rotate(45deg);
+    .logo-icon {
+      display: block;
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+    }
+
+    .logo-name {
+      display: block;
+      width: auto;
+      height: 16px;
+      object-fit: contain;
+    }
+
+    .brand.on-light .logo-icon,
+    .brand.on-light .logo-name {
+      filter: brightness(0) saturate(100%) invert(5%) sepia(12%) saturate(1316%) hue-rotate(185deg) brightness(95%) contrast(102%);
     }
 
     .nav-links {
@@ -887,9 +896,9 @@
 <body>
   <header class="hero snap-panel">
     <nav class="nav" aria-label="Primary">
-      <a class="brand" href="/">
-        <span class="mark" aria-hidden="true"></span>
-        <span>BLNKK</span>
+      <a class="brand" href="/" aria-label="BLNKK home">
+        <img class="logo-icon" src="https://framerusercontent.com/images/NYeJGzUhu5OjdBsoqNX1ywNRg.png?width=960&amp;height=960" alt="" aria-hidden="true">
+        <img class="logo-name" src="https://framerusercontent.com/images/UrrwUbK41hrsjeYDyQOYXxbrZPQ.png?width=2045&amp;height=444" alt="BLNKK">
       </a>
       <div class="nav-links">
         <a href="#how">How it works</a>
@@ -997,9 +1006,9 @@
           </div>
           <div class="workspace-grid">
             <aside class="side">
-              <a class="brand" href="#" style="color: var(--ink); font-size: 15px;">
-                <span class="mark" aria-hidden="true"></span>
-                <span>BLNKK</span>
+              <a class="brand on-light" href="#" aria-label="BLNKK">
+                <img class="logo-icon" src="https://framerusercontent.com/images/NYeJGzUhu5OjdBsoqNX1ywNRg.png?width=960&amp;height=960" alt="" aria-hidden="true">
+                <img class="logo-name" src="https://framerusercontent.com/images/UrrwUbK41hrsjeYDyQOYXxbrZPQ.png?width=2045&amp;height=444" alt="BLNKK">
               </a>
               <div class="side-title">Sourcing briefs</div>
               <div class="brief-item">
