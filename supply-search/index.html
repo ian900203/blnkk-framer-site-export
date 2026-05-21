@@ -29,10 +29,6 @@
       scroll-snap-type: y mandatory;
     }
 
-    html.is-programmatic-snap {
-      scroll-snap-type: none;
-    }
-
     body {
       margin: 0;
       color: var(--ink);
@@ -1207,7 +1203,6 @@
       const numberFormatter = new Intl.NumberFormat("en-US");
       const metricValues = [...document.querySelectorAll(".metric-value")];
       const metricsPanel = document.querySelector(".metrics-panel");
-      const canSnap = matchMedia("(min-width: 900px) and (pointer: fine)").matches;
       let metricsStarted = false;
 
       const prepareMetric = (metric) => {
@@ -1290,111 +1285,11 @@
       const metricsObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting || entry.intersectionRatio < .78) return;
-          if (canSnap && isSnapping) return;
           setTimeout(runMetricSequence, 260);
         });
       }, { threshold: [.78] });
 
       if (metricsPanel) metricsObserver.observe(metricsPanel);
-
-      if (!canSnap) return;
-
-      const panels = [...document.querySelectorAll(".snap-panel")];
-      let snapTimer = 0;
-      let snapFrame = 0;
-      let snapReleaseTimer = 0;
-      let isSnapping = false;
-      let lastSnapEnd = 0;
-
-      const easeInOutCubic = (t) => t < .5
-        ? 4 * t * t * t
-        : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
-      const panelTop = (panel) => panel.getBoundingClientRect().top + window.scrollY;
-      const nearestPanelIndex = () => {
-        const current = window.scrollY;
-        return panels.reduce((best, panel, index) => {
-          const distance = Math.abs(panelTop(panel) - current);
-          return distance < best.distance ? { index, distance } : best;
-        }, { index: 0, distance: Infinity }).index;
-      };
-
-      const animateScrollTo = (targetTop, onDone) => {
-        cancelAnimationFrame(snapFrame);
-        clearTimeout(snapReleaseTimer);
-        document.documentElement.classList.add("is-programmatic-snap");
-
-        const finish = () => {
-          window.scrollTo(0, Math.round(targetTop));
-          snapReleaseTimer = setTimeout(() => {
-            document.documentElement.classList.remove("is-programmatic-snap");
-          }, 80);
-          if (onDone) onDone();
-        };
-
-        const startTop = window.scrollY;
-        const distance = targetTop - startTop;
-        if (Math.abs(distance) < 8) {
-          finish();
-          return;
-        }
-        const duration = Math.min(880, Math.max(520, Math.abs(distance) * .56));
-        const start = performance.now();
-
-        const step = (now) => {
-          const progress = Math.min((now - start) / duration, 1);
-          window.scrollTo(0, startTop + distance * easeInOutCubic(progress));
-          if (progress < 1) {
-            snapFrame = requestAnimationFrame(step);
-            return;
-          }
-          finish();
-        };
-
-        snapFrame = requestAnimationFrame(step);
-      };
-
-      const snapToPanel = (index) => {
-        const nextIndex = Math.max(0, Math.min(panels.length - 1, index));
-        const target = panels[nextIndex];
-        if (!target) return;
-        isSnapping = true;
-        animateScrollTo(panelTop(target), () => {
-          isSnapping = false;
-          lastSnapEnd = performance.now();
-          if (target === metricsPanel) setTimeout(runMetricSequence, 220);
-        });
-      };
-
-      window.addEventListener("wheel", (event) => {
-        if (Math.abs(event.deltaY) < 6) return;
-        event.preventDefault();
-        const now = performance.now();
-        if (isSnapping || now - lastSnapEnd < 180) return;
-        const direction = event.deltaY > 0 ? 1 : -1;
-        snapToPanel(nearestPanelIndex() + direction);
-      }, { passive: false });
-
-      window.addEventListener("scroll", () => {
-        if (isSnapping) return;
-        clearTimeout(snapTimer);
-        snapTimer = setTimeout(() => {
-          const current = window.scrollY;
-          const nearest = panels.reduce((best, panel) => {
-            const top = panelTop(panel);
-            const distance = Math.abs(top - current);
-            return distance < best.distance ? { panel, top, distance } : best;
-          }, { panel: null, top: 0, distance: Infinity });
-
-          if (nearest.panel && nearest.distance < window.innerHeight * .48) {
-            isSnapping = true;
-            animateScrollTo(nearest.top, () => {
-              isSnapping = false;
-              lastSnapEnd = performance.now();
-            });
-          }
-        }, 90);
-      }, { passive: true });
     })();
   </script>
 </body>
