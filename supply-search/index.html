@@ -29,10 +29,8 @@
       scroll-snap-type: y mandatory;
     }
 
-    @media (min-width: 900px) and (pointer: fine) {
-      html {
-        scroll-snap-type: none;
-      }
+    html.is-programmatic-snap {
+      scroll-snap-type: none;
     }
 
     body {
@@ -1304,6 +1302,7 @@
       const panels = [...document.querySelectorAll(".snap-panel")];
       let snapTimer = 0;
       let snapFrame = 0;
+      let snapReleaseTimer = 0;
       let isSnapping = false;
       let lastSnapEnd = 0;
 
@@ -1322,11 +1321,21 @@
 
       const animateScrollTo = (targetTop, onDone) => {
         cancelAnimationFrame(snapFrame);
+        clearTimeout(snapReleaseTimer);
+        document.documentElement.classList.add("is-programmatic-snap");
+
+        const finish = () => {
+          window.scrollTo(0, Math.round(targetTop));
+          snapReleaseTimer = setTimeout(() => {
+            document.documentElement.classList.remove("is-programmatic-snap");
+          }, 80);
+          if (onDone) onDone();
+        };
+
         const startTop = window.scrollY;
         const distance = targetTop - startTop;
         if (Math.abs(distance) < 8) {
-          window.scrollTo(0, Math.round(targetTop));
-          if (onDone) onDone();
+          finish();
           return;
         }
         const duration = Math.min(880, Math.max(520, Math.abs(distance) * .56));
@@ -1339,8 +1348,7 @@
             snapFrame = requestAnimationFrame(step);
             return;
           }
-          window.scrollTo(0, Math.round(targetTop));
-          if (onDone) onDone();
+          finish();
         };
 
         snapFrame = requestAnimationFrame(step);
