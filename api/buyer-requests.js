@@ -12,31 +12,50 @@ function cleanText(value, maxLength = 4000) {
   return String(value || "").trim().slice(0, maxLength);
 }
 
+async function readGoogleAppsScriptResponse(response) {
+  const text = await response.text();
+  try {
+    return text ? JSON.parse(text) : null;
+  } catch (_) {
+    return text ? { text: text.slice(0, 500) } : null;
+  }
+}
+
+async function postGoogleAppsScript(url, payload) {
+  const initialResponse = await fetch(url, {
+    method: "POST",
+    redirect: "manual",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (initialResponse.status >= 300 && initialResponse.status < 400) {
+    const location = initialResponse.headers.get("location");
+    if (location) {
+      return fetch(location, { method: "GET" });
+    }
+  }
+
+  return initialResponse;
+}
+
 async function syncGoogleSheet(body, requestPayload, request) {
   const url = process.env.GOOGLE_APPS_SCRIPT_URL;
   if (!url) return { ok: false, skipped: true, reason: "GOOGLE_APPS_SCRIPT_URL is not configured." };
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
+  const formType = cleanText(body.google_sheet_form_type || body.formType || body.google_sheet_type || body.type, 80) || "buyer";
+  const response = await postGoogleAppsScript(url, {
       ...body,
       ...requestPayload,
-      type: cleanText(body.google_sheet_type || body.type, 80) || "buyer",
+      formType,
+      type: formType,
       source: "vercel_api",
       supabase_buyer_request_id: request.id,
       supabase_created_at: request.created_at,
       supabase_status: request.status,
-    }),
   });
 
-  const text = await response.text();
-  let data = null;
-  try {
-    data = text ? JSON.parse(text) : null;
-  } catch (_) {
-    data = text ? { text: text.slice(0, 500) } : null;
-  }
+  const data = await readGoogleAppsScriptResponse(response);
 
   if (!response.ok) {
     return {
