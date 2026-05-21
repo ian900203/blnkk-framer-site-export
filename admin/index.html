@@ -468,8 +468,37 @@
         border: 1px solid rgba(16, 184, 216, 0.28);
       }
 
+      .notice.warning {
+        background: rgba(217, 139, 22, 0.12);
+        border-color: rgba(217, 139, 22, 0.3);
+      }
+
       .notice strong {
         font-weight: 700;
+      }
+
+      .auth-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: 10px;
+        align-items: end;
+      }
+
+      .mini-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      .mini-card {
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #f8fafc;
+      }
+
+      .mini-card strong {
+        display: block;
+        margin-bottom: 4px;
       }
 
       .toast {
@@ -625,13 +654,61 @@
                   </div>
                   <div class="metric">
                     <div class="metric-label">Data source</div>
-                    <div class="metric-value">Supabase</div>
-                    <p class="hint">Next phase: wire supplier and request tables.</p>
+                    <div class="metric-value" id="supabaseStatus">Setup</div>
+                    <p class="hint" id="supabaseHint">Waiting for Vercel environment variables.</p>
                   </div>
                   <div class="metric">
                     <div class="metric-label">Launch status</div>
                     <div class="metric-value">Hold</div>
                     <p class="hint">Do not cut domain until checks are green.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel full">
+              <div class="panel-head">
+                <h2 class="panel-title">Supabase Connection</h2>
+                <span class="badge amber" id="apiBadge">Not checked</span>
+              </div>
+              <div class="panel-body">
+                <div class="notice warning" id="apiNotice">
+                  <strong>Admin data is protected by a token.</strong>
+                  <span>
+                    Set `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`, and
+                    `BLNKK_ADMIN_TOKEN` in Vercel, then enter the admin token here to load private
+                    dashboard data.
+                  </span>
+                </div>
+                <div class="auth-row">
+                  <label class="field">
+                    <span class="field-label">Admin token</span>
+                    <input id="adminToken" type="password" autocomplete="off" placeholder="BLNKK_ADMIN_TOKEN" />
+                  </label>
+                  <button class="button" id="saveToken">Save Token</button>
+                  <button class="button primary" id="refreshSupabase">Refresh Data</button>
+                </div>
+                <div style="height: 16px"></div>
+                <div class="metric-row">
+                  <div class="metric">
+                    <div class="metric-label">Supplier cards</div>
+                    <div class="metric-value" id="supplierCardCount">--</div>
+                    <p class="hint">Public supplier directory records.</p>
+                  </div>
+                  <div class="metric">
+                    <div class="metric-label">Buyer requests</div>
+                    <div class="metric-value" id="buyerRequestCount">--</div>
+                    <p class="hint">CSA and Protocol intake records.</p>
+                  </div>
+                  <div class="metric">
+                    <div class="metric-label">Supplier replies</div>
+                    <div class="metric-value" id="supplierReplyCount">--</div>
+                    <p class="hint">Imported or tracked supplier replies.</p>
+                  </div>
+                  <div class="metric">
+                    <div class="metric-label">Supplier intakes</div>
+                    <div class="metric-value" id="supplierIntakeCount">--</div>
+                    <p class="hint">Supplier-side intake submissions.</p>
                   </div>
                 </div>
               </div>
@@ -717,7 +794,7 @@
             <div class="panel span-8">
               <div class="panel-head">
                 <h2 class="panel-title">Edit Intake Prompt</h2>
-                <span class="badge amber">Local draft</span>
+                <span class="badge amber" id="settingsBadge">Local draft</span>
               </div>
               <div class="panel-body">
                 <div class="editor-grid">
@@ -765,9 +842,15 @@
             <div class="panel full">
               <div class="panel-head">
                 <h2 class="panel-title">Supplier Matching Review</h2>
-                <span class="badge green">1300-record database planned</span>
+                <span class="badge green" id="matchingBadge">Supabase ready</span>
               </div>
               <div class="panel-body">
+                <div class="notice">
+                  <strong>Latest buyer requests</strong>
+                  <span>These load from Supabase after the admin token is set.</span>
+                </div>
+                <div class="mini-list" id="recentRequests"></div>
+                <div style="height: 18px"></div>
                 <table class="table">
                   <thead>
                     <tr>
@@ -804,6 +887,7 @@
 
     <script>
       const storageKey = "blnkk-admin-v0";
+      const adminTokenKey = "blnkk-admin-token";
 
       const baseState = {
         checks: [
@@ -870,6 +954,108 @@
 
       const $ = (selector) => document.querySelector(selector);
       const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+
+      function getAdminToken() {
+        return localStorage.getItem(adminTokenKey) || "";
+      }
+
+      function setApiBadge(label, tone = "amber") {
+        const badge = $("#apiBadge");
+        badge.textContent = label;
+        badge.className = `badge ${tone}`;
+      }
+
+      async function apiFetch(path, options = {}) {
+        const headers = {
+          "Content-Type": "application/json",
+          ...(options.headers || {}),
+        };
+        const token = getAdminToken();
+        if (token) headers.Authorization = `Bearer ${token}`;
+
+        const response = await fetch(path, { ...options, headers });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok || payload.ok === false) {
+          throw new Error(payload.error || `Request failed with ${response.status}`);
+        }
+        return payload.data;
+      }
+
+      function applySettings(settings) {
+        if (!settings) return;
+        if (Array.isArray(settings.launch_checks) && settings.launch_checks.length > 0) {
+          state.checks = settings.launch_checks;
+        }
+        if (Array.isArray(settings.intake_questions) && settings.intake_questions.length > 0) {
+          state.questions = settings.intake_questions;
+          activeQuestion = state.questions[0].id;
+        }
+        localStorage.setItem(storageKey, JSON.stringify(state));
+        renderChecks();
+        renderQuestions();
+      }
+
+      async function loadSupabaseData() {
+        setApiBadge("Checking", "amber");
+
+        try {
+          const health = await apiFetch("/api/health");
+          $("#supabaseStatus").textContent = "Live";
+          $("#supabaseHint").textContent = `${health.public_supplier_cards || 0} supplier cards reachable.`;
+          setApiBadge("Connected", "green");
+        } catch (error) {
+          $("#supabaseStatus").textContent = "Setup";
+          $("#supabaseHint").textContent = error.message;
+          setApiBadge("Setup needed", "red");
+          return;
+        }
+
+        if (!getAdminToken()) {
+          $("#apiNotice span").textContent =
+            "Supabase is connected. Enter the admin token to load private dashboard counts and save settings.";
+          return;
+        }
+
+        try {
+          const [summary, settings] = await Promise.all([
+            apiFetch("/api/admin-summary"),
+            apiFetch("/api/admin-settings"),
+          ]);
+
+          const counts = summary.counts || {};
+          $("#supplierCardCount").textContent = counts.public_supplier_cards ?? "--";
+          $("#buyerRequestCount").textContent = counts.buyer_requests ?? "--";
+          $("#supplierReplyCount").textContent = counts.supplier_replies ?? "--";
+          $("#supplierIntakeCount").textContent = counts.supplier_intake_submissions ?? "--";
+          $("#matchingBadge").textContent = `${counts.public_supplier_cards || 0} supplier cards`;
+
+          renderRecentRequests(summary.recent_buyer_requests || []);
+          applySettings(settings);
+          $("#settingsBadge").textContent = settings?.updated_at ? "Supabase draft" : "Ready to save";
+          $("#settingsBadge").className = `badge ${settings?.updated_at ? "green" : "amber"}`;
+          $("#apiNotice span").textContent = "Admin token accepted. Dashboard data is loading from Supabase.";
+        } catch (error) {
+          setApiBadge("Token needed", "amber");
+          $("#apiNotice span").textContent = error.message;
+        }
+      }
+
+      async function saveRemoteState() {
+        if (!getAdminToken()) return false;
+        await apiFetch("/api/admin-settings", {
+          method: "POST",
+          body: JSON.stringify({
+            launch_checks: state.checks,
+            intake_questions: state.questions,
+            page_status: {},
+            matching_settings: {},
+            meeting_settings: {},
+          }),
+        });
+        $("#settingsBadge").textContent = "Saved to Supabase";
+        $("#settingsBadge").className = "badge green";
+        return true;
+      }
 
       function renderChecks() {
         const target = $("#launchChecks");
@@ -947,6 +1133,29 @@
           .join("");
       }
 
+      function renderRecentRequests(requests) {
+        const target = $("#recentRequests");
+        if (!target) return;
+
+        if (!requests.length) {
+          target.innerHTML = `<div class="mini-card"><strong>No recent requests loaded</strong><span class="hint">Enter token and refresh data.</span></div>`;
+          return;
+        }
+
+        target.innerHTML = requests
+          .map((request) => {
+            const title = request.company_name || request.email || "Unknown buyer";
+            const meta = [request.sourcing_category, request.status, request.source_page].filter(Boolean).join(" · ");
+            return `
+              <div class="mini-card">
+                <strong>${title}</strong>
+                <span class="hint">${meta || "New request"} · ${new Date(request.created_at).toLocaleString()}</span>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
       function renderMeetings() {
         $("#meetingPipeline").innerHTML = meetings
           .map(
@@ -970,9 +1179,16 @@
         );
       }
 
-      function saveState() {
+      async function saveState() {
         localStorage.setItem(storageKey, JSON.stringify(state));
+        let message = "Draft saved in this browser.";
+        try {
+          if (await saveRemoteState()) message = "Draft saved to Supabase.";
+        } catch (error) {
+          message = `Local draft saved. Supabase save failed: ${error.message}`;
+        }
         const toast = $("#toast");
+        toast.textContent = message;
         toast.classList.add("show");
         window.setTimeout(() => toast.classList.remove("show"), 1800);
       }
@@ -1015,12 +1231,20 @@
       });
 
       $("#saveState").addEventListener("click", saveState);
+      $("#saveToken").addEventListener("click", () => {
+        localStorage.setItem(adminTokenKey, $("#adminToken").value.trim());
+        loadSupabaseData();
+      });
+      $("#refreshSupabase").addEventListener("click", loadSupabaseData);
 
+      $("#adminToken").value = getAdminToken();
       renderChecks();
       renderPages();
       renderQuestions();
       renderMatching();
       renderMeetings();
+      renderRecentRequests([]);
+      loadSupabaseData();
     </script>
   </body>
 </html>
