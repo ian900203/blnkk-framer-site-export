@@ -480,6 +480,238 @@ function groups(){let set=new Set;document.querySelectorAll("#blnkk-qr-fallback,
 </script>
 <!-- SnippetEnd: blnkk-csa-first-use-clarity -->
 
+<!-- Snippet: blnkk-supabase-supplier-match-v2 -->
+<script>
+(() => {
+  if (!/\/csa(?:\/|\.html)?\/?$/.test(location.pathname) || window.__blnkkSupabaseSupplierMatchV2) return;
+  window.__blnkkSupabaseSupplierMatchV2 = 1;
+  window.__blnkkSupabaseSupplierMatch = 1;
+
+  const endpoint = "/api/supplier-match";
+  const text = (el) => (el && el.textContent || "").trim();
+  const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  })[char]);
+  const isVisible = (el) => {
+    const rect = el && el.getBoundingClientRect && el.getBoundingClientRect();
+    const style = el && getComputedStyle(el);
+    return !!(rect && rect.width && rect.height && style && style.display !== "none" && style.visibility !== "hidden");
+  };
+  const input = () => [...document.querySelectorAll("textarea,input")]
+    .filter((el) => isVisible(el) && el.type !== "hidden")
+    .sort((a, b) => b.getBoundingClientRect().top - a.getBoundingClientRect().top)[0] || null;
+
+  function css() {
+    if (document.getElementById("blnkk-supabase-match-v2-css")) return;
+    const style = document.createElement("style");
+    style.id = "blnkk-supabase-match-v2-css";
+    style.textContent = `
+      .blnkk-supabase-results{display:grid;gap:12px;max-width:100%;overflow:hidden}
+      .blnkk-supabase-note{border:1px dashed #cbd5e1;border-radius:16px;background:#fff;padding:14px;color:#667085;font-size:12px;line-height:1.55}
+      .blnkk-supplier-card{border:1px solid #e5e7eb;border-radius:18px;background:#fff;padding:15px 16px;box-shadow:0 10px 28px rgba(15,23,42,.055);max-width:100%;overflow:hidden}
+      .blnkk-supplier-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+      .blnkk-supplier-card b{display:block;color:#090f1f;font-size:14px;line-height:1.35}
+      .blnkk-score-badge{border-radius:999px;background:#090f1f;color:#fff;font-size:11px;font-weight:750;padding:5px 8px;white-space:nowrap}
+      .blnkk-supplier-meta{margin-top:7px;color:#667085;font-size:12px;line-height:1.45;overflow-wrap:anywhere}
+      .blnkk-supplier-summary{margin-top:10px;color:#344054;font-size:12px;line-height:1.55;overflow-wrap:anywhere}
+      .blnkk-supplier-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+      .blnkk-supplier-tags span{border:1px solid #e5e7eb;border-radius:999px;background:#f8fafc;color:#475467;font-size:11px;font-weight:650;padding:5px 8px;max-width:100%;overflow-wrap:anywhere}
+      @media(min-width:1024px){main [data-blnkk-supplier-panel="mobile"],main [data-blnkk-supplier-panel="mobile"] .blnkk-supabase-results,main [data-blnkk-supplier-panel="mobile"] .blnkk-supabase-note{display:none!important}}
+    `;
+    document.head.appendChild(style);
+  }
+
+  function panelForHeading(heading) {
+    const aside = heading.closest("aside");
+    if (aside) return aside.querySelector(".h-full.overflow-auto") || aside;
+
+    let candidate = null;
+    for (let node = heading; node && node !== document.body; node = node.parentElement) {
+      const classes = String(node.className || "");
+      if (classes.includes("lg:hidden")) return node;
+      if (/Supplier signals|Supplier Shortlist|Recommended candidates|Reviewed candidates/.test(text(node))) candidate = node;
+    }
+    return candidate || heading.parentElement;
+  }
+
+  function panels() {
+    const headings = [...document.querySelectorAll("h2")]
+      .filter((heading) => /Recommended candidates|Reviewed candidates|Supplier Shortlist/.test(text(heading)));
+    return [...new Set(headings.map(panelForHeading).filter(Boolean))];
+  }
+
+  function roots() {
+    const found = panels();
+    const asidePanels = found.filter((panel) => panel.closest("aside"));
+    const mainPanels = found.filter((panel) => !panel.closest("aside"));
+    if (innerWidth >= 1024) {
+      return asidePanels
+        .sort((a, b) => b.getBoundingClientRect().left - a.getBoundingClientRect().left)
+        .slice(0, 1);
+    }
+    return (mainPanels.length ? mainPanels : asidePanels).slice(0, 1);
+  }
+
+  function layoutGuard() {
+    panels().forEach((panel) => {
+      if (!panel.closest("aside")) {
+        panel.dataset.blnkkSupplierPanel = "mobile";
+        if (innerWidth >= 1024) panel.style.setProperty("display", "none", "important");
+        else panel.style.setProperty("display", "block", "important");
+      }
+    });
+  }
+
+  function setPills(root, count, status) {
+    [...root.querySelectorAll("span")].forEach((span) => {
+      const value = text(span);
+      if (/^\d+\s*(found|筆)$|found$|Searching|搜尋中/.test(value)) span.textContent = count;
+      else if (/Awaiting buyer input|Matching supplier cards|BLNKK review recommended|Match unavailable|Setup needed|需要補齊|尚未取得|尚未/.test(value)) span.textContent = status;
+    });
+  }
+
+  function mount(root, html, count, status) {
+    setPills(root, count, status);
+    root.querySelectorAll(".blnkk-supabase-results,.blnkk-supabase-note").forEach((node) => node.remove());
+    [...root.children].forEach((child) => {
+      if (/No supplier signals matched yet|目前尚未|Keep chatting/.test(text(child))) child.remove();
+    });
+    const box = document.createElement("div");
+    box.className = "blnkk-supabase-results";
+    box.innerHTML = html;
+    root.appendChild(box);
+  }
+
+  function score(row) {
+    let value = row.fit_score ?? row.score ?? row.match_score ?? row.similarity ?? row.confidence;
+    if (value == null) return "";
+    let number = Number(value);
+    if (!Number.isFinite(number)) return String(value);
+    if (number <= 1) number *= 100;
+    return `${Math.round(number)}%`;
+  }
+
+  function pick(row, keys) {
+    for (const key of keys) {
+      const value = row && row[key];
+      if (value != null && String(value).trim()) return value;
+    }
+    return "";
+  }
+
+  function list(value) {
+    if (Array.isArray(value)) return value.filter(Boolean).map(String);
+    if (typeof value === "string") return value.split(/[,|]/).map((item) => item.trim()).filter(Boolean);
+    return [];
+  }
+
+  function rows(payload) {
+    const data = payload && payload.data;
+    if (Array.isArray(data)) return data;
+    return ["matches", "results", "candidates", "suppliers"]
+      .map((key) => data && data[key])
+      .find(Array.isArray) || [];
+  }
+
+  function card(row, index) {
+    const name = pick(row, ["company_name", "supplier_name", "legal_name", "name", "title"]) || `Supplier candidate ${index + 1}`;
+    const category = pick(row, ["category", "primary_category", "capability", "capability_group", "sector"]);
+    const country = pick(row, ["country", "region", "location", "factory_location"]);
+    const summary = pick(row, ["summary", "description", "match_reason", "notes"]) || "Public supplier card matched the buyer brief. BLNKK review should confirm evidence, contact path, and introduction readiness.";
+    const tags = [...list(row.tags), ...list(row.keywords), ...list(row.services), category, country].filter(Boolean).slice(0, 6);
+    const fit = score(row);
+    return `<article class="blnkk-supplier-card"><div class="blnkk-supplier-card-head"><b>${esc(name)}</b>${fit ? `<span class="blnkk-score-badge">${esc(fit)}</span>` : ""}</div><div class="blnkk-supplier-meta">${esc([category, country].filter(Boolean).join(" · ") || "BLNKK public supplier directory")}</div><div class="blnkk-supplier-summary">${esc(summary)}</div>${tags.length ? `<div class="blnkk-supplier-tags">${tags.map((tag) => `<span>${esc(tag)}</span>`).join("")}</div>` : ""}</article>`;
+  }
+
+  let lastView = null;
+
+  function paint(view) {
+    css();
+    layoutGuard();
+    if (view.type === "loading") {
+      roots().forEach((root) => mount(root, '<div class="blnkk-supabase-note">Searching BLNKK supplier database and scoring public supplier cards...</div>', "Searching", "Matching supplier cards"));
+      return;
+    }
+    if (view.type === "error") {
+      roots().forEach((root) => mount(root, `<div class="blnkk-supabase-note">${esc(view.message)}</div>`, "0 found", "Setup needed"));
+      return;
+    }
+    const resultRows = rows(view.payload);
+    if (!resultRows.length) {
+      roots().forEach((root) => mount(root, '<div class="blnkk-supabase-note">No public supplier cards matched this brief yet. Add specs, region constraints, or target category so BLNKK can narrow again.</div>', "0 found", "Match unavailable"));
+      return;
+    }
+    const html = resultRows.slice(0, 5).map(card).join("");
+    roots().forEach((root) => mount(root, html, `${resultRows.length} found`, "BLNKK review recommended"));
+  }
+
+  function renderLoading() {
+    lastView = { type: "loading" };
+    paint(lastView);
+  }
+
+  function render(payload) {
+    lastView = { type: "payload", payload };
+    paint(lastView);
+  }
+
+  function renderError(error) {
+    const message = (error && error.message) || "Supplier matching is not available yet. Check Supabase environment variables and the Vercel API deployment.";
+    lastView = { type: "error", message };
+    paint(lastView);
+  }
+
+  let last = { key: "", time: 0 };
+  async function match(raw, via) {
+    raw = (raw || "").trim();
+    if (!raw) return;
+    const now = Date.now();
+    const key = `${raw}|${via}`;
+    if (last.key === key && now - last.time < 3500) return;
+    last = { key, time: now };
+    renderLoading();
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ search_query: raw, limit: 12 }),
+      });
+      const type = response.headers.get("content-type") || "";
+      const payload = type.includes("json") ? await response.json() : { ok: false, error: `Supplier match API returned ${response.status}` };
+      if (!response.ok || payload.ok === false) throw new Error(payload.error || `Supplier match API returned ${response.status}`);
+      render(payload);
+    } catch (error) {
+      console.warn("BLNKK supplier match failed", error);
+      renderError(error);
+    }
+  }
+
+  document.addEventListener("click", (event) => {
+    const button = event.target && event.target.closest && event.target.closest("button");
+    if (!button || !/^(Send|送出)$/.test(text(button))) return;
+    const currentInput = input();
+    match(currentInput && currentInput.value, "click");
+  }, true);
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" || event.shiftKey || event.isComposing) return;
+    const currentInput = input();
+    if (event.target === currentInput) match(currentInput.value, "enter");
+  }, true);
+  addEventListener("resize", () => {
+    if (lastView) paint(lastView);
+    else layoutGuard();
+  });
+  new MutationObserver(layoutGuard).observe(document.documentElement, { childList: true, subtree: true });
+  css();
+  layoutGuard();
+})();
+</script>
+<!-- SnippetEnd: blnkk-supabase-supplier-match-v2 -->
+
 <!-- Snippet: blnkk-supabase-supplier-match -->
 <script>
 (()=>{if(!/\/csa(?:\/|\.html)?$/.test(location.pathname)||window.__blnkkSupabaseSupplierMatch)return;window.__blnkkSupabaseSupplierMatch=1;const endpoint="/api/supplier-match",T=e=>(e&&e.textContent||"").trim(),input=()=>[...document.querySelectorAll("textarea,input")].filter(e=>{let r=e.getBoundingClientRect(),s=getComputedStyle(e);return r.width&&r.height&&s.display!=="none"&&s.visibility!=="hidden"&&e.type!=="hidden"}).sort((a,b)=>b.getBoundingClientRect().top-a.getBoundingClientRect().top)[0]||null,esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));function css(){if(document.getElementById("blnkk-supabase-match-css"))return;let s=document.createElement("style");s.id="blnkk-supabase-match-css";s.textContent=".blnkk-supabase-results{display:grid;gap:12px}.blnkk-supabase-note{border:1px dashed #cbd5e1;border-radius:16px;background:#fff;padding:14px;color:#667085;font-size:12px;line-height:1.55}.blnkk-supplier-card{border:1px solid #e5e7eb;border-radius:18px;background:#fff;padding:15px 16px;box-shadow:0 10px 28px rgba(15,23,42,.055)}.blnkk-supplier-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.blnkk-supplier-card b{display:block;color:#090f1f;font-size:14px;line-height:1.35}.blnkk-score-badge{border-radius:999px;background:#090f1f;color:#fff;font-size:11px;font-weight:750;padding:5px 8px;white-space:nowrap}.blnkk-supplier-meta{margin-top:7px;color:#667085;font-size:12px;line-height:1.45}.blnkk-supplier-summary{margin-top:10px;color:#344054;font-size:12px;line-height:1.55}.blnkk-supplier-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}.blnkk-supplier-tags span{border:1px solid #e5e7eb;border-radius:999px;background:#f8fafc;color:#475467;font-size:11px;font-weight:650;padding:5px 8px}";document.head.appendChild(s)}function roots(){let hs=[...document.querySelectorAll("h2")].filter(h=>/Recommended candidates|Reviewed candidates|Supplier Shortlist/.test(T(h))),out=[];hs.forEach(h=>{let n=h.parentElement;for(let i=0;n&&i<8;i++,n=n.parentElement){let txt=T(n);if(/Supplier signals/.test(txt)&&(/No supplier signals|Awaiting buyer input|blnkk-supabase-results/.test(txt)||n.querySelector(".blnkk-supabase-results"))){out.push(n);return}}let a=h.closest("aside");a&&out.push(a)});return[...new Set(out)]}function setPills(root,count,status){[...root.querySelectorAll("span")].forEach(sp=>{let t=T(sp);if(/^\d+\s*found$|found$|Searching/.test(t))sp.textContent=count;else if(/Awaiting buyer input|Matching supplier cards|BLNKK review recommended|Match unavailable|Setup needed/.test(t))sp.textContent=status})}function mount(root,html,count,status){setPills(root,count,status);root.querySelectorAll(".blnkk-supabase-results,.blnkk-supabase-note").forEach(n=>n.remove());[...root.children].forEach(c=>{/No supplier signals matched yet/.test(T(c))&&c.remove()});let box=document.createElement("div");box.className="blnkk-supabase-results";box.innerHTML=html;root.appendChild(box)}function renderLoading(){css();roots().forEach(r=>mount(r,'<div class="blnkk-supabase-note">Searching BLNKK supplier database and scoring public supplier cards...</div>',"Searching","Matching supplier cards"))}function score(row){let v=row.fit_score??row.score??row.match_score??row.similarity??row.confidence;if(v==null)return"";let n=Number(v);if(!Number.isFinite(n))return String(v);if(n<=1)n*=100;return Math.round(n)+"%"}function pick(row,keys){for(let k of keys){let v=row&&row[k];if(v!=null&&String(v).trim())return v}return""}function list(v){if(Array.isArray(v))return v.filter(Boolean).map(String);if(typeof v==="string")return v.split(/[,|]/).map(x=>x.trim()).filter(Boolean);return[]}function rows(payload){let d=payload&&payload.data;return Array.isArray(d)?d:Array.isArray(d?.matches)?d.matches:Array.isArray(d?.results)?d.results:Array.isArray(d?.candidates)?d.candidates:Array.isArray(d?.suppliers)?d.suppliers:[]}function card(row,i){let name=pick(row,["company_name","supplier_name","legal_name","name","title"])||`Supplier candidate ${i+1}`,sc=score(row),cat=pick(row,["category","primary_category","capability","capability_group","sector"]),country=pick(row,["country","region","location","factory_location"]),summary=pick(row,["summary","description","match_reason","notes"])||"Public supplier card matched the buyer brief. BLNKK review should confirm evidence, contact path, and introduction readiness.",tags=[...list(row.tags),...list(row.keywords),...list(row.services),cat,country].filter(Boolean).slice(0,6);return`<article class="blnkk-supplier-card"><div class="blnkk-supplier-card-head"><b>${esc(name)}</b>${sc?`<span class="blnkk-score-badge">${esc(sc)}</span>`:""}</div><div class="blnkk-supplier-meta">${esc([cat,country].filter(Boolean).join(" · ")||"BLNKK public supplier directory")}</div><div class="blnkk-supplier-summary">${esc(summary)}</div>${tags.length?`<div class="blnkk-supplier-tags">${tags.map(t=>`<span>${esc(t)}</span>`).join("")}</div>`:""}</article>`}function render(payload){css();let rs=rows(payload);if(!rs.length){roots().forEach(r=>mount(r,'<div class="blnkk-supabase-note">No public supplier cards matched this brief yet. Add specs, region constraints, or target category so BLNKK can narrow again.</div>',"0 found","Match unavailable"));return}let html=rs.slice(0,5).map(card).join("");roots().forEach(r=>mount(r,html,`${rs.length} found`,"BLNKK review recommended"))}function renderError(err){css();let msg=(err&&err.message)||"Supplier matching is not available yet. Check Supabase environment variables and the Vercel API deployment.";roots().forEach(r=>mount(r,`<div class="blnkk-supabase-note">${esc(msg)}</div>`,"0 found","Setup needed"))}let last={key:"",time:0};async function match(raw,via){raw=(raw||"").trim();if(!raw)return;let now=Date.now(),key=raw+"|"+via;if(last.key===key&&now-last.time<3500)return;last={key,time:now};renderLoading();try{let res=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({search_query:raw,limit:12})}),type=res.headers.get("content-type")||"",payload=type.includes("json")?await res.json():{ok:false,error:`Supplier match API returned ${res.status}`};if(!res.ok||payload.ok===false)throw new Error(payload.error||`Supplier match API returned ${res.status}`);render(payload)}catch(e){console.warn("BLNKK supplier match failed",e);renderError(e)}}document.addEventListener("click",e=>{let b=e.target&&e.target.closest&&e.target.closest("button");if(!b||!/^(Send|送出)$/.test(T(b)))return;let i=input();match(i&&i.value,"click")},true);document.addEventListener("keydown",e=>{if(e.key!=="Enter"||e.shiftKey||e.isComposing)return;let i=input();if(e.target===i)match(i.value,"enter")},true);css()})()
