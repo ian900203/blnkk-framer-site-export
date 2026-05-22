@@ -7,8 +7,9 @@
  * structured buyerRequirement object.
  *
  * Architecture:
- *  - Mounts an overlay inside <main> on /csa pages.
- *  - Hides Framer's native chat content while the overlay is active.
+ *  - Waits for [data-framer-root] (Framer uses <div id="main">, not <main>).
+ *  - Appends a position:fixed overlay to document.body, z-index 9999.
+ *  - Disables pointer-events on Framer root so the old chat is unreachable.
  *  - Calls the existing /api/supplier-match for results.
  *  - Calls the existing /api/buyer-requests on consent + contact.
  *  - Never touches Supabase directly; no service_role; no AI API keys.
@@ -484,18 +485,39 @@
   // ============================================================
 
   const CSS = `
-    body.blnkk-csa-intake-on main > section > *:not(#blnkk-csa-intake-root) {
-      display: none !important;
+    /* Framer uses <div data-framer-root> not <main> — disable native chat when overlay active */
+    body.blnkk-csa-intake-on [data-framer-root] {
+      pointer-events: none !important;
+      user-select: none !important;
     }
-    body.blnkk-csa-intake-on main > section { position: relative; padding: 0 !important; }
     #blnkk-csa-intake-root {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
       display: flex;
       flex-direction: column;
-      width: 100%;
-      height: 100%;
-      min-height: 0;
       background: #f6f7f9;
       font-family: -apple-system, "SF Pro Text", "Inter", system-ui, sans-serif;
+    }
+    .blnkk-intake__header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 24px;
+      height: 52px;
+      border-bottom: 1px solid #e5e7eb;
+      background: #fff;
+      flex-shrink: 0;
+    }
+    .blnkk-intake__header-logo {
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      color: #0b1020;
+    }
+    .blnkk-intake__header-sub {
+      font-size: 12px;
+      color: #9ca3af;
     }
     .blnkk-intake__scroll {
       flex: 1 1 auto;
@@ -708,6 +730,7 @@
       40% { transform: scale(1); opacity: 1; }
     }
     @media (max-width: 809.98px) {
+      .blnkk-intake__header { padding: 0 14px; }
       .blnkk-intake__scroll { padding: 16px 14px 10px; gap: 12px; }
       .blnkk-intake__bubble { max-width: 92%; font-size: 14.5px; padding: 13px 15px; }
       .blnkk-intake__input-wrap { padding: 10px 12px 14px; }
@@ -734,13 +757,17 @@
   function mount() {
     if (rootEl) return true;
     injectCss();
-    const main = document.querySelector("main");
-    if (!main) return false;
-    const section = main.querySelector("section") || main;
+    // Framer uses <div data-framer-root>, not <main> – wait for hydration.
+    const framerRoot = document.querySelector("[data-framer-root]");
+    if (!framerRoot) return false;
 
     rootEl = document.createElement("div");
     rootEl.id = "blnkk-csa-intake-root";
     rootEl.innerHTML = `
+      <div class="blnkk-intake__header">
+        <span class="blnkk-intake__header-logo">BLNKK CSA</span>
+        <span class="blnkk-intake__header-sub">Taiwan Supplier Sourcing Agent</span>
+      </div>
       <div class="blnkk-intake__scroll" id="blnkk-csa-intake-scroll"></div>
       <div class="blnkk-intake__input-wrap">
         <div class="blnkk-intake__chips" id="blnkk-csa-intake-chips"></div>
@@ -750,7 +777,8 @@
         </div>
       </div>
     `;
-    section.appendChild(rootEl);
+    // Inject into body (fixed overlay) so Framer DOM structure doesn't matter.
+    document.body.appendChild(rootEl);
 
     scrollEl = rootEl.querySelector("#blnkk-csa-intake-scroll");
     chipsEl = rootEl.querySelector("#blnkk-csa-intake-chips");
@@ -1742,9 +1770,10 @@
     setTextareaMode({ placeholder: "Describe your sourcing need…" });
   }
 
-  // Reset helper for debugging.
+  // Reset helper for debugging (call from browser console).
   window.__blnkkCsaIntakeReset = function () {
-    if (rootEl && rootEl.parentNode) rootEl.parentNode.removeChild(rootEl);
+    const existing = document.getElementById("blnkk-csa-intake-root");
+    if (existing) existing.remove();
     document.body.classList.remove("blnkk-csa-intake-on");
     delete window.__blnkkCsaIntakeV2;
     location.reload();
