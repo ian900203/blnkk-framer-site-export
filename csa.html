@@ -1161,6 +1161,113 @@ function groups(){let set=new Set;document.querySelectorAll("#blnkk-qr-fallback,
 </script>
 <!-- SnippetEnd: blnkk-csa-interaction-stability-guard -->
 
+<!-- Snippet: blnkk-csa-quick-reply-order -->
+<script>
+(() => {
+  if (!/\/csa(?:\/|\.html)?$/.test(location.pathname) || window.__blnkkCsaQuickReplyOrder) return;
+  window.__blnkkCsaQuickReplyOrder = 1;
+
+  // Hold each freshly rendered quick-reply group invisible for HOLD_MS so the
+  // assistant question bubble has time to be read before the options appear.
+  const HOLD_MS = 520;
+  const OPT_RE = /^(Early feasibility|Prototype|Sample build|Production|Yes, non-PRC|Mixed origin OK|Need guidance|Yes, NDA-gated|Not yet|Need more info|ASAP|4-8 weeks|1-3 months|3\+ months|Module supplier|Subsystem integration|Low-volume build support|Validation \/ documentation support|Origin \/ Non-PRC evidence|Datasheet \/ spec package|Sample-build support|Compliance \/ NDAA support|Add more specs|Review shortlisted suppliers|前期可行性|是，需要 Non-PRC|可接受混合來源|需要 BLNKK 建議|是，需 NDA|暫時不用|需要更多說明|4-8 週|1-3 個月|3 個月以上|先找 module supplier|先找 subsystem integration|先找低量 build support|先找驗證 \/ 文件支援|Origin \/ Non-PRC 證據|Sample-build 支援|Compliance \/ NDAA 支援)$/;
+  const T = (e) => (e && e.textContent || "").trim();
+  const isOpt = (b) => b && b.matches && b.matches("button") && OPT_RE.test(T(b));
+
+  function ensureCss() {
+    if (document.getElementById("blnkk-csa-qr-order-css")) return;
+    const s = document.createElement("style");
+    s.id = "blnkk-csa-qr-order-css";
+    s.textContent = ".blnkk-csa-qr-hold{opacity:0!important;transform:translate3d(0,8px,0)!important;pointer-events:none!important;transition:opacity .36s cubic-bezier(.2,.7,.2,1),transform .36s cubic-bezier(.2,.7,.2,1)!important}.blnkk-csa-qr-show{opacity:1;transform:none;transition:opacity .36s cubic-bezier(.2,.7,.2,1),transform .36s cubic-bezier(.2,.7,.2,1)}";
+    document.head.appendChild(s);
+  }
+
+  function groupOf(button) {
+    let n = button;
+    for (let i = 0; n && i < 6; i++, n = n.parentElement) {
+      if ([...n.querySelectorAll("button")].filter(isOpt).length >= 2) return n;
+    }
+    return null;
+  }
+
+  function scan() {
+    ensureCss();
+    const groups = new Set();
+    document.querySelectorAll("button").forEach((b) => {
+      if (!isOpt(b)) return;
+      const g = groupOf(b);
+      if (g) groups.add(g);
+    });
+    groups.forEach((g) => {
+      const sig = [...g.querySelectorAll("button")].filter(isOpt).map(T).join("|");
+      if (!sig || g.dataset.blnkkQrSig === sig) return;
+      g.dataset.blnkkQrSig = sig;
+      g.classList.remove("blnkk-csa-qr-show");
+      g.classList.add("blnkk-csa-qr-hold");
+      setTimeout(() => {
+        if (g.dataset.blnkkQrSig !== sig) return;
+        g.classList.remove("blnkk-csa-qr-hold");
+        g.classList.add("blnkk-csa-qr-show");
+      }, HOLD_MS);
+    });
+  }
+
+  let d = 0;
+  function schedule() { clearTimeout(d); d = setTimeout(scan, 50); }
+  new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true });
+  addEventListener("load", schedule);
+  scan();
+})();
+</script>
+<!-- SnippetEnd: blnkk-csa-quick-reply-order -->
+
+<!-- Snippet: blnkk-csa-mobile-rwd -->
+<script>
+(() => {
+  if (!/\/csa(?:\/|\.html)?$/.test(location.pathname) || window.__blnkkCsaMobileRwd) return;
+  window.__blnkkCsaMobileRwd = 1;
+  if (document.getElementById("blnkk-csa-mobile-rwd-css")) return;
+  const s = document.createElement("style");
+  s.id = "blnkk-csa-mobile-rwd-css";
+  s.textContent = [
+    "@media (max-width: 1023.98px){",
+    "  .flex.overflow-hidden.bg-\\[\\#f6f7f9\\]{height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important}",
+    "  body aside.hidden.w-\\[280px\\],body aside.hidden.w-\\[380px\\]{display:none!important}",
+    "  section .mt-6.block.rounded-3xl.lg\\:hidden{display:none!important}",
+    "  .blnkk-csa-score-model{display:none!important}",
+    "}",
+    "@media (max-width: 809.98px){",
+    "  main > header{min-height:50px!important;padding:8px 12px!important;gap:8px!important}",
+    "  main > header .hidden.sm\\:block{display:none!important}",
+    "  main .rounded-3xl.bg-white.p-5,main .rounded-3xl.bg-white.p-6{padding:18px!important;margin-bottom:16px!important}",
+    "  main .rounded-3xl h1{font-size:24px!important;line-height:1.15!important;letter-spacing:-.01em!important}",
+    "  main .rounded-3xl p{font-size:13.5px!important;line-height:1.55!important}",
+    "  .flex.justify-start > div,.flex.justify-end > div{max-width:92%!important;font-size:14.5px!important;line-height:1.6!important;padding:13px 15px!important;border-radius:18px!important}",
+    "  .flex.flex-wrap.gap-2 button,main .flex.flex-wrap button,.blnkk-csa-recovery-options button,.blnkk-csa-flow-options button{min-height:42px!important;padding:10px 16px!important;font-size:14px!important;border-radius:999px!important}",
+    "  main .rounded-3xl .mt-5.flex.flex-wrap.gap-2{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}",
+    "  main .border-t.border-gray-200.bg-white{padding:10px 12px!important;box-shadow:0 -4px 24px rgba(15,23,42,.05)!important}",
+    "  main input[placeholder],main textarea[placeholder]{font-size:16px!important;padding:12px 14px!important;min-height:46px!important}",
+    "  main .rounded-xl.bg-gray-950{min-height:46px!important;padding:11px 18px!important;font-size:14.5px!important}",
+    "  .blnkk-supplier-card{padding:14px 15px!important;border-radius:16px!important}",
+    "  .blnkk-supplier-card b{font-size:13.5px!important}",
+    "  .blnkk-supabase-results{gap:10px!important}",
+    "  .blnkk-csa-shortlist-heading{font-size:17px!important}",
+    "  .blnkk-csa-shortlist-lines li{padding:12px 0!important}",
+    "  .blnkk-csa-shortlist-company b{font-size:14px!important}",
+    "  .blnkk-csa-shortlist-meta{font-size:12.5px!important}",
+    "}",
+    "@media (max-width: 480px){",
+    "  main .rounded-3xl h1{font-size:21px!important}",
+    "  main .rounded-3xl .mt-5.flex.flex-wrap.gap-2{grid-template-columns:1fr!important}",
+    "  .flex.justify-start > div,.flex.justify-end > div{max-width:96%!important;font-size:14px!important;padding:12px 14px!important}",
+    "  main > header .truncate.text-sm{font-size:13px!important}",
+    "}",
+  ].join("\n");
+  document.head.appendChild(s);
+})();
+</script>
+<!-- SnippetEnd: blnkk-csa-mobile-rwd -->
+
     <!-- End of bodyEnd -->
 </body>
 </html>
