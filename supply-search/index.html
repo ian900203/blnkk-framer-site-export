@@ -581,6 +581,66 @@
       line-height: 1.6;
     }
 
+    .choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+      min-height: 44px;
+    }
+
+    .choice-chip {
+      opacity: 0;
+      transform: translateY(10px) scale(.96);
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #344054;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 750;
+      box-shadow: 0 8px 18px rgba(9, 15, 31, .04);
+    }
+
+    .choice-chip.is-live {
+      animation: choicePop .46s cubic-bezier(.18, .86, .22, 1) both;
+    }
+
+    .choice-chip.is-selected {
+      color: #fff;
+      border-color: var(--ink);
+      background: var(--ink);
+      box-shadow: 0 14px 30px rgba(9, 15, 31, .16);
+    }
+
+    .reply-bubble {
+      min-height: 58px;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border: 1px solid rgba(9, 15, 31, .08);
+      border-radius: 18px 18px 6px 18px;
+      color: #fff;
+      background: var(--ink);
+      font-size: 15px;
+      line-height: 1.55;
+      box-shadow: 0 16px 30px rgba(9, 15, 31, .15);
+    }
+
+    .type-line {
+      display: inline;
+    }
+
+    .type-cursor::after {
+      content: "";
+      display: inline-block;
+      width: 1px;
+      height: 1.05em;
+      margin-left: 3px;
+      vertical-align: -0.12em;
+      background: currentColor;
+      animation: blinkCursor .85s steps(1) infinite;
+    }
+
     .input-preview {
       display: flex;
       justify-content: space-between;
@@ -630,6 +690,23 @@
     .supplier {
       padding: 16px;
       margin-bottom: 12px;
+      transition: transform .26s var(--motion), box-shadow .26s var(--motion), opacity .24s ease, border-color .24s ease, background .24s ease;
+    }
+
+    .supplier.is-active {
+      border-color: #c7d7ff;
+      background: linear-gradient(180deg, #fff 0%, #f8fbff 100%);
+      box-shadow: 0 18px 38px rgba(37, 99, 235, .10);
+    }
+
+    .supplier.is-dim {
+      opacity: .72;
+    }
+
+    .brief-item.is-active,
+    .field.is-active {
+      border-color: #c7d7ff;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, .08);
     }
 
     .supplier-top {
@@ -940,6 +1017,33 @@
       }
     }
 
+    @keyframes choicePop {
+      0% {
+        opacity: 0;
+        transform: translateY(12px) scale(.94);
+      }
+
+      68% {
+        opacity: 1;
+        transform: translateY(-3px) scale(1.03);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes blinkCursor {
+      0%, 44% {
+        opacity: 1;
+      }
+
+      45%, 100% {
+        opacity: 0;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *,
       *::before,
@@ -1032,24 +1136,24 @@
             <strong>RF data-link supplier search</strong>
             <span>AI sourcing conversation - BLNKK review required</span>
           </div>
-          <div class="workspace-grid">
+          <div class="workspace-grid" data-demo-workspace>
             <aside class="side">
               <a class="brand on-light" href="#" aria-label="BLNKK">
                 <img class="logo-icon" src="https://framerusercontent.com/images/NYeJGzUhu5OjdBsoqNX1ywNRg.png?width=960&amp;height=960" alt="" aria-hidden="true">
                 <img class="logo-name" src="https://framerusercontent.com/images/UrrwUbK41hrsjeYDyQOYXxbrZPQ.png?width=2045&amp;height=444" alt="BLNKK">
               </a>
               <div class="side-title">Sourcing briefs</div>
-              <div class="brief-item">
+              <div class="brief-item is-active" data-demo-brief>
                 <strong>RF data-link suppliers</strong>
                 <span>Non-PRC modules for UAV applications.</span>
                 <div class="status">Shortlist ready</div>
               </div>
-              <div class="brief-item">
+              <div class="brief-item" data-demo-brief>
                 <strong>Flight controller PCBA</strong>
                 <span>Small-batch samples, documentation support.</span>
                 <div class="status" style="color:#805d0c;background:#fff4cf;">Needs specs</div>
               </div>
-              <div class="brief-item">
+              <div class="brief-item" data-demo-brief>
                 <strong>Battery / BMS options</strong>
                 <span>Pack integration and export support.</span>
                 <div class="status" style="color:#647085;background:#eceff3;">Draft</div>
@@ -1058,20 +1162,20 @@
 
             <section class="main-pane">
               <div class="intake-card">
-                <div class="kicker">Step 2 of 5</div>
-                <h3>Confirm the must-have supplier signals.</h3>
+                <div class="kicker" data-demo-step>Step 2 of 5</div>
+                <h3 data-demo-title>Confirm the must-have supplier signals.</h3>
                 <div class="field-row">
-                  <div class="field">Frequency band: 900 MHz / 2.4 GHz</div>
-                  <div class="field">Region exclusion: PRC-owned suppliers</div>
-                  <div class="field">MOQ: prototype batch accepted</div>
-                  <div class="field">Evidence: datasheet + export history</div>
+                  <div class="field is-active" data-demo-field>Frequency band: 900 MHz / 2.4 GHz</div>
+                  <div class="field is-active" data-demo-field>Region exclusion: PRC-owned suppliers</div>
+                  <div class="field is-active" data-demo-field>MOQ: prototype batch accepted</div>
+                  <div class="field is-active" data-demo-field>Evidence: datasheet + export history</div>
                 </div>
               </div>
-              <div class="ask">
-                Do you need the supplier to support custom firmware, or is a catalog RF module acceptable for the first prototype?
-              </div>
+              <div class="ask"><span class="type-line" data-demo-question>Do you need the supplier to support custom firmware, or is a catalog RF module acceptable for the first prototype?</span></div>
+              <div class="choice-row" data-demo-options></div>
+              <div class="reply-bubble"><span class="type-line" data-demo-reply>Catalog RF module is acceptable for the first prototype.</span></div>
               <div class="input-preview">
-                <span>Reply with a constraint, file, or target spec...</span>
+                <span class="type-line" data-demo-input>Catalog RF module is acceptable for the first prototype.</span>
                 <button type="button">Send</button>
               </div>
             </section>
@@ -1079,23 +1183,23 @@
             <aside class="signals-pane">
               <div class="signal-head">
                 <h3>Recommended candidates</h3>
-                <span class="count">3 found</span>
+                <span class="count" data-demo-count>3 found</span>
               </div>
-              <div class="supplier">
+              <div class="supplier is-active" data-demo-supplier>
                 <div class="supplier-top">
                   <strong>Taipei RF Systems Co.</strong>
                   <span class="score">92%</span>
                 </div>
                 <p>Matched on RF module capability, UAV adjacent projects, and small-batch support. Public evidence found in product sheets.</p>
               </div>
-              <div class="supplier">
+              <div class="supplier" data-demo-supplier>
                 <div class="supplier-top">
                   <strong>Hsinchu Embedded Link</strong>
                   <span class="score">86%</span>
                 </div>
                 <p>Strong firmware fit and hardware integration history. Needs BLNKK review before buyer details are revealed.</p>
               </div>
-              <div class="supplier">
+              <div class="supplier is-dim" data-demo-supplier>
                 <div class="supplier-top">
                   <strong>2 gated alternates</strong>
                   <span class="score">Review</span>
@@ -1275,6 +1379,194 @@
       window.addEventListener("scroll", scheduleMetricSequence, { passive: true });
       window.addEventListener("resize", scheduleMetricSequence);
       scheduleMetricSequence();
+    })();
+  </script>
+  <script>
+    (() => {
+      const root = document.querySelector("[data-demo-workspace]");
+      if (!root) return;
+
+      const stepEl = root.querySelector("[data-demo-step]");
+      const titleEl = root.querySelector("[data-demo-title]");
+      const fieldEls = [...root.querySelectorAll("[data-demo-field]")];
+      const briefEls = [...root.querySelectorAll("[data-demo-brief]")];
+      const questionEl = root.querySelector("[data-demo-question]");
+      const optionsEl = root.querySelector("[data-demo-options]");
+      const replyEl = root.querySelector("[data-demo-reply]");
+      const inputEl = root.querySelector("[data-demo-input]");
+      const countEl = root.querySelector("[data-demo-count]");
+      const supplierEls = [...root.querySelectorAll("[data-demo-supplier]")];
+      const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const scenarios = [
+        {
+          step: "Step 2 of 5",
+          title: "Confirm the must-have supplier signals.",
+          fields: [
+            "Frequency band: 900 MHz / 2.4 GHz",
+            "Region exclusion: PRC-owned suppliers",
+            "MOQ: prototype batch accepted",
+            "Evidence: datasheet + export history"
+          ],
+          question: "Do you need the supplier to support custom firmware, or is a catalog RF module acceptable for the first prototype?",
+          options: ["Catalog RF module OK", "Need firmware support", "Need both"],
+          selected: 0,
+          reply: "Catalog RF module is acceptable for the first prototype.",
+          count: "3 found",
+          activeBrief: 0,
+          suppliers: [
+            ["Taipei RF Systems Co.", "92%", "Matched on RF module capability, UAV adjacent projects, and small-batch support. Public evidence found in product sheets.", "active"],
+            ["Hsinchu Embedded Link", "86%", "Strong firmware fit and hardware integration history. Needs BLNKK review before buyer details are revealed.", ""],
+            ["2 gated alternates", "Review", "Supplier names stay hidden until BLNKK validates ownership, export sensitivity, and disclosure rules.", "dim"]
+          ]
+        },
+        {
+          step: "Step 3 of 5",
+          title: "Narrow the first-pass qualification filters.",
+          fields: [
+            "Integration path: drop-in RF module",
+            "Compliance: NDAA-aware documentation",
+            "Timeline: prototype in 6 weeks",
+            "Review gate: export + ownership screen"
+          ],
+          question: "What evidence should BLNKK prioritize before a supplier moves into the reviewed shortlist?",
+          options: ["Datasheet + COO", "Test report", "Export history"],
+          selected: 2,
+          reply: "Prioritize export history first, then confirm the datasheet and COO.",
+          count: "4 found",
+          activeBrief: 0,
+          suppliers: [
+            ["Taipei RF Systems Co.", "94%", "Still leads after the evidence filter tightened around export-ready RF module support.", "active"],
+            ["Taichung Signal Works", "88%", "Strong adjacent RF integration history, but product-sheet detail still needs BLNKK review.", ""],
+            ["1 gated alternate", "Review", "Additional candidate stays hidden until origin and disclosure checks clear.", "dim"]
+          ]
+        },
+        {
+          step: "Step 4 of 5",
+          title: "Shape the first supplier conversation.",
+          fields: [
+            "Meeting goal: first prototype feasibility",
+            "Factory region: Taiwan preferred",
+            "Fallback path: allied-market alternate",
+            "Buyer detail gate: BLNKK review required"
+          ],
+          question: "Should BLNKK prepare a shortlist focused on immediate prototype supply, or include alternates for a second sourcing path?",
+          options: ["Prototype only", "Include alternates", "Need BLNKK guidance"],
+          selected: 1,
+          reply: "Include alternates so we can compare a second sourcing path after the first review.",
+          count: "5 found",
+          activeBrief: 1,
+          suppliers: [
+            ["Hsinchu Embedded Link", "91%", "Moves up when alternates are included because integration support looks stronger for second-path sourcing.", "active"],
+            ["Taipei RF Systems Co.", "89%", "Still viable for the first prototype route and remains in the reviewed stack.", ""],
+            ["2 gated alternates", "Ready", "BLNKK can introduce alternates after ownership and disclosure review completes.", ""]
+          ]
+        }
+      ];
+
+      const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      async function typeText(node, text, speed) {
+        if (!node) return;
+        node.textContent = "";
+        node.classList.add("type-cursor");
+        if (reduceMotion) {
+          node.textContent = text;
+          node.classList.remove("type-cursor");
+          return;
+        }
+        for (let i = 0; i < text.length; i += 1) {
+          node.textContent = text.slice(0, i + 1);
+          await wait(speed);
+        }
+        node.classList.remove("type-cursor");
+      }
+
+      function paintSuppliers(items) {
+        supplierEls.forEach((card, index) => {
+          const item = items[index];
+          if (!item) return;
+          const [name, score, copy, tone] = item;
+          const nameEl = card.querySelector("strong");
+          const scoreEl = card.querySelector(".score");
+          const copyEl = card.querySelector("p");
+          if (nameEl) nameEl.textContent = name;
+          if (scoreEl) scoreEl.textContent = score;
+          if (copyEl) copyEl.textContent = copy;
+          card.classList.remove("is-active", "is-dim");
+          if (tone === "active") card.classList.add("is-active");
+          if (tone === "dim") card.classList.add("is-dim");
+        });
+      }
+
+      function paintFields(fields) {
+        fieldEls.forEach((field, index) => {
+          field.textContent = fields[index] || "";
+          field.classList.remove("is-active");
+        });
+        fieldEls.forEach((field, index) => {
+          setTimeout(() => field.classList.add("is-active"), reduceMotion ? 0 : 70 * index);
+        });
+      }
+
+      function paintBrief(activeIndex) {
+        briefEls.forEach((brief, index) => {
+          brief.classList.toggle("is-active", index === activeIndex);
+        });
+      }
+
+      async function animateOptions(options, selected) {
+        optionsEl.innerHTML = "";
+        if (reduceMotion) {
+          options.forEach((label, index) => {
+            const chip = document.createElement("button");
+            chip.type = "button";
+            chip.className = `choice-chip is-live${index === selected ? " is-selected" : ""}`;
+            chip.textContent = label;
+            optionsEl.appendChild(chip);
+          });
+          return;
+        }
+        for (let i = 0; i < options.length; i += 1) {
+          const chip = document.createElement("button");
+          chip.type = "button";
+          chip.className = "choice-chip";
+          chip.textContent = options[i];
+          optionsEl.appendChild(chip);
+          requestAnimationFrame(() => chip.classList.add("is-live"));
+          await wait(90);
+        }
+        await wait(240);
+        const selectedChip = optionsEl.children[selected];
+        if (selectedChip) selectedChip.classList.add("is-selected");
+      }
+
+      async function playScenario(scenario) {
+        if (stepEl) stepEl.textContent = scenario.step;
+        if (titleEl) titleEl.textContent = scenario.title;
+        if (countEl) countEl.textContent = scenario.count;
+        paintFields(scenario.fields);
+        paintBrief(scenario.activeBrief);
+        paintSuppliers(scenario.suppliers);
+        await typeText(questionEl, scenario.question, 18);
+        await wait(reduceMotion ? 0 : 180);
+        await animateOptions(scenario.options, scenario.selected);
+        await wait(reduceMotion ? 0 : 180);
+        await typeText(replyEl, scenario.reply, 16);
+        await wait(reduceMotion ? 0 : 120);
+        await typeText(inputEl, scenario.reply, 12);
+      }
+
+      async function loop() {
+        let index = 0;
+        while (root.isConnected) {
+          await playScenario(scenarios[index]);
+          await wait(reduceMotion ? 2600 : 2900);
+          index = (index + 1) % scenarios.length;
+        }
+      }
+
+      loop();
     })();
   </script>
 </body>
