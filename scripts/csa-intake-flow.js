@@ -1073,12 +1073,15 @@
 
       case "contact_cta":
         if (answer.source !== "chip") return;
-        appendUser(answer.label);
-        if (answer.value === "yes") return goContactCompany();
-        appendAssistant("Got it — your sourcing requirement is logged in BLNKK's review queue. Refresh anytime to start a new search.");
+        session.step = "complete"; // lock immediately to prevent double-fire
         clearChips();
         setTextareaMode({ disabled: true, placeholder: "Session complete." });
-        session.step = "complete";
+        appendUser(answer.label);
+        if (answer.value === "yes") {
+          session.step = "contact_company"; // re-open for contact flow
+          return goContactCompany();
+        }
+        appendAssistant("Got it — your sourcing requirement is logged in BLNKK's review queue. Refresh anytime to start a new search.");
         persistSession({ withContact: false }).catch(() => {});
         return;
 
@@ -1473,6 +1476,14 @@
     return goContactCta();
   }
 
+  // Pick first truthy value from a list of field names on obj.
+  function pick(obj, keys) {
+    for (const k of keys) {
+      if (obj && obj[k] != null && String(obj[k]).trim()) return String(obj[k]).trim();
+    }
+    return "";
+  }
+
   function renderResults() {
     const matches = session.matches || [];
     if (!matches.length) {
@@ -1485,47 +1496,55 @@
       .filter((c) => (r.complianceFlags || []).includes(c.id))
       .map((c) => c.label);
     const lines = top.map((s, i) => {
-      const signal = s.signal_code || s.signalCode || s.code || ("TW-SIGNAL-" + String(i + 1).padStart(3, "0"));
-      const fit = s.fit_score || s.fit || s.score || s.match_score || (90 - i * 3);
-      const conf = s.confidence || s.confidence_level || (i < 2 ? "High" : i < 5 ? "Medium" : "Reviewed");
-      const category = s.category || s.matched_subsystem || s.subsystem || r.subsystem || r.domain || "";
-      const country = s.country || "Taiwan";
-      const why = s.why_it_fits || s.reason || s.match_reason || s.summary
-        || (`Database signal aligned with ${r.subsystem || r.domain || "your requirement"}.`);
-      const tags = Array.isArray(s.tags) ? s.tags
+      // Use same field-name priority as the existing blnkk-supabase-supplier-match-v2 snippet
+      const name = pick(s, ["company_name", "supplier_name", "legal_name", "name", "title"])
+        || `Supplier candidate ${i + 1}`;
+      const rawFit = s.fit_score ?? s.score ?? s.match_score ?? s.similarity ?? s.confidence;
+      const fitNum = rawFit != null ? Number(rawFit) : null;
+      const fitDisplay = fitNum != null
+        ? (fitNum <= 1 ? Math.round(fitNum * 100) + "%" : Math.round(fitNum) + (fitNum > 1 && fitNum <= 100 ? "%" : ""))
+        : "";
+      const conf = pick(s, ["confidence_level", "confidence"])
+        || (fitNum != null ? (fitNum > 0.75 || fitNum > 75 ? "High" : fitNum > 0.5 || fitNum > 50 ? "Medium" : "Reviewed") : "Reviewed");
+      const category = pick(s, ["category", "primary_category", "capability", "capability_group", "sector"])
+        || r.subsystem || r.domain || "";
+      const country = pick(s, ["country", "region", "location", "factory_location"]) || "Taiwan";
+      const why = pick(s, ["why_it_fits", "reason", "match_reason", "summary", "description"])
+        || `Matched on ${r.subsystem || r.domain || "your sourcing requirement"}.`;
+      const tagArr = Array.isArray(s.tags) ? s.tags
         : Array.isArray(s.signals) ? s.signals
         : Array.isArray(s.compliance_signals) ? s.compliance_signals
         : complianceLabels.slice(0, 3);
-      const tagsStr = (tags || []).slice(0, 4).join(" · ");
+      const tagsStr = (tagArr || []).slice(0, 4).join(" · ");
       return `<li>
-        <div class="blnkk-intake__result-head"><b>${escapeHtml(signal)}</b><span class="blnkk-intake__result-fit">Fit ${escapeHtml(String(fit))}</span></div>
+        <div class="blnkk-intake__result-head"><b>${escapeHtml(name)}</b>${fitDisplay ? `<span class="blnkk-intake__result-fit">Fit ${escapeHtml(fitDisplay)}</span>` : ""}</div>
         <div class="blnkk-intake__result-meta">${escapeHtml(category)}${country ? " · " + escapeHtml(country) : ""}${conf ? " · " + escapeHtml(conf) + " confidence" : ""}</div>
         <div class="blnkk-intake__result-why">${escapeHtml(why)}</div>
         ${tagsStr ? `<div class="blnkk-intake__result-tags">${escapeHtml(tagsStr)}</div>` : ""}
         <div class="blnkk-intake__result-cta">
-          <button type="button" data-action="interested" data-signal="${escapeHtml(signal)}">Interested</button>
-          <button type="button" data-action="more-info" data-signal="${escapeHtml(signal)}">Need more info</button>
+          <button type="button" data-action="interested" data-name="${escapeHtml(name)}">Interested</button>
+          <button type="button" data-action="more-info" data-name="${escapeHtml(name)}">Need more info</button>
         </div>
       </li>`;
     }).join("");
     const html = `<div class="blnkk-intake__results">
       <div class="blnkk-intake__brand">BLNKK</div>
       <div class="blnkk-intake__results-title">First-pass supplier shortlist</div>
-      <p class="blnkk-intake__results-intro">Based on your requirement profile, BLNKK matched ${top.length} Taiwan supplier signal${top.length === 1 ? "" : "s"} that may fit.</p>
+      <p class="blnkk-intake__results-intro">Based on your requirement profile, BLNKK matched ${top.length} Taiwan supplier${top.length === 1 ? "" : "s"} that may fit.</p>
       <ol class="blnkk-intake__results-list">${lines}</ol>
-      <p class="blnkk-intake__results-note">Full supplier identities and contact information remain protected until BLNKK confirms the NDA-gated introduction.</p>
+      <p class="blnkk-intake__results-note">Contact details and full supplier profiles are shared only after BLNKK confirms the introduction path.</p>
     </div>`;
     appendCustomBubble(html);
-    // wire up the interested / more-info buttons
+    // Wire up Interested / Need more info buttons
     scrollEl.querySelectorAll(".blnkk-intake__result-cta button").forEach((btn) => {
       btn.addEventListener("click", () => {
         const action = btn.dataset.action;
-        const sig = btn.dataset.signal;
-        appendUser(action === "interested" ? `Interested in ${sig}` : `Need more info on ${sig}`);
+        const nm = btn.dataset.name;
+        appendUser(action === "interested" ? `Interested in ${nm}` : `Need more info on ${nm}`);
         if (action === "interested") {
-          appendAssistant("Noted. Once you tap Yes, prepare next steps below, BLNKK will queue this signal for the confidential shortlist.");
+          appendAssistant(`Noted — ${nm} is queued for the confidential shortlist once you confirm next steps below.`);
         } else {
-          appendAssistant("Got it — BLNKK can compile additional info on that signal during the confidential review.");
+          appendAssistant(`Got it — BLNKK will include additional detail on ${nm} in the confidential review.`);
         }
       });
     });
@@ -1611,6 +1630,10 @@
   }
 
   async function finalizeContact() {
+    // Lock the step immediately — prevents double-fire if user interacts during async fetch.
+    session.step = "complete";
+    clearChips();
+    setTextareaMode({ disabled: true, placeholder: "Saving…" });
     appendAssistant("Thanks — saving your request and notifying BLNKK now.");
     showTyping();
     try {
@@ -1626,9 +1649,7 @@
       console.error("[BLNKK CSA] persist failed:", err);
       appendAssistant("Saved locally — BLNKK's review queue had a transient issue. We'll retry on our side and follow up by email.");
     }
-    clearChips();
     setTextareaMode({ disabled: true, placeholder: "Session complete." });
-    session.step = "complete";
   }
 
   // ============================================================
