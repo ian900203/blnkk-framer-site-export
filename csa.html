@@ -369,10 +369,32 @@ function groups(){let set=new Set;document.querySelectorAll("#blnkk-qr-fallback,
 (()=>{
   if(!/\/csa(?:\/|\.html)?$/.test(location.pathname)||window.__blnkkCsaShortlistFormat)return;
   window.__blnkkCsaShortlistFormat=1;
-  const T=e=>(e&&e.textContent||"").trim();
-  const match=text=>{
+  // innerText respects block-level boundaries so multi-paragraph shortlists
+  // don't run together like "Power2. POWER"; textContent is the fallback.
+  const T=e=>{
+    if(!e)return"";
+    let t=(e.innerText!==undefined&&e.innerText!==null?e.innerText:e.textContent)||"";
+    return t.trim();
+  };
+  function normalize(text){
     text=String(text||"").replace(/\s+/g," ").trim();
-    return /BLNKK/i.test(text)&&/(supplier cards|shortlist|candidate)/i.test(text)&&/\b1[\.\)]\s+[A-Z0-9]/.test(text);
+    // Insert a missing space between any non-pipe/non-space character and a "N. CAP"
+    // run-on, e.g. "Power2. POWER" -> "Power 2. POWER".
+    text=text.replace(/([^\d\s|])(\d+[\.\)]\s+[A-Z0-9])/g,"$1 $2");
+    // Insert a missing space before a Next-step marker that is glued to the previous row.
+    text=text.replace(/([^\s])((?:下一步建議|建議下一步|下一步|Next step|Next)[:：])/g,"$1 $2");
+    return text;
+  }
+  const NEXT_RE=/(下一步建議|建議下一步|下一步|Next step|Next)[:：]/i;
+  const match=text=>{
+    text=normalize(text);
+    if(!/BLNKK/i.test(text))return false;
+    if(!/(supplier cards|shortlist|candidate|供應商|public cards)/i.test(text))return false;
+    if(!/(?:^|[^\d])1[\.\)]\s+[A-Z0-9]/.test(text))return false;
+    // Wait for the message to be "complete": either a next-step marker is present
+    // or we already see at least 3 numbered rows.
+    let rowCount=(text.match(/(?:^|[^\d])\d+[\.\)]\s+[A-Z0-9]/g)||[]).length;
+    return NEXT_RE.test(text)||rowCount>=3;
   };
   function css(){
     if(document.getElementById("blnkk-csa-shortlist-format-css"))return;
@@ -382,27 +404,38 @@ function groups(){let set=new Set;document.querySelectorAll("#blnkk-qr-fallback,
     document.head.appendChild(s);
   }
   function build(text){
+    text=normalize(text);
     text=text.replace(/^BLNKK\s*/,"").replace(/^BLNKK(?=I searched|First-pass)/,"").replace(/\s+/g," ").trim();
-    text=text.replace(/^First-pass supplier shortlist\s*/i,"").trim();
-    let start=text.search(/\b1[\.\)]\s+[A-Z0-9]/);
+    text=text.replace(/^First-pass supplier shortlist[:：]?\s*/i,"").trim();
+    let m=text.match(/(?:^|[^\d])(1[\.\)]\s+[A-Z0-9])/);
+    if(!m)return null;
+    let start=text.indexOf(m[1],m.index);
     if(start<0)return null;
-    let intro=text.slice(0,start).trim(),rest=text.slice(start).trim(),next="",ni=rest.search(/\s(?:Next|Next step)[:：]\s/i);
-    if(ni>=0){next=rest.slice(ni).replace(/^(?:Next|Next step)[:：]\s*/i,"").trim();rest=rest.slice(0,ni).trim()}
-    let rows=rest.match(/\b\d+[\.\)]\s+[\s\S]*?(?=\s+\d+[\.\)]\s+[A-Z0-9]|$)/g)||[];
-    rows=rows.map(x=>x.trim()).filter(Boolean);
+    let intro=text.slice(0,start).trim().replace(/[:：]\s*$/,"。");
+    let rest=text.slice(start).trim();
+    let next="";
+    let ni=rest.search(NEXT_RE);
+    if(ni>=0){
+      let after=rest.slice(ni).replace(/^\s+/,"");
+      next=after.replace(/^(?:Next|Next step|下一步建議|下一步|建議下一步)[:：]\s*/i,"").trim();
+      rest=rest.slice(0,ni).trim();
+    }
+    let rows=rest.match(/(?:^|[^\d])(\d+[\.\)]\s+[\s\S]*?)(?=\s+\d+[\.\)]\s+[A-Z0-9]|$)/g)||[];
+    rows=rows.map(x=>x.replace(/^[^\d]/,"").trim()).filter(Boolean);
     if(rows.length<2)return null;
     let box=document.createElement("div");
     box.className="blnkk-csa-shortlist-result";
     box.innerHTML='<div class="blnkk-csa-shortlist-heading">First-pass supplier shortlist</div>';
-    let p=document.createElement("p");
-    p.className="blnkk-csa-shortlist-intro";
-    p.textContent=intro.replace(/:\s*$/,".");
-    box.appendChild(p);
+    if(intro){let p=document.createElement("p");p.className="blnkk-csa-shortlist-intro";p.textContent=intro;box.appendChild(p)}
     let ol=document.createElement("ol");
     ol.className="blnkk-csa-shortlist-lines";
     rows.forEach(row=>{
       row=row.replace(/^\d+[\.\)]\s*/,"").trim();
-      let parts=row.split(/\s+\|\s+/).map(x=>x.trim()).filter(Boolean),name=parts.shift()||row,fit=(parts.find(x=>/^fit\s+/i.test(x))||row.match(/\bfit\s+(\d+%?)/i)?.[0]||"").replace(/^fit\s+/i,""),conf=parts.find(x=>/confidence/i.test(x))||row.match(/\b(?:High|Medium|Low)\s+confidence\b/i)?.[0]||"",meta=parts.filter(x=>!/^fit\s+/i.test(x)&&!/confidence/i.test(x)).join(" | ");
+      let parts=row.split(/\s*\|\s*/).map(x=>x.trim()).filter(Boolean);
+      let name=parts.shift()||row;
+      let fit=(parts.find(x=>/^fit\s+/i.test(x))||row.match(/\bfit\s+(\d+%?)/i)?.[0]||"").replace(/^fit\s+/i,"");
+      let conf=parts.find(x=>/confidence/i.test(x))||row.match(/\b(?:High|Medium|Low)\s+confidence\b/i)?.[0]||"";
+      let meta=parts.filter(x=>!/^fit\s+/i.test(x)&&!/confidence/i.test(x)).join(" | ");
       if(!parts.length){name=row.replace(/\bfit\s+\d+%?.*$/i,"").replace(/\b(?:High|Medium|Low)\s+confidence.*$/i,"").trim()}
       let li=document.createElement("li");
       li.innerHTML='<div class="blnkk-csa-shortlist-company"><b></b><span class="blnkk-csa-shortlist-fit"></span></div><div class="blnkk-csa-shortlist-meta"></div>';
@@ -419,7 +452,7 @@ function groups(){let set=new Set;document.querySelectorAll("#blnkk-qr-fallback,
     let fixed=[...document.querySelectorAll(".flex.justify-start > div,[class*='justify-start'] > div")];
     let loose=[...document.querySelectorAll("div")].filter(el=>{
       let text=T(el);
-      return text.length>160&&text.length<2600&&match(text)&&!el.querySelector("input,textarea,button")&&!el.closest(".blnkk-csa-shortlist-result");
+      return text.length>160&&text.length<3600&&match(text)&&!el.querySelector("input,textarea,button")&&!el.closest(".blnkk-csa-shortlist-result");
     }).sort((a,b)=>T(a).length-T(b).length);
     return [...new Set([...fixed,...loose])];
   }
@@ -437,15 +470,9 @@ function groups(){let set=new Set;document.querySelectorAll("#blnkk-qr-fallback,
       if(label)el.appendChild(label);else{let k=document.createElement("div");k.className="mb-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-blue-600";k.textContent="BLNKK";el.appendChild(k)}
       el.appendChild(built);
     });
-    let w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:n=>{
-      let p=n.parentElement,t=n.nodeValue||"";
-      return p&&match(t)&&!p.closest(".blnkk-csa-shortlist-result,script,style")?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;
-    }}),nodes=[],n;
-    while(n=w.nextNode())nodes.push(n);
-    nodes.forEach(x=>{let built=build(x.nodeValue||"");built&&x.parentNode.replaceChild(built,x)});
   }
   let d=0;
-  function tick(){clearTimeout(d);d=setTimeout(run,120)}
+  function tick(){clearTimeout(d);d=setTimeout(run,140)}
   new MutationObserver(tick).observe(document.documentElement,{childList:1,subtree:1,characterData:1});
   addEventListener("load",tick);
   run();
@@ -1167,10 +1194,17 @@ function groups(){let set=new Set;document.querySelectorAll("#blnkk-qr-fallback,
   if (!/\/csa(?:\/|\.html)?$/.test(location.pathname) || window.__blnkkCsaQuickReplyOrder) return;
   window.__blnkkCsaQuickReplyOrder = 1;
 
-  // Hold each freshly rendered quick-reply group invisible for HOLD_MS so the
-  // assistant question bubble has time to be read before the options appear.
-  const HOLD_MS = 520;
+  // Quick-reply lifecycle rules:
+  //  - Only the bottom-most QR group is ever shown; all earlier groups are hidden as stale.
+  //  - The latest group is held invisible while the assistant is in a loading/typing state.
+  //  - Once the assistant's question bubble has been visible (and stable) for POST_QUESTION_DELAY,
+  //    the latest QR group fades in.
+  //  - Once a button inside a group is clicked, that group is hidden immediately until Framer
+  //    rebuilds it with a different button signature.
+  const POST_QUESTION_DELAY = 480;
+  const MIN_GROUP_AGE = 200;
   const OPT_RE = /^(Early feasibility|Prototype|Sample build|Production|Yes, non-PRC|Mixed origin OK|Need guidance|Yes, NDA-gated|Not yet|Need more info|ASAP|4-8 weeks|1-3 months|3\+ months|Module supplier|Subsystem integration|Low-volume build support|Validation \/ documentation support|Origin \/ Non-PRC evidence|Datasheet \/ spec package|Sample-build support|Compliance \/ NDAA support|Add more specs|Review shortlisted suppliers|前期可行性|是，需要 Non-PRC|可接受混合來源|需要 BLNKK 建議|是，需 NDA|暫時不用|需要更多說明|4-8 週|1-3 個月|3 個月以上|先找 module supplier|先找 subsystem integration|先找低量 build support|先找驗證 \/ 文件支援|Origin \/ Non-PRC 證據|Sample-build 支援|Compliance \/ NDAA 支援)$/;
+  const LOADING_RE = /(正在分析|正在比對|正在搜尋|Analyzing|Searching|Looking up|signals\s*\.{3}|\u2026\s*$|\.{3,}\s*$)/i;
   const T = (e) => (e && e.textContent || "").trim();
   const isOpt = (b) => b && b.matches && b.matches("button") && OPT_RE.test(T(b));
 
@@ -1178,7 +1212,7 @@ function groups(){let set=new Set;document.querySelectorAll("#blnkk-qr-fallback,
     if (document.getElementById("blnkk-csa-qr-order-css")) return;
     const s = document.createElement("style");
     s.id = "blnkk-csa-qr-order-css";
-    s.textContent = ".blnkk-csa-qr-hold{opacity:0!important;transform:translate3d(0,8px,0)!important;pointer-events:none!important;transition:opacity .36s cubic-bezier(.2,.7,.2,1),transform .36s cubic-bezier(.2,.7,.2,1)!important}.blnkk-csa-qr-show{opacity:1;transform:none;transition:opacity .36s cubic-bezier(.2,.7,.2,1),transform .36s cubic-bezier(.2,.7,.2,1)}";
+    s.textContent = ".blnkk-csa-qr-hold{opacity:0!important;transform:translate3d(0,8px,0)!important;pointer-events:none!important;transition:opacity .32s cubic-bezier(.2,.7,.2,1),transform .32s cubic-bezier(.2,.7,.2,1)!important}.blnkk-csa-qr-stale{display:none!important}.blnkk-csa-qr-show{opacity:1;transform:none;transition:opacity .32s cubic-bezier(.2,.7,.2,1),transform .32s cubic-bezier(.2,.7,.2,1)}";
     document.head.appendChild(s);
   }
 
@@ -1190,33 +1224,105 @@ function groups(){let set=new Set;document.querySelectorAll("#blnkk-qr-fallback,
     return null;
   }
 
-  function scan() {
-    ensureCss();
+  function findGroups() {
     const groups = new Set();
     document.querySelectorAll("button").forEach((b) => {
       if (!isOpt(b)) return;
       const g = groupOf(b);
       if (g) groups.add(g);
     });
-    groups.forEach((g) => {
-      const sig = [...g.querySelectorAll("button")].filter(isOpt).map(T).join("|");
-      if (!sig || g.dataset.blnkkQrSig === sig) return;
-      g.dataset.blnkkQrSig = sig;
-      g.classList.remove("blnkk-csa-qr-show");
-      g.classList.add("blnkk-csa-qr-hold");
-      setTimeout(() => {
-        if (g.dataset.blnkkQrSig !== sig) return;
-        g.classList.remove("blnkk-csa-qr-hold");
-        g.classList.add("blnkk-csa-qr-show");
-      }, HOLD_MS);
+    // Sort by document position so the last one is the "current" QR group.
+    return [...groups].sort((a, b) => {
+      const m = a.compareDocumentPosition(b);
+      if (m & Node.DOCUMENT_POSITION_FOLLOWING) return -1;
+      if (m & Node.DOCUMENT_POSITION_PRECEDING) return 1;
+      return 0;
     });
   }
 
+  function latestAssistantBubble() {
+    const bubbles = [...document.querySelectorAll(".flex.justify-start > div, [class*='justify-start'] > div")];
+    return bubbles[bubbles.length - 1] || null;
+  }
+
+  function isLoading(bubble) {
+    if (!bubble) return false;
+    const text = T(bubble);
+    if (LOADING_RE.test(text)) return true;
+    if (bubble.querySelector("[class*='animate-bounce'],[class*='animate-pulse'],[class*='animate-ping']")) return true;
+    return false;
+  }
+
+  const bubbleFirstSeenAt = new WeakMap();
+  function bubbleAge(bubble) {
+    if (!bubble) return Infinity;
+    if (!bubbleFirstSeenAt.has(bubble)) bubbleFirstSeenAt.set(bubble, Date.now());
+    return Date.now() - bubbleFirstSeenAt.get(bubble);
+  }
+
+  const groupState = new WeakMap();
+  function stateOf(g) {
+    const sig = [...g.querySelectorAll("button")].filter(isOpt).map(T).join("|");
+    let st = groupState.get(g);
+    if (!st || st.sig !== sig) {
+      st = { sig, firstSeenAt: Date.now(), clicked: false };
+      groupState.set(g, st);
+    }
+    return st;
+  }
+
+  function hide(g, stale) {
+    g.classList.remove("blnkk-csa-qr-show");
+    if (stale) {
+      g.classList.add("blnkk-csa-qr-stale");
+      g.classList.remove("blnkk-csa-qr-hold");
+    } else {
+      g.classList.add("blnkk-csa-qr-hold");
+      g.classList.remove("blnkk-csa-qr-stale");
+    }
+  }
+  function show(g) {
+    g.classList.remove("blnkk-csa-qr-hold", "blnkk-csa-qr-stale");
+    g.classList.add("blnkk-csa-qr-show");
+  }
+
+  function process() {
+    ensureCss();
+    const groups = findGroups();
+    if (!groups.length) return;
+    const latest = groups[groups.length - 1];
+    const bubble = latestAssistantBubble();
+    const loading = isLoading(bubble);
+    let anyHeld = false;
+    groups.forEach((g) => {
+      const st = stateOf(g);
+      if (g !== latest) { hide(g, true); return; }
+      if (st.clicked) { hide(g, false); anyHeld = true; return; }
+      if (loading) { hide(g, false); anyHeld = true; return; }
+      if (bubble && bubbleAge(bubble) < POST_QUESTION_DELAY) { hide(g, false); anyHeld = true; return; }
+      if (Date.now() - st.firstSeenAt < MIN_GROUP_AGE) { hide(g, false); anyHeld = true; return; }
+      show(g);
+    });
+    if (anyHeld) setTimeout(scheduleProcess, 160);
+  }
+
+  function onClickCapture(e) {
+    const btn = e.target && e.target.closest && e.target.closest("button");
+    if (!btn || !isOpt(btn)) return;
+    const g = groupOf(btn);
+    if (!g) return;
+    const st = stateOf(g);
+    st.clicked = true;
+    hide(g, false);
+  }
+  document.addEventListener("click", onClickCapture, true);
+  document.addEventListener("pointerdown", onClickCapture, true);
+
   let d = 0;
-  function schedule() { clearTimeout(d); d = setTimeout(scan, 50); }
-  new MutationObserver(schedule).observe(document.documentElement, { childList: true, subtree: true });
-  addEventListener("load", schedule);
-  scan();
+  function scheduleProcess() { clearTimeout(d); d = setTimeout(process, 50); }
+  new MutationObserver(scheduleProcess).observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+  addEventListener("load", scheduleProcess);
+  process();
 })();
 </script>
 <!-- SnippetEnd: blnkk-csa-quick-reply-order -->
