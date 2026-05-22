@@ -492,6 +492,192 @@ function groups(){let set=new Set;document.querySelectorAll("#blnkk-qr-fallback,
 </script>
 <!-- SnippetEnd: blnkk-csa-conversation-recovery -->
 
+<!-- Snippet: blnkk-csa-interaction-stability-guard -->
+<script>
+(()=>{
+  if(!/\/csa(?:\/|\.html)?$/.test(location.pathname)||window.__blnkkCsaInteractionStabilityGuard)return;
+  window.__blnkkCsaInteractionStabilityGuard=1;
+  const OPTIONS=[
+    "前期可行性","Prototype","Sample build","Production",
+    "是，需要 Non-PRC","可接受混合來源","需要 BLNKK 建議",
+    "是，需 NDA","暫時不用","需要更多說明",
+    "ASAP","4-8 週","1-3 個月","3 個月以上",
+    "先找 module supplier","先找 subsystem integration","先找低量 build support","先找驗證 / 文件支援",
+    "Early feasibility","Yes, non-PRC","Mixed origin OK","Need guidance",
+    "Yes, NDA-gated","Not yet","Need more info",
+    "4-8 weeks","1-3 months","3+ months",
+    "Module supplier","Subsystem integration","Low-volume build support","Validation / documentation support",
+    "Add more specs","Review shortlisted suppliers"
+  ];
+  const T=e=>(e&&e.textContent||"").trim();
+  const norm=v=>String(v||"").replace(/[。．.]+$/,"").replace(/\s+/g," ").trim();
+  const OPTION_SET=new Set(OPTIONS.map(norm));
+  const visible=e=>{let r=e&&e.getBoundingClientRect&&e.getBoundingClientRect(),s=e&&getComputedStyle(e);return !!(r&&r.width&&r.height&&s&&s.display!=="none"&&s.visibility!=="hidden"&&s.opacity!=="0")};
+  const isOpt=b=>b&&b.matches&&b.matches("button")&&OPTION_SET.has(norm(T(b)));
+  const userText=()=>[...document.querySelectorAll(".flex.justify-end > div,[class*='justify-end'] > div")].filter(visible).map(T).join("\n");
+  function css(){
+    if(document.getElementById("blnkk-csa-stability-css"))return;
+    let s=document.createElement("style");
+    s.id="blnkk-csa-stability-css";
+    s.textContent=".blnkk-csa-option-consumed{display:none!important;pointer-events:none!important}.blnkk-csa-option-group-live button{animation-fill-mode:both}.blnkk-csa-shortlist-result{margin-top:2px;display:grid;gap:12px}.blnkk-csa-shortlist-heading{font-size:18px;line-height:1.25;font-weight:760;color:#0b1020;letter-spacing:0}.blnkk-csa-shortlist-intro,.blnkk-csa-shortlist-next{margin:0;color:#4b5563;line-height:1.65}.blnkk-csa-shortlist-lines{margin:0;padding:0;display:grid;gap:0;list-style:none;border-top:1px solid #edf0f4}.blnkk-csa-shortlist-lines li{display:grid;gap:6px;padding:13px 0;border-bottom:1px solid #edf0f4}.blnkk-csa-shortlist-company{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.blnkk-csa-shortlist-company b{color:#111827;font-size:14px;line-height:1.35;font-weight:760}.blnkk-csa-shortlist-fit{border:1px solid #dbeafe;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-size:11px;font-weight:760;padding:4px 8px;white-space:nowrap}.blnkk-csa-shortlist-meta{color:#4b5563;font-size:13px;line-height:1.55}.blnkk-csa-shortlist-next{border-left:3px solid #2563eb;background:#f8fbff;border-radius:10px;padding:10px 12px}.blnkk-csa-shortlist-next b{color:#111827}";
+    document.head.appendChild(s);
+  }
+  function groupOf(button){
+    let n=button;
+    for(let i=0;n&&i<7;i++,n=n.parentElement){
+      let count=[...n.querySelectorAll("button")].filter(isOpt).length;
+      if(count>1)return n;
+    }
+    return button&&button.parentElement;
+  }
+  function hideGroup(g){
+    if(!g)return;
+    g.dataset.blnkkConsumedOptions="1";
+    g.classList&&g.classList.add("blnkk-csa-option-consumed");
+    g.style.setProperty("display","none","important");
+    g.style.setProperty("pointer-events","none","important");
+  }
+  function consumed(){
+    let saved=[];
+    try{saved=JSON.parse(sessionStorage.getItem("blnkk-csa-consumed-options")||"[]")}catch(e){}
+    let text=userText();
+    OPTIONS.forEach(o=>{let n=norm(o);if(n&&text.includes(n)&&!saved.includes(n))saved.push(n)});
+    try{sessionStorage.setItem("blnkk-csa-consumed-options",JSON.stringify(saved.slice(-24)))}catch(e){}
+    return new Set(saved);
+  }
+  function hideAnsweredOptions(){
+    let done=consumed();
+    document.querySelectorAll("#blnkk-qr-fallback,button").forEach(el=>{
+      if(el.id==="blnkk-qr-fallback"){
+        let any=[...el.querySelectorAll("button")].some(b=>done.has(norm(T(b))));
+        if(any)hideGroup(el);
+        return;
+      }
+      if(!isOpt(el))return;
+      let g=groupOf(el),buttons=[...g.querySelectorAll("button")].filter(isOpt),any=buttons.some(b=>done.has(norm(T(b))));
+      if(any||g.dataset.blnkkConsumedOptions)hideGroup(g);
+    });
+  }
+  function isShortlistText(text){
+    text=String(text||"").replace(/\s+/g," ").trim();
+    return text.length>180&&text.length<4200&&/\b1[\.\)]\s+[A-Z0-9]/.test(text)&&/\b2[\.\)]\s+[A-Z0-9]/.test(text)&&/(BLNKK|supplier database|public cards|shortlist|fit\s+\d+|confidence)/i.test(text);
+  }
+  function splitShortlist(text){
+    text=String(text||"").replace(/\s+/g," ").trim();
+    text=text.replace(/^BLNKK\s*/i,"").replace(/^First-pass supplier shortlist\s*/i,"").trim();
+    let start=text.search(/\b1[\.\)]\s+[A-Z0-9]/);
+    if(start<0)return null;
+    let intro=text.slice(0,start).replace(/[：:]\s*$/,".").trim();
+    let rest=text.slice(start).trim(),next="";
+    let ni=rest.search(/\s(?:Next|Next step|下一步建議|下一步)[:：]\s*/i);
+    if(ni>=0){
+      next=rest.slice(ni).replace(/^(?:Next|Next step|下一步建議|下一步)[:：]\s*/i,"").trim();
+      rest=rest.slice(0,ni).trim();
+    }
+    let rows=rest.match(/\b\d+[\.\)]\s+[A-Z0-9][\s\S]*?(?=\s+\d+[\.\)]\s+[A-Z0-9]|$)/g)||[];
+    rows=rows.map(row=>{
+      row=row.replace(/^\d+[\.\)]\s*/,"").trim();
+      let parts=row.split(/\s+\|\s+/).map(x=>x.trim()).filter(Boolean);
+      let name=parts.shift()||row;
+      let fit=(parts.find(x=>/^fit\s+/i.test(x))||row.match(/\bfit\s+(\d+%?)/i)?.[0]||"").replace(/^fit\s+/i,"");
+      let confidence=parts.find(x=>/confidence/i.test(x))||row.match(/\b(?:High|Medium|Low)\s+confidence\b/i)?.[0]||"";
+      let meta=parts.filter(x=>!/^fit\s+/i.test(x)&&!/confidence/i.test(x)).join(" | ");
+      return {name,fit,confidence,meta};
+    }).filter(r=>r.name);
+    return rows.length>=2?{intro,rows,next}:null;
+  }
+  function buildShortlist(data){
+    let box=document.createElement("div");
+    box.className="blnkk-csa-shortlist-result";
+    let heading=document.createElement("div");
+    heading.className="blnkk-csa-shortlist-heading";
+    heading.textContent="First-pass supplier shortlist";
+    box.appendChild(heading);
+    if(data.intro){
+      let p=document.createElement("p");
+      p.className="blnkk-csa-shortlist-intro";
+      p.textContent=data.intro;
+      box.appendChild(p);
+    }
+    let ol=document.createElement("ol");
+    ol.className="blnkk-csa-shortlist-lines";
+    data.rows.slice(0,8).forEach(row=>{
+      let li=document.createElement("li");
+      let top=document.createElement("div");
+      top.className="blnkk-csa-shortlist-company";
+      let name=document.createElement("b");
+      name.textContent=row.name;
+      let fit=document.createElement("span");
+      fit.className="blnkk-csa-shortlist-fit";
+      fit.textContent=row.fit?"Fit "+row.fit:"Reviewed";
+      top.append(name,fit);
+      let meta=document.createElement("div");
+      meta.className="blnkk-csa-shortlist-meta";
+      meta.textContent=[row.confidence,row.meta].filter(Boolean).join(" | ");
+      li.append(top,meta);
+      ol.appendChild(li);
+    });
+    box.appendChild(ol);
+    if(data.next){
+      let next=document.createElement("p");
+      next.className="blnkk-csa-shortlist-next";
+      let b=document.createElement("b");
+      b.textContent="Next: ";
+      next.append(b,document.createTextNode(data.next));
+      box.appendChild(next);
+    }
+    return box;
+  }
+  function shortlistTargets(){
+    let bubbles=[...document.querySelectorAll(".flex.justify-start > div,[class*='justify-start'] > div")].filter(el=>visible(el)&&isShortlistText(T(el)));
+    let loose=[...document.querySelectorAll("div")].filter(el=>{
+      if(!visible(el)||el.closest(".blnkk-csa-shortlist-result")||el.querySelector("input,textarea,button"))return false;
+      let text=T(el);
+      if(!isShortlistText(text))return false;
+      let r=el.getBoundingClientRect();
+      return r.left<innerWidth*.78&&r.width<900;
+    }).sort((a,b)=>T(a).length-T(b).length);
+    return [...new Set([...bubbles,...loose])];
+  }
+  function formatShortlists(){
+    shortlistTargets().forEach(el=>{
+      if(el.dataset.blnkkStableShortlist==="1"||el.closest(".blnkk-csa-shortlist-result"))return;
+      let data=splitShortlist(T(el));
+      if(!data)return;
+      let label=[...el.children].find(c=>/^BLNKK/.test(T(c))&&T(c).length<40);
+      el.dataset.blnkkStableShortlist="1";
+      el.innerHTML="";
+      if(label)el.appendChild(label);
+      else{
+        let k=document.createElement("div");
+        k.className="mb-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-blue-600";
+        k.textContent="BLNKK";
+        el.appendChild(k);
+      }
+      el.appendChild(buildShortlist(data));
+    });
+  }
+  document.addEventListener("click",e=>{
+    let b=e.target&&e.target.closest&&e.target.closest("button");
+    if(!isOpt(b))return;
+    let value=norm(T(b));
+    let saved=[];
+    try{saved=JSON.parse(sessionStorage.getItem("blnkk-csa-consumed-options")||"[]")}catch(err){}
+    if(value&&!saved.includes(value))saved.push(value);
+    try{sessionStorage.setItem("blnkk-csa-consumed-options",JSON.stringify(saved.slice(-24)))}catch(err){}
+    hideGroup(groupOf(b));
+  },true);
+  function run(){css();hideAnsweredOptions();formatShortlists()}
+  let d=0;
+  function tick(){clearTimeout(d);d=setTimeout(run,80)}
+  new MutationObserver(tick).observe(document.documentElement,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:["style","class"]});
+  addEventListener("load",tick);
+  setInterval(run,900);
+  run();
+})()
+</script>
+<!-- SnippetEnd: blnkk-csa-interaction-stability-guard -->
+
     <!-- End of bodyEnd -->
 </body>
 </html>
