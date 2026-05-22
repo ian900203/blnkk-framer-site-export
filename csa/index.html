@@ -750,6 +750,13 @@ function groups(){let set=new Set;document.querySelectorAll("#blnkk-qr-fallback,
 </script>
 <!-- SnippetEnd: blnkk-csa-conversation-recovery -->
 
+<!-- Snippet: blnkk-disable-csa-flow-controller -->
+<script>
+window.__blnkkCsaFlowControllerV2 = 1;
+document.querySelectorAll(".blnkk-csa-flow,#blnkk-qr-fallback,.blnkk-csa-recovery").forEach((node) => node.remove());
+</script>
+<!-- SnippetEnd: blnkk-disable-csa-flow-controller -->
+
 <!-- Snippet: blnkk-csa-flow-controller-v2 -->
 <script>
 (()=>{
