@@ -366,7 +366,10 @@ function groups(){let set=new Set;document.querySelectorAll("#blnkk-qr-fallback,
   if(!/\/csa(?:\/|\.html)?$/.test(location.pathname)||window.__blnkkCsaShortlistFormat)return;
   window.__blnkkCsaShortlistFormat=1;
   const T=e=>(e&&e.textContent||"").trim();
-  const match=text=>/I searched BLNKK[\s\S]+first-pass shortlist/.test(text||"");
+  const match=text=>{
+    text=String(text||"").replace(/\s+/g," ").trim();
+    return /BLNKK/i.test(text)&&/(supplier cards|shortlist|candidate)/i.test(text)&&/\b1[\.\)]\s+[A-Z0-9]/.test(text);
+  };
   function css(){
     if(document.getElementById("blnkk-csa-shortlist-format-css"))return;
     let s=document.createElement("style");
@@ -375,12 +378,14 @@ function groups(){let set=new Set;document.querySelectorAll("#blnkk-qr-fallback,
     document.head.appendChild(s);
   }
   function build(text){
-    text=text.replace(/^BLNKK\s*/,"").replace(/^BLNKK(?=I searched)/,"").trim();
-    let start=text.search(/\s?1\.\s+[A-Z0-9]/);
+    text=text.replace(/^BLNKK\s*/,"").replace(/^BLNKK(?=I searched|First-pass)/,"").replace(/\s+/g," ").trim();
+    text=text.replace(/^First-pass supplier shortlist\s*/i,"").trim();
+    let start=text.search(/\b1[\.\)]\s+[A-Z0-9]/);
     if(start<0)return null;
-    let intro=text.slice(0,start).trim(),rest=text.slice(start).trim(),next="",ni=rest.search(/\sNext:\s/i);
-    if(ni>=0){next=rest.slice(ni).replace(/^Next:\s*/i,"").trim();rest=rest.slice(0,ni).trim()}
-    let rows=rest.split(/\s(?=\d+\.\s+[A-Z0-9])/).map(x=>x.trim()).filter(Boolean);
+    let intro=text.slice(0,start).trim(),rest=text.slice(start).trim(),next="",ni=rest.search(/\s(?:Next|Next step)[:：]\s/i);
+    if(ni>=0){next=rest.slice(ni).replace(/^(?:Next|Next step)[:：]\s*/i,"").trim();rest=rest.slice(0,ni).trim()}
+    let rows=rest.match(/\b\d+[\.\)]\s+[\s\S]*?(?=\s+\d+[\.\)]\s+[A-Z0-9]|$)/g)||[];
+    rows=rows.map(x=>x.trim()).filter(Boolean);
     if(rows.length<2)return null;
     let box=document.createElement("div");
     box.className="blnkk-csa-shortlist-result";
@@ -392,8 +397,9 @@ function groups(){let set=new Set;document.querySelectorAll("#blnkk-qr-fallback,
     let ol=document.createElement("ol");
     ol.className="blnkk-csa-shortlist-lines";
     rows.forEach(row=>{
-      row=row.replace(/^\d+\.\s*/,"").trim();
-      let parts=row.split(/\s+\|\s+/),name=parts.shift()||row,fit=(parts.find(x=>/^fit\s+/i.test(x))||"").replace(/^fit\s+/i,""),conf=parts.find(x=>/confidence/i.test(x))||"",meta=parts.filter(x=>!/^fit\s+/i.test(x)&&!/confidence/i.test(x)).join(" | ");
+      row=row.replace(/^\d+[\.\)]\s*/,"").trim();
+      let parts=row.split(/\s+\|\s+/).map(x=>x.trim()).filter(Boolean),name=parts.shift()||row,fit=(parts.find(x=>/^fit\s+/i.test(x))||row.match(/\bfit\s+(\d+%?)/i)?.[0]||"").replace(/^fit\s+/i,""),conf=parts.find(x=>/confidence/i.test(x))||row.match(/\b(?:High|Medium|Low)\s+confidence\b/i)?.[0]||"",meta=parts.filter(x=>!/^fit\s+/i.test(x)&&!/confidence/i.test(x)).join(" | ");
+      if(!parts.length){name=row.replace(/\bfit\s+\d+%?.*$/i,"").replace(/\b(?:High|Medium|Low)\s+confidence.*$/i,"").trim()}
       let li=document.createElement("li");
       li.innerHTML='<div class="blnkk-csa-shortlist-company"><b></b><span class="blnkk-csa-shortlist-fit"></span></div><div class="blnkk-csa-shortlist-meta"></div>';
       li.querySelector("b").textContent=name;
