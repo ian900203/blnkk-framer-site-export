@@ -303,6 +303,10 @@ html, body, #main, [data-framer-root], [data-framer-root] > div, [data-framer-ro
 <!-- SnippetEnd: jqWTNfxpi -->
 <!-- Snippet: SWia7QbFq -->
 
+<!-- Snippet: blnkk-disable-legacy-candidate-movers -->
+<script>window.__csaV15=1;window.__csaNextV16=1;</script>
+<!-- SnippetEnd: blnkk-disable-legacy-candidate-movers -->
+
 <!-- SnippetEnd: SWia7QbFq --><!-- Snippet: TOdJzNyfd --><script>window.__csaV13=1</script><!-- SnippetEnd: TOdJzNyfd --><!-- Snippet: eRr6v4MY3 --><script>window.__csaV14=1</script><!-- SnippetEnd: eRr6v4MY3 --><!-- Snippet: ePHox_nrN --><script>(()=>{if(window.__csaV15)return;window.__csaV15=1;const W=900,A=/(\u6709\u8208\u8da3|Interested|\u5df2\u5217\u512a\u5148|\u9700\u8981\u66f4\u591a\u8cc7\u8a0a|Need more info|\u5df2\u8acb\u6c42\u66f4\u591a\u8cc7\u8a0a)/,M=/(\u9700\u8981\u66f4\u591a\u8cc7\u8a0a|Need more info|\u5df2\u8acb\u6c42\u66f4\u591a\u8cc7\u8a0a)/,H=/(\u76ee\u524d shortlist|Current shortlist|Recommended candidates)/,L=/(\u6839\u64da\u4f60\u76ee\u524d\u63d0\u4f9b\u7684\u9700\u6c42|Based on your current intake|\d+\.\s*Air-Wave Candidate)/,X=/(\u9001\u51fa|Send|EN|\u4e2d\u6587|\u7d50\u679c|\u7533\u8acb)/,q=s=>document.querySelector(s),t=n=>((n&&n.textContent)||"").trim(),inp=()=>q('input[placeholder*="sourcing need"],input[placeholder*="\u8acb\u63cf\u8ff0"],textarea'),acts=n=>[...n.querySelectorAll("button")].filter(b=>A.test(t(b))),pan=()=>{let b=[...document.querySelectorAll("button")].find(x=>A.test(t(x)));if(!b)return null;let n=b.parentElement;for(let k=0;n&&k<12;k++,n=n.parentElement)if(H.test(t(n))&&acts(n).length>1)return n},comp=()=>{let n=inp();while(n&&n!==document.body){if(n.querySelector&&n.querySelector("button"))return n.parentElement||n;n=n.parentElement}},side=()=>[...document.querySelectorAll("aside")].find(a=>a.getBoundingClientRect().left>innerWidth*.55||H.test(t(a))||a.style.display==="none"),css=()=>{if(q("#blnkk-v15-style"))return;let s=document.createElement("style");s.id="blnkk-v15-style";s.textContent="#blnkk-inline-results{max-height:44vh;overflow:auto}#blnkk-action-note{margin:12px 0;padding:14px;border:1px solid #bfdbfe;border-radius:18px;background:#eff6ff;line-height:1.55;font-size:14px}.blnkk-quick{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}.blnkk-quick button{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:8px 12px}@media(min-width:901px){#blnkk-inline-results{display:none!important}}";document.head.appendChild(s)},hide=()=>[...document.querySelectorAll("div,p,span")].forEach(n=>{let x=t(n);if(x.length>90&&L.test(x)){let p=n.closest('[class*=rounded]')||n.parentElement;if(p&&!p.querySelector("button"))p.style.setProperty("display","none","important")}}),ops=()=>{let a=[...document.querySelectorAll("button")].filter(b=>{let x=t(b);return x.length>1&&x.length<26&&!A.test(x)&&!X.test(x)}),s=a.map(b=>t(b)).join("|");if(a.length&&s!==ops.s){ops.s=s;requestAnimationFrame(()=>a[a.length-1].scrollIntoView({behavior:"smooth",block:"center",inline:"nearest"}))}},move=()=>{css();hide();ops();let p=pan(),c=comp(),m=q("#blnkk-inline-results"),r=side();if(!p)return;if(innerWidth>W){if(r){r.style.removeProperty("display");if(p.parentElement!==r)r.appendChild(p)}if(m&&!m.children.length)m.remove()}else{if(!c)return;if(!m){m=document.createElement("section");m.id="blnkk-inline-results";c.parentElement&&c.parentElement.insertBefore(m,c)}if(p.parentElement!==m)m.appendChild(p);if(r)r.style.display="none"}};function val(e,v){let d=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(e),"value");d&&d.set?d.set.call(e,v):e.value=v;e.dispatchEvent(new Event("input",{bubbles:1}));e.dispatchEvent(new Event("change",{bubbles:1}))}function send(v){let e=inp();if(!e)return;e.focus();val(e,v);setTimeout(()=>{let c=comp(),b=[...(c||document).querySelectorAll("button")].reverse().find(x=>/(\u9001\u51fa|Send)/.test(t(x)));b&&b.click()},70)}function nm(b){let n=b.parentElement;for(let k=0;n&&k<8;k++,n=n.parentElement){let h=n.querySelector&&n.querySelector("h1,h2,h3,h4,[role=heading]");if(h&&acts(n).length)return t(h)}return "candidate"}function note(b){move();let p=pan();if(!p)return;let x=q("#blnkk-action-note")||document.createElement("div"),n=nm(b),more=M.test(t(b)),qs=more?["\u70ba\u4ec0\u9ebc\u63a8\u85a6\u9019\u5bb6\uff1f","\u9084\u7f3a\u54ea\u4e9b\u9a57\u8b49\uff1f","\u548c\u5176\u4ed6\u5019\u9078\u6bd4\u8f03","\u4e0b\u4e00\u6b65\u600e\u9ebc\u8d70\uff1f"]:["\u70ba\u4ec0\u9ebc\u6700\u9069\u5408\uff1f","\u5148\u770b\u98a8\u96aa\u8207\u7f3a\u53e3","\u548c\u7b2c\u4e8c\u540d\u6bd4\u8f03","\u600e\u9ebc\u9032\u5165 review\uff1f"];x.id="blnkk-action-note";x.innerHTML=(more?`\u6211\u6703\u5148\u6574\u7406 <b>${n}</b> \u7684\u66f4\u591a\u8cc7\u8a0a\u3002\u4f60\u53ef\u4ee5\u7e7c\u7e8c\u554f\uff1a`:`\u5df2\u628a <b>${n}</b> \u653e\u9032\u512a\u5148\u8ffd\u8e64\u3002\u4f60\u53ef\u4ee5\u7e7c\u7e8c\u554f\uff1a`)+`<div class="blnkk-quick">${qs.map(z=>`<button type="button">${z}</button>`).join("")}</div>`;p.insertBefore(x,p.firstChild);[...x.querySelectorAll("button")].forEach(bt=>bt.onclick=()=>send(`${n}\uff1a${t(bt)}`));b.textContent=more?"\u5df2\u8acb\u6c42\u66f4\u591a\u8cc7\u8a0a":"\u5df2\u5217\u512a\u5148";x.scrollIntoView({behavior:"smooth",block:"nearest"});setTimeout(()=>inp()?.focus(),250)}document.addEventListener("click",e=>{let b=e.target.closest&&e.target.closest("button");if(b&&A.test(t(b)))setTimeout(()=>note(b),80)},true);new MutationObserver(move).observe(document.body,{childList:1,subtree:1,characterData:1});addEventListener("resize",move);addEventListener("load",move);move()})()</script>
 <!-- SnippetEnd: ePHox_nrN --><!-- Snippet: Bx_eqAVss --><script>(()=>{if(window.__csaNextV16)return;window.__csaNextV16=1;const H=/(\u76ee\u524d shortlist|Current shortlist|Recommended candidates)/,A=/(\u6709\u8208\u8da3|Interested|\u9700\u8981\u66f4\u591a\u8cc7\u8a0a|Need more info|\u5df2\u5217\u512a\u5148|\u5df2\u8acb\u6c42)/,q=s=>document.querySelector(s),t=n=>((n&&n.textContent)||"").trim(),i=()=>q('input[placeholder*="sourcing need"],input[placeholder*="\u8acb\u63cf\u8ff0"],textarea'),box=()=>{let e=i();while(e&&e!==document.body){if(e.querySelector&&e.querySelector("button"))return e.parentElement||e;e=e.parentElement}},panel=()=>{let b=[...document.querySelectorAll("button")].find(x=>A.test(t(x)));if(!b)return null;let n=b.parentElement;for(let k=0;n&&k<12;k++,n=n.parentElement)if(H.test(t(n))&&[...n.querySelectorAll("button")].filter(x=>A.test(t(x))).length>1)return n},names=p=>[...p.querySelectorAll("h1,h2,h3,h4,[role=heading]")].map(t).filter(x=>/Candidate/.test(x)).slice(0,3),val=(e,v)=>{let d=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(e),"value");d&&d.set?d.set.call(e,v):e.value=v;e.dispatchEvent(new Event("input",{bubbles:1}));e.dispatchEvent(new Event("change",{bubbles:1}))},send=v=>{let e=i();if(!e)return;e.focus();val(e,v);setTimeout(()=>{let b=[...(box()||document).querySelectorAll("button")].reverse().find(x=>/(\u9001\u51fa|Send)/.test(t(x)));b&&b.click()},80)},css=()=>{if(q("#blnkk-next16-style"))return;let s=document.createElement("style");s.id="blnkk-next16-style";s.textContent="#blnkk-next-step{margin:12px 0;padding:14px;border:1px solid #dbe3ee;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(15,23,42,.06);line-height:1.55;font-size:14px}#blnkk-next-step b{color:#0f172a}.blnkk-next-actions{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}.blnkk-next-actions button{border:1px solid #cbd5e1;background:#fff;border-radius:999px;padding:8px 12px;cursor:pointer}.blnkk-next-actions button:hover{border-color:#2563eb;color:#1d4ed8}";document.head.appendChild(s)},run=()=>{css();let p=panel(),c=box(),old=q("#blnkk-next-step");if(!p||!c){old&&old.remove();return}let ns=names(p),sig=ns.join("|")||t(p).slice(0,80),g=old||document.createElement("section"),first=ns[0]||"Air-Wave Candidate",qs=[["\u6bd4\u8f03\u9019 3 \u5bb6\u5dee\u7570",`\u8acb\u6bd4\u8f03\u9019 3 \u5bb6 candidate \u7684\u9069\u5408\u5ea6\u3001\u98a8\u96aa\u8207\u4e0b\u4e00\u6b65\u9a57\u8b49\u91cd\u9ede\u3002`],["\u5148\u770b\u6700\u9069\u5408\u7684\u4e00\u5bb6",`\u8acb\u5148\u5e6b\u6211\u5206\u6790 ${first} \u70ba\u4ec0\u9ebc\u6700\u9069\u5408\uff0c\u4ee5\u53ca\u5b83\u4e0d\u9069\u5408\u7684\u98a8\u96aa\u3002`],["\u770b\u98a8\u96aa\u8207\u9a57\u8b49\u7f3a\u53e3",`\u8acb\u6574\u7406\u9019\u4efd shortlist \u9084\u9700\u8981\u9a57\u8b49\u7684\u98a8\u96aa\u3001\u8cc7\u6599\u7f3a\u53e3\u548c follow-up \u554f\u984c\u3002`],["\u88dc\u9700\u6c42\u91cd\u65b0\u6536\u6582",`\u6211\u60f3\u88dc\u5145\u9700\u6c42\u4f86\u91cd\u65b0\u6536\u6582 shortlist\uff0c\u8acb\u544a\u8a34\u6211\u6700\u6709\u5e6b\u52a9\u7684 3 \u500b\u6b04\u4f4d\u3002`],["\u6e96\u5099 review / NDA \u4e0b\u4e00\u6b65",`\u8acb\u5e6b\u6211\u628a\u9019\u500b case \u6574\u7406\u6210 BLNKK review / NDA \u7684\u4e0b\u4e00\u6b65\u6e05\u55ae\u3002`]];g.id="blnkk-next-step";if(g.dataset.sig!==sig){g.dataset.sig=sig;g.innerHTML=`<b>BLNKK \u5df2\u5148\u6574\u7406\u51fa\u7b2c\u4e00\u7248 shortlist\u3002</b><br>\u63a5\u4e0b\u4f86\u53ef\u4ee5\u628a\u9019 3 \u5bb6\u8f49\u6210\u6bd4\u8f03\u3001\u98a8\u96aa\u9a57\u8b49\u6216 review \u52d5\u4f5c\uff1a<div class="blnkk-next-actions">${qs.map(([a])=>`<button type="button">${a}</button>`).join("")}</div>`;[...g.querySelectorAll("button")].forEach((b,k)=>b.onclick=()=>send(qs[k][1]));setTimeout(()=>g.scrollIntoView({behavior:"smooth",block:"nearest"}),120)}if(g.parentElement!==c.parentElement)c.parentElement.insertBefore(g,c)};new MutationObserver(run).observe(document.body,{childList:1,subtree:1,characterData:1});addEventListener("load",run);run()})()</script>
 <!-- SnippetEnd: Bx_eqAVss -->
@@ -479,6 +483,260 @@ function groups(){let set=new Set;document.querySelectorAll("#blnkk-qr-fallback,
 (()=>{if(!/\/csa(?:\/|\.html)?$/.test(location.pathname)||window.__blnkkCsaFirstUseClarity)return;window.__blnkkCsaFirstUseClarity=1;const T=e=>(e&&e.textContent||"").trim(),input=()=>[...document.querySelectorAll("textarea,input")].filter(e=>{let r=e.getBoundingClientRect(),s=getComputedStyle(e);return r.width&&r.height&&s.display!=="none"&&s.visibility!=="hidden"&&e.type!=="hidden"}).sort((a,b)=>b.getBoundingClientRect().top-a.getBoundingClientRect().top)[0]||null,briefs={"RF / data-link":"We are looking for non-PRC RF data-link suppliers for UAV applications.","Flight controller PCBA":"Need Taiwan suppliers that can support flight controller PCBA and small-batch sample builds.","Replace China-based parts":"Replace China-based drone components with Taiwan alternatives.","Battery / BMS":"Looking for UAV battery pack and BMS integration suppliers with documentation support.","Motor / actuator":"Need Taiwan motor, actuator, or precision motion suppliers for UAV subsystem builds.","Custom brief":""};function css(){if(document.getElementById("blnkk-csa-first-use-clarity-css"))return;let s=document.createElement("style");s.id="blnkk-csa-first-use-clarity-css";s.textContent="#blnkk-csa-workflow{display:none!important}main .rounded-3xl{border-color:#cfe0ff!important;box-shadow:0 22px 60px rgba(15,23,42,.08)!important}main .rounded-3xl h1{max-width:760px}main .rounded-3xl .blnkk-continuity-pill{display:none!important}section .mt-6.block.rounded-3xl.lg\\:hidden{display:none!important}aside .mb-3.text-xs.font-semibold.uppercase{font-size:0!important}aside .mb-3.text-xs.font-semibold.uppercase:after{content:'POPULAR SUPPLIER SEARCHES';font-size:12px;letter-spacing:.18em}main .rounded-3xl .mt-5.flex.flex-wrap.gap-2{margin-top:10px!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px!important;align-items:stretch}main .rounded-3xl .mt-5.flex.flex-wrap.gap-2:before{content:'Example starters, not the full list';grid-column:1/-1;color:#667085;font-size:12px;font-weight:760;letter-spacing:.12em;text-transform:uppercase;margin-bottom:-1px}main .rounded-3xl .mt-5.flex.flex-wrap.gap-2:after{content:'Examples only. You can also type battery / BMS, motors, CNC, sensors, cables, factory location, origin constraints, timeline, or any supplier gap below.';grid-column:1/-1;color:#667085;font-size:12px;line-height:1.45;margin-top:1px}main .rounded-3xl .mt-5.flex.flex-wrap.gap-2 button{position:relative!important;border:1px solid #d7deea!important;border-radius:14px!important;background:#fff!important;color:#111827!important;padding:13px 14px!important;text-align:left!important;font-size:13px!important;font-weight:760!important;line-height:1.25!important;box-shadow:0 8px 24px rgba(15,23,42,.055)!important;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease!important}main .rounded-3xl .mt-5.flex.flex-wrap.gap-2 button:after{content:'Use example';display:block;margin-top:7px;color:#2563eb;font-size:11px;font-weight:760}main .rounded-3xl .mt-5.flex.flex-wrap.gap-2 button:hover{border-color:#2563eb!important;box-shadow:0 14px 36px rgba(37,99,235,.13)!important;transform:translateY(-1px)}main .rounded-3xl .mt-5.flex.flex-wrap.gap-2 button:focus-visible{outline:3px solid rgba(37,99,235,.22);outline-offset:2px}@media(max-width:809.98px){main .rounded-3xl{padding:18px!important;margin-bottom:16px!important}main .rounded-3xl h1{font-size:28px!important;line-height:1.05!important}main .rounded-3xl .mt-5.flex.flex-wrap.gap-2{grid-template-columns:1fr!important}main .rounded-3xl .mt-5.flex.flex-wrap.gap-2 button{padding:14px 15px!important}.blnkk-csa-score-model{display:none!important}}";document.head.appendChild(s)}function setValue(v){let i=input();if(!i)return;let d=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(i),"value");d&&d.set?d.set.call(i,v):i.value=v;i.dispatchEvent(new Event("input",{bubbles:true}));i.dispatchEvent(new Event("change",{bubbles:true}));i.focus();setTimeout(()=>i.scrollIntoView({behavior:"smooth",block:"nearest"}),60)}function starterRow(card){return [...card.querySelectorAll("button")].find(b=>Object.prototype.hasOwnProperty.call(briefs,T(b)))?.parentElement||null}function ensureStarters(card){let row=starterRow(card);if(!row||row.dataset.blnkkStartersExpanded)return;row.dataset.blnkkStartersExpanded="1";["Battery / BMS","Motor / actuator","Custom brief"].forEach(label=>{let b=document.createElement("button");b.type="button";b.textContent=label;row.appendChild(b)})}function hero(){let h=[...document.querySelectorAll("h1")].find(x=>/Start with the part|Find, score|Tell BLNKK/.test(T(x)));let card=h&&(h.closest(".rounded-3xl")||h.parentElement);if(!card)return;card.querySelectorAll("button").forEach(b=>{if(!Object.prototype.hasOwnProperty.call(briefs,T(b))||b.dataset.blnkkBriefBound)return;b.dataset.blnkkBriefBound="1";b.type="button";b.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();setValue(briefs[T(b)]||"")},true)})}function sideLabels(){document.querySelectorAll("div").forEach(el=>{if(el.children.length===0&&T(el)==="Sourcing chats")el.textContent="Popular supplier searches"});document.querySelectorAll("h2").forEach(h=>{if(/Reviewed candidates|Recommended candidates/.test(T(h)))h.textContent="Supplier Shortlist"})}function hideMobileResults(){document.querySelectorAll(".lg\\:hidden").forEach(el=>{/Supplier signals|Recommended candidates|Supplier Shortlist|Reviewed candidates/.test(T(el))&&el.style.setProperty("display","none","important")})}function run(){css();hero();sideLabels();hideMobileResults()}let d=0;function tick(){clearTimeout(d);d=setTimeout(run,120)}new MutationObserver(tick).observe(document.documentElement,{childList:true,subtree:true,characterData:true});addEventListener("load",tick);run()})()
 </script>
 <!-- SnippetEnd: blnkk-csa-first-use-clarity -->
+
+<!-- Snippet: blnkk-supabase-supplier-match-v2 -->
+<script>
+(() => {
+  if (!/\/csa(?:\/|\.html)?\/?$/.test(location.pathname) || window.__blnkkSupabaseSupplierMatchV2) return;
+  window.__blnkkSupabaseSupplierMatchV2 = 1;
+  window.__blnkkSupabaseSupplierMatch = 1;
+
+  const endpoint = "/api/supplier-match";
+  const text = (el) => (el && el.textContent || "").trim();
+  const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  })[char]);
+  const isVisible = (el) => {
+    const rect = el && el.getBoundingClientRect && el.getBoundingClientRect();
+    const style = el && getComputedStyle(el);
+    return !!(rect && rect.width && rect.height && style && style.display !== "none" && style.visibility !== "hidden");
+  };
+  const input = () => [...document.querySelectorAll("textarea,input")]
+    .filter((el) => isVisible(el) && el.type !== "hidden")
+    .sort((a, b) => b.getBoundingClientRect().top - a.getBoundingClientRect().top)[0] || null;
+
+  function css() {
+    if (document.getElementById("blnkk-supabase-match-v2-css")) return;
+    const style = document.createElement("style");
+    style.id = "blnkk-supabase-match-v2-css";
+    style.textContent = `
+      .blnkk-supabase-results{display:grid;gap:12px;max-width:100%;overflow:hidden}
+      .blnkk-supabase-note{border:1px dashed #cbd5e1;border-radius:16px;background:#fff;padding:14px;color:#667085;font-size:12px;line-height:1.55}
+      .blnkk-supplier-card{border:1px solid #e5e7eb;border-radius:18px;background:#fff;padding:15px 16px;box-shadow:0 10px 28px rgba(15,23,42,.055);max-width:100%;overflow:hidden}
+      .blnkk-supplier-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+      .blnkk-supplier-card b{display:block;color:#090f1f;font-size:14px;line-height:1.35}
+      .blnkk-score-badge{border-radius:999px;background:#090f1f;color:#fff;font-size:11px;font-weight:750;padding:5px 8px;white-space:nowrap}
+      .blnkk-supplier-meta{margin-top:7px;color:#667085;font-size:12px;line-height:1.45;overflow-wrap:anywhere}
+      .blnkk-supplier-summary{margin-top:10px;color:#344054;font-size:12px;line-height:1.55;overflow-wrap:anywhere}
+      .blnkk-supplier-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+      .blnkk-supplier-tags span{border:1px solid #e5e7eb;border-radius:999px;background:#f8fafc;color:#475467;font-size:11px;font-weight:650;padding:5px 8px;max-width:100%;overflow-wrap:anywhere}
+      @media(min-width:1024px){main [data-blnkk-supplier-panel="mobile"],main [data-blnkk-supplier-panel="mobile"] .blnkk-supabase-results,main [data-blnkk-supplier-panel="mobile"] .blnkk-supabase-note{display:none!important}}
+    `;
+    document.head.appendChild(style);
+  }
+
+  function panelForHeading(heading) {
+    const aside = heading.closest("aside");
+    if (aside) return aside.querySelector(".h-full.overflow-auto") || aside;
+
+    let candidate = null;
+    for (let node = heading; node && node !== document.body; node = node.parentElement) {
+      const classes = String(node.className || "");
+      if (classes.includes("lg:hidden")) return node;
+      if (/Supplier signals|Supplier Shortlist|Recommended candidates|Reviewed candidates/.test(text(node))) candidate = node;
+    }
+    return candidate || heading.parentElement;
+  }
+
+  function panels() {
+    const headings = [...document.querySelectorAll("h2")]
+      .filter((heading) => /Recommended candidates|Reviewed candidates|Supplier Shortlist/.test(text(heading)));
+    return [...new Set(headings.map(panelForHeading).filter(Boolean))];
+  }
+
+  function hasNativeDesktopCards() {
+    if (innerWidth < 1024) return false;
+    return [...document.querySelectorAll("aside button")].some((button) => {
+      const label = text(button);
+      return /^(Interested|Need more info|有興趣|需要更多資訊)$/.test(label) && isVisible(button);
+    });
+  }
+
+  function clearGeneratedResults() {
+    document.querySelectorAll(".blnkk-supabase-results,.blnkk-supabase-note").forEach((node) => node.remove());
+  }
+
+  function roots() {
+    const found = panels();
+    const asidePanels = found.filter((panel) => panel.closest("aside"));
+    const mainPanels = found.filter((panel) => !panel.closest("aside"));
+    if (innerWidth >= 1024) {
+      return asidePanels
+        .sort((a, b) => b.getBoundingClientRect().left - a.getBoundingClientRect().left)
+        .slice(0, 1);
+    }
+    return (mainPanels.length ? mainPanels : asidePanels).slice(0, 1);
+  }
+
+  function layoutGuard() {
+    panels().forEach((panel) => {
+      if (!panel.closest("aside")) {
+        panel.dataset.blnkkSupplierPanel = "mobile";
+        if (innerWidth >= 1024) panel.style.setProperty("display", "none", "important");
+        else panel.style.setProperty("display", "block", "important");
+      }
+    });
+    if (innerWidth >= 1024) {
+      document.querySelectorAll(".blnkk-supabase-results,.blnkk-supabase-note").forEach((node) => {
+        if (!node.closest("aside")) node.remove();
+      });
+      if (hasNativeDesktopCards()) clearGeneratedResults();
+    }
+  }
+
+  function setPills(root, count, status) {
+    [...root.querySelectorAll("span")].forEach((span) => {
+      const value = text(span);
+      if (/^\d+\s*(found|筆)$|found$|Searching|搜尋中/.test(value)) span.textContent = count;
+      else if (/Awaiting buyer input|Matching supplier cards|BLNKK review recommended|Match unavailable|Setup needed|需要補齊|尚未取得|尚未/.test(value)) span.textContent = status;
+    });
+  }
+
+  function mount(root, html, count, status) {
+    setPills(root, count, status);
+    root.querySelectorAll(".blnkk-supabase-results,.blnkk-supabase-note").forEach((node) => node.remove());
+    [...root.children].forEach((child) => {
+      if (/No supplier signals matched yet|目前尚未|Keep chatting/.test(text(child))) child.remove();
+    });
+    const box = document.createElement("div");
+    box.className = "blnkk-supabase-results";
+    box.innerHTML = html;
+    root.appendChild(box);
+  }
+
+  function score(row) {
+    let value = row.fit_score ?? row.score ?? row.match_score ?? row.similarity ?? row.confidence;
+    if (value == null) return "";
+    let number = Number(value);
+    if (!Number.isFinite(number)) return String(value);
+    if (number <= 1) number *= 100;
+    return `${Math.round(number)}%`;
+  }
+
+  function pick(row, keys) {
+    for (const key of keys) {
+      const value = row && row[key];
+      if (value != null && String(value).trim()) return value;
+    }
+    return "";
+  }
+
+  function list(value) {
+    if (Array.isArray(value)) return value.filter(Boolean).map(String);
+    if (typeof value === "string") return value.split(/[,|]/).map((item) => item.trim()).filter(Boolean);
+    return [];
+  }
+
+  function rows(payload) {
+    const data = payload && payload.data;
+    if (Array.isArray(data)) return data;
+    return ["matches", "results", "candidates", "suppliers"]
+      .map((key) => data && data[key])
+      .find(Array.isArray) || [];
+  }
+
+  function card(row, index) {
+    const name = pick(row, ["company_name", "supplier_name", "legal_name", "name", "title"]) || `Supplier candidate ${index + 1}`;
+    const category = pick(row, ["category", "primary_category", "capability", "capability_group", "sector"]);
+    const country = pick(row, ["country", "region", "location", "factory_location"]);
+    const summary = pick(row, ["summary", "description", "match_reason", "notes"]) || "Public supplier card matched the buyer brief. BLNKK review should confirm evidence, contact path, and introduction readiness.";
+    const tags = [...list(row.tags), ...list(row.keywords), ...list(row.services), category, country].filter(Boolean).slice(0, 6);
+    const fit = score(row);
+    return `<article class="blnkk-supplier-card"><div class="blnkk-supplier-card-head"><b>${esc(name)}</b>${fit ? `<span class="blnkk-score-badge">${esc(fit)}</span>` : ""}</div><div class="blnkk-supplier-meta">${esc([category, country].filter(Boolean).join(" · ") || "BLNKK public supplier directory")}</div><div class="blnkk-supplier-summary">${esc(summary)}</div>${tags.length ? `<div class="blnkk-supplier-tags">${tags.map((tag) => `<span>${esc(tag)}</span>`).join("")}</div>` : ""}</article>`;
+  }
+
+  let lastView = null;
+
+  function paint(view) {
+    css();
+    layoutGuard();
+    if (hasNativeDesktopCards()) {
+      clearGeneratedResults();
+      return;
+    }
+    if (view.type === "loading") {
+      roots().forEach((root) => mount(root, '<div class="blnkk-supabase-note">Searching BLNKK supplier database and scoring public supplier cards...</div>', "Searching", "Matching supplier cards"));
+      return;
+    }
+    if (view.type === "error") {
+      roots().forEach((root) => mount(root, `<div class="blnkk-supabase-note">${esc(view.message)}</div>`, "0 found", "Setup needed"));
+      return;
+    }
+    const resultRows = rows(view.payload);
+    if (!resultRows.length) {
+      roots().forEach((root) => mount(root, '<div class="blnkk-supabase-note">No public supplier cards matched this brief yet. Add specs, region constraints, or target category so BLNKK can narrow again.</div>', "0 found", "Match unavailable"));
+      return;
+    }
+    const html = resultRows.slice(0, 5).map(card).join("");
+    roots().forEach((root) => mount(root, html, `${resultRows.length} found`, "BLNKK review recommended"));
+  }
+
+  function renderLoading() {
+    lastView = { type: "loading" };
+    paint(lastView);
+  }
+
+  function render(payload) {
+    lastView = { type: "payload", payload };
+    paint(lastView);
+  }
+
+  function renderError(error) {
+    const message = (error && error.message) || "Supplier matching is not available yet. Check Supabase environment variables and the Vercel API deployment.";
+    lastView = { type: "error", message };
+    paint(lastView);
+  }
+
+  let last = { key: "", time: 0 };
+  async function match(raw, via) {
+    raw = (raw || "").trim();
+    if (!raw) return;
+    const now = Date.now();
+    const key = `${raw}|${via}`;
+    if (last.key === key && now - last.time < 3500) return;
+    last = { key, time: now };
+    renderLoading();
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ search_query: raw, limit: 12 }),
+      });
+      const type = response.headers.get("content-type") || "";
+      const payload = type.includes("json") ? await response.json() : { ok: false, error: `Supplier match API returned ${response.status}` };
+      if (!response.ok || payload.ok === false) throw new Error(payload.error || `Supplier match API returned ${response.status}`);
+      render(payload);
+    } catch (error) {
+      console.warn("BLNKK supplier match failed", error);
+      renderError(error);
+    }
+  }
+
+  document.addEventListener("click", (event) => {
+    const button = event.target && event.target.closest && event.target.closest("button");
+    if (!button || !/^(Send|送出)$/.test(text(button))) return;
+    const currentInput = input();
+    match(currentInput && currentInput.value, "click");
+  }, true);
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" || event.shiftKey || event.isComposing) return;
+    const currentInput = input();
+    if (event.target === currentInput) match(currentInput.value, "enter");
+  }, true);
+  addEventListener("resize", () => {
+    if (lastView) paint(lastView);
+    else layoutGuard();
+  });
+  new MutationObserver(layoutGuard).observe(document.documentElement, { childList: true, subtree: true });
+  css();
+  layoutGuard();
+})();
+</script>
+<!-- SnippetEnd: blnkk-supabase-supplier-match-v2 -->
 
 <!-- Snippet: blnkk-supabase-supplier-match -->
 <script>
