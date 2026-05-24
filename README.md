@@ -12,15 +12,17 @@ Production preview from `main`:
 - [TW](https://blnkk-framer-site-export.vercel.app/tw)
 - [CSA](https://blnkk-framer-site-export.vercel.app/csa)
 - [Protocol](https://blnkk-framer-site-export.vercel.app/protocol)
+- [Supply Search](https://blnkk-framer-site-export.vercel.app/supply-search)
+- [Admin](https://blnkk-framer-site-export.vercel.app/admin)
 
-Admin PR preview from `admin-preview`:
+Preview branch from `admin-preview`:
 
+- [Home](https://blnkk-framer-site-expor-git-ac79e6-ian900203-gmailcoms-projects.vercel.app/)
+- [TW](https://blnkk-framer-site-expor-git-ac79e6-ian900203-gmailcoms-projects.vercel.app/tw)
+- [CSA](https://blnkk-framer-site-expor-git-ac79e6-ian900203-gmailcoms-projects.vercel.app/csa)
+- [Protocol](https://blnkk-framer-site-expor-git-ac79e6-ian900203-gmailcoms-projects.vercel.app/protocol)
+- [Supply Search](https://blnkk-framer-site-expor-git-ac79e6-ian900203-gmailcoms-projects.vercel.app/supply-search)
 - [Admin](https://blnkk-framer-site-expor-git-ac79e6-ian900203-gmailcoms-projects.vercel.app/admin)
-- [Pull Request #1](https://github.com/ian900203/blnkk-framer-site-export/pull/1)
-
-After PR #1 is merged, Admin should be reviewed at:
-
-- [Admin on production preview](https://blnkk-framer-site-export.vercel.app/admin)
 
 ## Captured Pages
 
@@ -45,6 +47,7 @@ This is not yet a rebuilt app. The exported files are live-site captures that pr
 - `home.html`, `tw.html`, `csa.html`, `protocol.html`: raw captured HTML for each live page.
 - `framer-custom-code-notes.md`: notes about the Home/CSA custom-code issue fixed before this export.
 - `admin/index.html`: Admin v0 preview for launch readiness, CSA intake, matching review, and meeting pipeline planning.
+- `supply-search/index.html`: Supply Search landing and buyer entry route.
 - `api/*`: Vercel API routes for Supabase health, supplier matching, buyer requests, and protected Admin data.
 
 ## Supabase / Vercel Environment
@@ -76,6 +79,7 @@ Build a clean app from this snapshot, likely with:
 - `tw` as `/tw`
 - `csa` as `/csa`
 - `protocol` as `/protocol`
+- `supply-search` as `/supply-search`
 - `admin` as `/admin`
 
 During the rebuild, do not copy old Framer custom-code patches blindly. Recreate only the current intended behavior in source-controlled components.
