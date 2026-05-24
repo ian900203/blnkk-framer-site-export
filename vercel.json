@@ -21,6 +21,10 @@
     {
       "source": "/protocol",
       "destination": "/protocol.html"
+    },
+    {
+      "source": "/sourcing-profile",
+      "destination": "/sourcing-profile/index.html"
     }
   ]
 }
