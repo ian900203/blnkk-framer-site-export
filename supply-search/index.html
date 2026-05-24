@@ -1,0 +1,1573 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BLNKK Supply Search</title>
+  <meta name="description" content="BLNKK Supply Search helps UAS buyers brief, source, score, review, and meet qualified Taiwan supplier candidates.">
+  <style>
+    :root {
+      --ink: #090f1f;
+      --muted: #667085;
+      --line: #e5e7eb;
+      --paper: #ffffff;
+      --soft: #f6f7f9;
+      --blue: #2563eb;
+      --blue-soft: #eff6ff;
+      --blue-line: #bfdbfe;
+      --green: #047857;
+      --shadow: 0 22px 70px rgba(9, 15, 31, .10);
+      --motion: cubic-bezier(.2, .8, .2, 1);
+      --hero-image: url("https://images.unsplash.com/photo-1640955785023-1854685dae05?auto=format&fit=crop&w=2200&q=85");
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-snap-type: y mandatory;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--soft);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      color: #fff;
+      background:
+        linear-gradient(90deg, rgba(9, 15, 31, .88), rgba(9, 15, 31, .62) 55%, rgba(9, 15, 31, .18)),
+        var(--hero-image) center / cover;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 68% 38%, rgba(255, 255, 255, .22), transparent 30%);
+      opacity: .55;
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 160px;
+      background: linear-gradient(180deg, rgba(9, 15, 31, 0), rgba(9, 15, 31, .34));
+      pointer-events: none;
+    }
+
+    .nav,
+    .hero-inner,
+    .section,
+    .footer-inner {
+      width: min(1160px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 76px;
+      gap: 24px;
+    }
+
+    .brand {
+      --logo-icon-size: 30px;
+      --logo-wordmark-height: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-icon {
+      display: block;
+      width: var(--logo-icon-size);
+      height: var(--logo-icon-size);
+      object-fit: contain;
+    }
+
+    .logo-name {
+      display: block;
+      width: auto;
+      height: var(--logo-wordmark-height);
+      object-fit: contain;
+    }
+
+    .side .brand {
+      --logo-icon-size: 24px;
+      --logo-wordmark-height: 14px;
+      gap: 7px;
+    }
+
+    .brand.on-light .logo-icon,
+    .brand.on-light .logo-name {
+      filter: brightness(0) saturate(100%) invert(5%) sepia(12%) saturate(1316%) hue-rotate(185deg) brightness(95%) contrast(102%);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      color: rgba(255, 255, 255, .78);
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 18px;
+      border: 1px solid rgba(255, 255, 255, .25);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      background: rgba(255, 255, 255, .12);
+      backdrop-filter: blur(12px);
+      transition: transform .2s var(--motion), background .2s var(--motion), border-color .2s var(--motion), box-shadow .2s var(--motion);
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255, 255, 255, .48);
+      background: rgba(255, 255, 255, .18);
+      box-shadow: 0 14px 34px rgba(9, 15, 31, .18);
+    }
+
+    .button.primary {
+      color: var(--ink);
+      background: #fff;
+      border-color: #fff;
+    }
+
+    .button.primary:hover {
+      background: #f8fafc;
+    }
+
+    .button.dark {
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+
+    .button.dark:hover {
+      background: #111827;
+    }
+
+    .button.cta-primary {
+      min-height: 54px;
+      padding-inline: 24px;
+      font-size: 15px;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: grid;
+      align-content: center;
+      padding: 76px 0 132px;
+    }
+
+    .eyebrow,
+    .kicker {
+      color: #93c5fd;
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 780px;
+      margin: 18px 0 0;
+      font-size: clamp(48px, 8vw, 92px);
+      line-height: .96;
+      letter-spacing: 0;
+    }
+
+    .hero-copy {
+      max-width: 650px;
+      margin: 28px 0 0;
+      color: rgba(255, 255, 255, .9);
+      font-size: 19px;
+      line-height: 1.65;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 32px;
+    }
+
+    .tag {
+      padding: 9px 12px;
+      border: 1px solid rgba(255, 255, 255, .28);
+      border-radius: 999px;
+      color: rgba(255, 255, 255, .82);
+      background: rgba(255, 255, 255, .08);
+      font-size: 13px;
+      font-weight: 700;
+      backdrop-filter: blur(12px);
+    }
+
+    .proof {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      width: min(1160px, calc(100% - 40px));
+      margin: 0 auto;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--line);
+      box-shadow: 0 24px 70px rgba(9, 15, 31, .12);
+    }
+
+    .proof-item {
+      min-height: 132px;
+      padding: 24px;
+      background: #fff;
+      transition: transform .22s var(--motion), box-shadow .22s var(--motion);
+    }
+
+    .proof-item.is-visible {
+      animation: proofSnap .72s var(--motion) both;
+    }
+
+    .proof-item strong {
+      display: block;
+      font-size: 30px;
+      line-height: 1;
+    }
+
+    .proof-item.is-visible strong {
+      animation: metricPop .86s var(--motion) both;
+    }
+
+    .proof-item span {
+      display: block;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .section {
+      min-height: 100svh;
+      display: grid;
+      align-content: center;
+      padding: 96px 0;
+    }
+
+    .snap-panel {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+
+    .metrics-panel {
+      min-height: 100svh;
+      display: grid;
+      align-content: center;
+      padding: 108px 0;
+      background:
+        linear-gradient(180deg, #f7f8fa 0%, #f4f6f8 100%);
+    }
+
+    .metrics-head {
+      width: min(1160px, calc(100% - 40px));
+      margin: 0 auto 28px;
+    }
+
+    .metrics-head h2 {
+      max-width: 760px;
+      margin: 10px 0 0;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 34px;
+    }
+
+    .section h2 {
+      margin: 10px 0 0;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .section-head p,
+    .lead {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .kicker {
+      color: var(--blue);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .step,
+    .model-card,
+    .faq,
+    .pricing-chip {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 12px 34px rgba(9, 15, 31, .045);
+      transition: transform .22s var(--motion), box-shadow .22s var(--motion), border-color .22s var(--motion);
+    }
+
+    .proof-item:hover,
+    .step:hover,
+    .model-card:hover,
+    .faq:hover,
+    .pricing-chip:hover,
+    .supplier:hover,
+    .brief-item:hover {
+      transform: translateY(-3px);
+      border-color: #d1d5db;
+      box-shadow: 0 18px 48px rgba(9, 15, 31, .08);
+    }
+
+    .step {
+      min-height: 260px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .step.is-visible,
+    .model-card.is-visible,
+    .pricing-chip.is-visible,
+    .faq.is-visible {
+      animation: cardSettle .82s var(--motion) both;
+    }
+
+    .step-num {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      color: var(--blue);
+      background: var(--blue-soft);
+      font-weight: 900;
+    }
+
+    .step.is-visible .step-num {
+      animation: badgePulse .78s var(--motion) both;
+    }
+
+    .step h3,
+    .model-card h3,
+    .faq h3 {
+      margin: 22px 0 0;
+      font-size: 22px;
+    }
+
+    .step p,
+    .model-card p,
+    .faq p,
+    .pricing-chip span {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .workspace-band {
+      background: #fff;
+      border-block: 1px solid var(--line);
+    }
+
+    .workspace {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #f8fafc;
+      box-shadow: var(--shadow);
+      transition: transform .24s var(--motion), box-shadow .24s var(--motion);
+    }
+
+    .workspace:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 30px 80px rgba(9, 15, 31, .12);
+    }
+
+    .workspace-cta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-top: 22px;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 12px 34px rgba(9, 15, 31, .055);
+    }
+
+    .workspace-cta p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .workspace-cta strong {
+      display: block;
+      color: var(--ink);
+      font-size: 16px;
+    }
+
+    .workspace-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding: 18px 22px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .workspace-top strong {
+      font-size: 18px;
+    }
+
+    .workspace-top span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 230px 1fr 330px;
+      min-height: 520px;
+    }
+
+    .side,
+    .signals-pane {
+      padding: 18px;
+      background: #f0f3f7;
+    }
+
+    .side-title {
+      margin: 22px 0 10px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .brief-item {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      margin-bottom: 10px;
+    }
+
+    .brief-item strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .brief-item span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .status {
+      display: inline-flex;
+      margin-top: 10px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      color: var(--green);
+      background: #ecfdf3;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .main-pane {
+      padding: 24px;
+      border-inline: 1px solid var(--line);
+      background: #f8fafc;
+    }
+
+    .intake-card,
+    .ask,
+    .input-preview,
+    .supplier {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .intake-card {
+      padding: 22px;
+    }
+
+    .intake-card h3 {
+      margin: 8px 0 0;
+      font-size: 24px;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .field {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: #344054;
+      background: #f8fafc;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .ask {
+      margin-top: 18px;
+      padding: 18px;
+      font-size: 17px;
+      line-height: 1.6;
+    }
+
+    .choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+      min-height: 44px;
+    }
+
+    .choice-chip {
+      opacity: 0;
+      transform: translateY(10px) scale(.96);
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #344054;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 750;
+      box-shadow: 0 8px 18px rgba(9, 15, 31, .04);
+    }
+
+    .choice-chip.is-live {
+      animation: choicePop .46s cubic-bezier(.18, .86, .22, 1) both;
+    }
+
+    .choice-chip.is-selected {
+      color: #fff;
+      border-color: var(--ink);
+      background: var(--ink);
+      box-shadow: 0 14px 30px rgba(9, 15, 31, .16);
+    }
+
+    .reply-bubble {
+      min-height: 58px;
+      margin-top: 14px;
+      padding: 14px 16px;
+      border: 1px solid rgba(9, 15, 31, .08);
+      border-radius: 18px 18px 6px 18px;
+      color: #fff;
+      background: var(--ink);
+      font-size: 15px;
+      line-height: 1.55;
+      box-shadow: 0 16px 30px rgba(9, 15, 31, .15);
+    }
+
+    .type-line {
+      display: inline;
+    }
+
+    .type-cursor::after {
+      content: "";
+      display: inline-block;
+      width: 1px;
+      height: 1.05em;
+      margin-left: 3px;
+      vertical-align: -0.12em;
+      background: currentColor;
+      animation: blinkCursor .85s steps(1) infinite;
+    }
+
+    .input-preview {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-top: 18px;
+      padding: 12px;
+      color: var(--muted);
+    }
+
+    .input-preview button {
+      border: 0;
+      border-radius: 8px;
+      color: #fff;
+      background: var(--ink);
+      padding: 10px 16px;
+      font-weight: 800;
+    }
+
+    .signals-pane {
+      background: #f8fafc;
+    }
+
+    .signal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .signal-head h3 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .count {
+      color: var(--blue);
+      border: 1px solid var(--blue-line);
+      background: var(--blue-soft);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .supplier {
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: transform .26s var(--motion), box-shadow .26s var(--motion), opacity .24s ease, border-color .24s ease, background .24s ease;
+    }
+
+    .supplier.is-active {
+      border-color: #c7d7ff;
+      background: linear-gradient(180deg, #fff 0%, #f8fbff 100%);
+      box-shadow: 0 18px 38px rgba(37, 99, 235, .10);
+    }
+
+    .supplier.is-dim {
+      opacity: .72;
+    }
+
+    .brief-item.is-active,
+    .field.is-active {
+      border-color: #c7d7ff;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, .08);
+    }
+
+    .supplier-top {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .supplier strong {
+      font-size: 15px;
+    }
+
+    .score {
+      padding: 5px 8px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--ink);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .supplier p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .model-grid,
+    .faq-grid,
+    .pricing-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .model-card,
+    .faq,
+    .pricing-chip {
+      padding: 22px;
+    }
+
+    .model-token {
+      display: inline-flex;
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: #0b4d76;
+      background: var(--blue-soft);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .price {
+      display: grid;
+      grid-template-columns: .95fr 1.05fr;
+      gap: 36px;
+      align-items: center;
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+    }
+
+    .price .kicker {
+      color: #93c5fd;
+    }
+
+    .price h2 {
+      margin: 10px 0 0;
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.04;
+    }
+
+    .price p {
+      color: rgba(255, 255, 255, .74);
+      line-height: 1.7;
+    }
+
+    .pricing-row {
+      grid-template-columns: 1fr;
+    }
+
+    .pricing-chip {
+      background: rgba(255, 255, 255, .08);
+      border-color: rgba(255, 255, 255, .15);
+    }
+
+    .pricing-chip strong,
+    .pricing-chip span {
+      display: block;
+    }
+
+    .pricing-chip span {
+      margin-top: 6px;
+      color: rgba(255, 255, 255, .72);
+    }
+
+    .cta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 28px;
+      padding: clamp(30px, 5vw, 56px);
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 8px;
+      color: #fff;
+      background: var(--ink);
+      box-shadow: 0 30px 90px rgba(9, 15, 31, .18);
+    }
+
+    .cta h2 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.05;
+    }
+
+    .cta p {
+      margin: 14px 0 0;
+      max-width: 680px;
+      color: rgba(255, 255, 255, .74);
+      line-height: 1.65;
+    }
+
+    .cta .kicker {
+      color: #93c5fd;
+    }
+
+    .cta-actions {
+      display: grid;
+      gap: 10px;
+      min-width: 230px;
+    }
+
+    .cta-actions .button.primary {
+      min-height: 56px;
+      font-size: 15px;
+    }
+
+    .cta-note {
+      color: rgba(255, 255, 255, .58);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    footer {
+      padding: 34px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      background: #fff;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 980px) {
+      .nav-links {
+        display: none;
+      }
+
+      .proof,
+      .steps,
+      .model-grid,
+      .faq-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .workspace-grid,
+      .price {
+        grid-template-columns: 1fr;
+      }
+
+      .main-pane {
+        border-inline: 0;
+        border-block: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav,
+      .hero-inner,
+      .section,
+      .footer-inner,
+      .proof {
+        width: min(100% - 28px, 1160px);
+      }
+
+      .hero {
+        min-height: 100svh;
+        background:
+          linear-gradient(180deg, rgba(9, 15, 31, .94), rgba(9, 15, 31, .78) 48%, rgba(9, 15, 31, .58)),
+          var(--hero-image) 62% center / cover;
+      }
+
+      .hero-actions,
+      .cta,
+      .workspace-cta,
+      .footer-inner,
+      .workspace-top {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .proof,
+      .steps,
+      .model-grid,
+      .faq-grid,
+      .field-row {
+        grid-template-columns: 1fr;
+      }
+
+      .section {
+        min-height: 100svh;
+        padding: 88px 0;
+      }
+
+      .metrics-panel {
+        min-height: 100svh;
+        padding: 88px 0;
+      }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(38px) scale(.985);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transition: opacity .7s var(--motion), transform .7s var(--motion);
+    }
+
+    @keyframes proofSnap {
+      0% {
+        opacity: 0;
+        transform: translateY(42px) scale(.96);
+      }
+
+      58% {
+        opacity: 1;
+        transform: translateY(-8px) scale(1.025);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes metricPop {
+      0% {
+        opacity: .35;
+        transform: translateY(14px) scale(.9);
+      }
+
+      68% {
+        opacity: 1;
+        transform: translateY(-3px) scale(1.08);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes cardSettle {
+      0% {
+        opacity: 0;
+        filter: blur(8px);
+        transform: translateY(54px) scale(.96);
+      }
+
+      55% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(-7px) scale(1.015);
+      }
+
+      100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes badgePulse {
+      0% {
+        transform: scale(.72);
+      }
+
+      55% {
+        transform: scale(1.18);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes choicePop {
+      0% {
+        opacity: 0;
+        transform: translateY(12px) scale(.94);
+      }
+
+      68% {
+        opacity: 1;
+        transform: translateY(-3px) scale(1.03);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes blinkCursor {
+      0%, 44% {
+        opacity: 1;
+      }
+
+      45%, 100% {
+        opacity: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero snap-panel">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="/" aria-label="BLNKK home">
+        <img class="logo-icon" src="https://framerusercontent.com/images/NYeJGzUhu5OjdBsoqNX1ywNRg.png?width=960&amp;height=960" alt="" aria-hidden="true">
+        <img class="logo-name" src="https://framerusercontent.com/images/UrrwUbK41hrsjeYDyQOYXxbrZPQ.png?width=2045&amp;height=444" alt="BLNKK">
+      </a>
+      <div class="nav-links">
+        <a href="#workspace">Workspace</a>
+        <a href="#model">Score model</a>
+        <a class="button" href="/csa.html">Start search</a>
+      </div>
+    </nav>
+
+    <div class="hero-inner">
+      <div class="eyebrow">BLNKK Supply Search</div>
+      <h1>Vetted Taiwan suppliers, on demand.</h1>
+      <p class="hero-copy">
+        Brief BLNKK once. We turn your part requirement into supplier-ready signals,
+        search the BLNKK database and trusted public sources, review the shortlist,
+        then help you choose who to meet.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary cta-primary" href="/csa.html">Start supplier search</a>
+        <a class="button" href="#workspace">See the workspace</a>
+      </div>
+      <div class="tags" aria-label="Key points">
+        <span class="tag">Human-reviewed shortlist</span>
+        <span class="tag">NDA-gated buyer details</span>
+        <span class="tag">Non-PRC supplier path</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="metrics-panel snap-panel" aria-label="BLNKK Supply Search proof points">
+    <div class="metrics-head">
+      <div class="kicker">Supplier Signal Layer</div>
+      <h2>Start with the numbers that make the shortlist move.</h2>
+    </div>
+    <div class="proof">
+      <div class="proof-item">
+        <strong class="metric-value" data-count-to="1303">1,303</strong>
+        <span>supplier records ready for AI-assisted matching</span>
+      </div>
+      <div class="proof-item">
+        <strong class="metric-value" data-count-to="48" data-suffix="h">48h</strong>
+        <span>target time to first reviewed signal set</span>
+      </div>
+      <div class="proof-item">
+        <strong>NDA</strong>
+        <span>sensitive buyer information stays review-gated</span>
+      </div>
+      <div class="proof-item">
+        <strong class="metric-value" data-count-to="3" data-suffix="+">3+</strong>
+        <span>qualified supplier paths per validated brief</span>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <section class="workspace-band snap-panel" id="workspace">
+      <div class="section">
+        <div class="section-head">
+          <div class="kicker">Product Surface</div>
+          <h2>The buyer sees the work in one place.</h2>
+          <p>
+            The workspace keeps the intake, clarification questions, supplier signals, score
+            model, and review gate visible, so the outcome is legible before the intro happens.
+          </p>
+        </div>
+
+        <div class="workspace" aria-label="BLNKK Supply Search workspace concept">
+          <div class="workspace-top">
+            <strong>RF data-link supplier search</strong>
+            <span>AI sourcing conversation - BLNKK review required</span>
+          </div>
+          <div class="workspace-grid" data-demo-workspace>
+            <aside class="side">
+              <a class="brand on-light" href="#" aria-label="BLNKK">
+                <img class="logo-icon" src="https://framerusercontent.com/images/NYeJGzUhu5OjdBsoqNX1ywNRg.png?width=960&amp;height=960" alt="" aria-hidden="true">
+                <img class="logo-name" src="https://framerusercontent.com/images/UrrwUbK41hrsjeYDyQOYXxbrZPQ.png?width=2045&amp;height=444" alt="BLNKK">
+              </a>
+              <div class="side-title">Sourcing briefs</div>
+              <div class="brief-item is-active" data-demo-brief>
+                <strong>RF data-link suppliers</strong>
+                <span>Non-PRC modules for UAV applications.</span>
+                <div class="status">Shortlist ready</div>
+              </div>
+              <div class="brief-item" data-demo-brief>
+                <strong>Flight controller PCBA</strong>
+                <span>Small-batch samples, documentation support.</span>
+                <div class="status" style="color:#805d0c;background:#fff4cf;">Needs specs</div>
+              </div>
+              <div class="brief-item" data-demo-brief>
+                <strong>Battery / BMS options</strong>
+                <span>Pack integration and export support.</span>
+                <div class="status" style="color:#647085;background:#eceff3;">Draft</div>
+              </div>
+            </aside>
+
+            <section class="main-pane">
+              <div class="intake-card">
+                <div class="kicker" data-demo-step>Step 2 of 5</div>
+                <h3 data-demo-title>Confirm the must-have supplier signals.</h3>
+                <div class="field-row">
+                  <div class="field is-active" data-demo-field>Frequency band: 900 MHz / 2.4 GHz</div>
+                  <div class="field is-active" data-demo-field>Region exclusion: PRC-owned suppliers</div>
+                  <div class="field is-active" data-demo-field>MOQ: prototype batch accepted</div>
+                  <div class="field is-active" data-demo-field>Evidence: datasheet + export history</div>
+                </div>
+              </div>
+              <div class="ask"><span class="type-line" data-demo-question>Do you need the supplier to support custom firmware, or is a catalog RF module acceptable for the first prototype?</span></div>
+              <div class="choice-row" data-demo-options></div>
+              <div class="reply-bubble"><span class="type-line" data-demo-reply>Catalog RF module is acceptable for the first prototype.</span></div>
+              <div class="input-preview">
+                <span class="type-line" data-demo-input>Catalog RF module is acceptable for the first prototype.</span>
+                <button type="button">Send</button>
+              </div>
+            </section>
+
+            <aside class="signals-pane">
+              <div class="signal-head">
+                <h3>Recommended candidates</h3>
+                <span class="count" data-demo-count>3 found</span>
+              </div>
+              <div class="supplier is-active" data-demo-supplier>
+                <div class="supplier-top">
+                  <strong>Taipei RF Systems Co.</strong>
+                  <span class="score">92%</span>
+                </div>
+                <p>Matched on RF module capability, UAV adjacent projects, and small-batch support. Public evidence found in product sheets.</p>
+              </div>
+              <div class="supplier" data-demo-supplier>
+                <div class="supplier-top">
+                  <strong>Hsinchu Embedded Link</strong>
+                  <span class="score">86%</span>
+                </div>
+                <p>Strong firmware fit and hardware integration history. Needs BLNKK review before buyer details are revealed.</p>
+              </div>
+              <div class="supplier is-dim" data-demo-supplier>
+                <div class="supplier-top">
+                  <strong>2 gated alternates</strong>
+                  <span class="score">Review</span>
+                </div>
+                <p>Supplier names stay hidden until BLNKK validates ownership, export sensitivity, and disclosure rules.</p>
+              </div>
+            </aside>
+          </div>
+        </div>
+        <div class="workspace-cta">
+          <p>
+            <strong>Already know the part or subsystem?</strong>
+            Start with a brief and let BLNKK narrow the supplier path.
+          </p>
+          <a class="button dark" href="/csa.html">Start supplier search</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section snap-panel" id="model">
+      <div class="section-head">
+        <div class="kicker">Score Model</div>
+        <h2>Turn supplier discovery into a reviewable shortlist.</h2>
+        <p>
+          Buyers can understand why a supplier is recommended, what still needs review, and
+          which candidates are ready for a meeting.
+        </p>
+      </div>
+      <div class="model-grid">
+        <article class="model-card">
+          <span class="model-token">Ownership</span>
+          <h3>UBO and origin</h3>
+          <p>Flag ownership, factory region, excluded jurisdictions, and buyer-sensitive disclosure constraints.</p>
+        </article>
+        <article class="model-card">
+          <span class="model-token">Production</span>
+          <h3>Factory readiness</h3>
+          <p>Score production equipment, sample-build support, volume readiness, and documentation quality.</p>
+        </article>
+        <article class="model-card">
+          <span class="model-token">Risk</span>
+          <h3>BOM and systems exposure</h3>
+          <p>Review BOM exposure, cyber or network stack, monitoring systems, and evidence gaps before outreach.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section snap-panel">
+      <div class="cta">
+        <div>
+          <div class="kicker">Ready To Source</div>
+          <h2>Tell BLNKK the part. We will help find who to meet.</h2>
+          <p>
+            Brief once. BLNKK searches the database, checks supplier signals, gates sensitive
+            details, and turns the shortlist into reviewed supplier conversations.
+          </p>
+        </div>
+        <div class="cta-actions">
+          <a class="button primary" href="/csa.html">Start supplier search</a>
+          <span class="cta-note">Begin with a part, subsystem, or manufacturing need.</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <strong>BLNKK Supply Search</strong>
+      <span>AI sourcing agency concept - Taiwan supplier discovery</span>
+    </div>
+  </footer>
+  <script>
+    (() => {
+      const motionOK = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!motionOK || !("IntersectionObserver" in window)) return;
+      const numberFormatter = new Intl.NumberFormat("en-US");
+      const metricValues = [...document.querySelectorAll(".metric-value")];
+      const metricsPanel = document.querySelector(".metrics-panel");
+      let metricsStarted = false;
+
+      const prepareMetric = (metric) => {
+        if (!metric) return;
+        const target = Number(metric.dataset.countTo);
+        if (!Number.isFinite(target)) return;
+        metric.dataset.prepared = "true";
+        metric.dataset.animated = "false";
+        metric.textContent = `0${metric.dataset.suffix || ""}`;
+      };
+
+      const animateMetric = (metric, delay = 0) => {
+        if (!metric || metric.dataset.animated === "true") return;
+        metric.dataset.animated = "true";
+
+        const target = Number(metric.dataset.countTo);
+        if (!Number.isFinite(target)) return;
+
+        const suffix = metric.dataset.suffix || "";
+        const duration = target > 100 ? 1800 : 1320;
+        const start = performance.now() + delay;
+
+        const tick = (now) => {
+          if (now < start) {
+            requestAnimationFrame(tick);
+            return;
+          }
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 4);
+          const microBounce = progress < .88 ? Math.sin(progress * Math.PI * 13) * target * .006 : 0;
+          const value = Math.max(0, Math.round(target * eased + microBounce));
+          metric.textContent = `${numberFormatter.format(value)}${suffix}`;
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+
+        metric.textContent = `0${suffix}`;
+        requestAnimationFrame(tick);
+      };
+
+      const runMetricSequence = () => {
+        if (metricsStarted) return;
+        metricsStarted = true;
+        metricValues.forEach(prepareMetric);
+        metricValues.forEach((metric, index) => animateMetric(metric, 220 + index * 180));
+      };
+
+      const metricsAreInFocus = () => {
+        if (!metricsPanel) return false;
+        const rect = metricsPanel.getBoundingClientRect();
+        return rect.top < window.innerHeight * .66 && rect.bottom > window.innerHeight * .34;
+      };
+
+      const scheduleMetricSequence = () => {
+        if (metricsStarted || !metricsAreInFocus()) return;
+        setTimeout(runMetricSequence, 260);
+      };
+
+      metricValues.forEach(prepareMetric);
+
+      const targets = document.querySelectorAll(
+        ".metrics-head, .proof-item, .section-head, .workspace, .workspace-cta, .model-card, .cta"
+      );
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.2, rootMargin: "0px 0px -28px 0px" });
+
+      targets.forEach((node, index) => {
+        node.classList.add("reveal");
+        const siblingIndex = node.parentElement ? [...node.parentElement.children].indexOf(node) : index;
+        const delay = node.classList.contains("proof-item")
+          ? siblingIndex * 95
+          : Math.min(index % 3, 2) * 70;
+        node.dataset.revealDelay = String(delay);
+        node.style.transitionDelay = `${delay}ms`;
+        node.style.animationDelay = `${delay}ms`;
+        const metric = node.querySelector(".metric-value");
+        if (metric) metric.style.animationDelay = `${delay + 80}ms`;
+        const rect = node.getBoundingClientRect();
+        if (rect.top < window.innerHeight * .92) {
+          node.classList.add("is-visible");
+          return;
+        }
+        observer.observe(node);
+      });
+
+      const metricsObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          scheduleMetricSequence();
+        });
+      }, { threshold: [.18, .34, .5] });
+
+      if (metricsPanel) metricsObserver.observe(metricsPanel);
+      window.addEventListener("scroll", scheduleMetricSequence, { passive: true });
+      window.addEventListener("resize", scheduleMetricSequence);
+      scheduleMetricSequence();
+    })();
+  </script>
+  <script>
+    (() => {
+      const root = document.querySelector("[data-demo-workspace]");
+      if (!root) return;
+
+      const stepEl = root.querySelector("[data-demo-step]");
+      const titleEl = root.querySelector("[data-demo-title]");
+      const fieldEls = [...root.querySelectorAll("[data-demo-field]")];
+      const briefEls = [...root.querySelectorAll("[data-demo-brief]")];
+      const questionEl = root.querySelector("[data-demo-question]");
+      const optionsEl = root.querySelector("[data-demo-options]");
+      const replyEl = root.querySelector("[data-demo-reply]");
+      const inputEl = root.querySelector("[data-demo-input]");
+      const countEl = root.querySelector("[data-demo-count]");
+      const supplierEls = [...root.querySelectorAll("[data-demo-supplier]")];
+      const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const scenarios = [
+        {
+          step: "Step 2 of 5",
+          title: "Confirm the must-have supplier signals.",
+          fields: [
+            "Frequency band: 900 MHz / 2.4 GHz",
+            "Region exclusion: PRC-owned suppliers",
+            "MOQ: prototype batch accepted",
+            "Evidence: datasheet + export history"
+          ],
+          question: "Do you need the supplier to support custom firmware, or is a catalog RF module acceptable for the first prototype?",
+          options: ["Catalog RF module OK", "Need firmware support", "Need both"],
+          selected: 0,
+          reply: "Catalog RF module is acceptable for the first prototype.",
+          count: "3 found",
+          activeBrief: 0,
+          suppliers: [
+            ["Taipei RF Systems Co.", "92%", "Matched on RF module capability, UAV adjacent projects, and small-batch support. Public evidence found in product sheets.", "active"],
+            ["Hsinchu Embedded Link", "86%", "Strong firmware fit and hardware integration history. Needs BLNKK review before buyer details are revealed.", ""],
+            ["2 gated alternates", "Review", "Supplier names stay hidden until BLNKK validates ownership, export sensitivity, and disclosure rules.", "dim"]
+          ]
+        },
+        {
+          step: "Step 3 of 5",
+          title: "Narrow the first-pass qualification filters.",
+          fields: [
+            "Integration path: drop-in RF module",
+            "Compliance: NDAA-aware documentation",
+            "Timeline: prototype in 6 weeks",
+            "Review gate: export + ownership screen"
+          ],
+          question: "What evidence should BLNKK prioritize before a supplier moves into the reviewed shortlist?",
+          options: ["Datasheet + COO", "Test report", "Export history"],
+          selected: 2,
+          reply: "Prioritize export history first, then confirm the datasheet and COO.",
+          count: "4 found",
+          activeBrief: 0,
+          suppliers: [
+            ["Taipei RF Systems Co.", "94%", "Still leads after the evidence filter tightened around export-ready RF module support.", "active"],
+            ["Taichung Signal Works", "88%", "Strong adjacent RF integration history, but product-sheet detail still needs BLNKK review.", ""],
+            ["1 gated alternate", "Review", "Additional candidate stays hidden until origin and disclosure checks clear.", "dim"]
+          ]
+        },
+        {
+          step: "Step 4 of 5",
+          title: "Shape the first supplier conversation.",
+          fields: [
+            "Meeting goal: first prototype feasibility",
+            "Factory region: Taiwan preferred",
+            "Fallback path: allied-market alternate",
+            "Buyer detail gate: BLNKK review required"
+          ],
+          question: "Should BLNKK prepare a shortlist focused on immediate prototype supply, or include alternates for a second sourcing path?",
+          options: ["Prototype only", "Include alternates", "Need BLNKK guidance"],
+          selected: 1,
+          reply: "Include alternates so we can compare a second sourcing path after the first review.",
+          count: "5 found",
+          activeBrief: 1,
+          suppliers: [
+            ["Hsinchu Embedded Link", "91%", "Moves up when alternates are included because integration support looks stronger for second-path sourcing.", "active"],
+            ["Taipei RF Systems Co.", "89%", "Still viable for the first prototype route and remains in the reviewed stack.", ""],
+            ["2 gated alternates", "Ready", "BLNKK can introduce alternates after ownership and disclosure review completes.", ""]
+          ]
+        }
+      ];
+
+      const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      async function typeText(node, text, speed) {
+        if (!node) return;
+        node.textContent = "";
+        node.classList.add("type-cursor");
+        if (reduceMotion) {
+          node.textContent = text;
+          node.classList.remove("type-cursor");
+          return;
+        }
+        for (let i = 0; i < text.length; i += 1) {
+          node.textContent = text.slice(0, i + 1);
+          await wait(speed);
+        }
+        node.classList.remove("type-cursor");
+      }
+
+      function paintSuppliers(items) {
+        supplierEls.forEach((card, index) => {
+          const item = items[index];
+          if (!item) return;
+          const [name, score, copy, tone] = item;
+          const nameEl = card.querySelector("strong");
+          const scoreEl = card.querySelector(".score");
+          const copyEl = card.querySelector("p");
+          if (nameEl) nameEl.textContent = name;
+          if (scoreEl) scoreEl.textContent = score;
+          if (copyEl) copyEl.textContent = copy;
+          card.classList.remove("is-active", "is-dim");
+          if (tone === "active") card.classList.add("is-active");
+          if (tone === "dim") card.classList.add("is-dim");
+        });
+      }
+
+      function paintFields(fields) {
+        fieldEls.forEach((field, index) => {
+          field.textContent = fields[index] || "";
+          field.classList.remove("is-active");
+        });
+        fieldEls.forEach((field, index) => {
+          setTimeout(() => field.classList.add("is-active"), reduceMotion ? 0 : 70 * index);
+        });
+      }
+
+      function paintBrief(activeIndex) {
+        briefEls.forEach((brief, index) => {
+          brief.classList.toggle("is-active", index === activeIndex);
+        });
+      }
+
+      async function animateOptions(options, selected) {
+        optionsEl.innerHTML = "";
+        if (reduceMotion) {
+          options.forEach((label, index) => {
+            const chip = document.createElement("button");
+            chip.type = "button";
+            chip.className = `choice-chip is-live${index === selected ? " is-selected" : ""}`;
+            chip.textContent = label;
+            optionsEl.appendChild(chip);
+          });
+          return;
+        }
+        for (let i = 0; i < options.length; i += 1) {
+          const chip = document.createElement("button");
+          chip.type = "button";
+          chip.className = "choice-chip";
+          chip.textContent = options[i];
+          optionsEl.appendChild(chip);
+          requestAnimationFrame(() => chip.classList.add("is-live"));
+          await wait(90);
+        }
+        await wait(240);
+        const selectedChip = optionsEl.children[selected];
+        if (selectedChip) selectedChip.classList.add("is-selected");
+      }
+
+      async function playScenario(scenario) {
+        if (stepEl) stepEl.textContent = scenario.step;
+        if (titleEl) titleEl.textContent = scenario.title;
+        if (countEl) countEl.textContent = scenario.count;
+        paintFields(scenario.fields);
+        paintBrief(scenario.activeBrief);
+        paintSuppliers(scenario.suppliers);
+        await typeText(questionEl, scenario.question, 18);
+        await wait(reduceMotion ? 0 : 180);
+        await animateOptions(scenario.options, scenario.selected);
+        await wait(reduceMotion ? 0 : 180);
+        await typeText(replyEl, scenario.reply, 16);
+        await wait(reduceMotion ? 0 : 120);
+        await typeText(inputEl, scenario.reply, 12);
+      }
+
+      async function loop() {
+        let index = 0;
+        while (root.isConnected) {
+          await playScenario(scenarios[index]);
+          await wait(reduceMotion ? 2600 : 2900);
+          index = (index + 1) % scenarios.length;
+        }
+      }
+
+      loop();
+    })();
+  </script>
+</body>
+</html>
