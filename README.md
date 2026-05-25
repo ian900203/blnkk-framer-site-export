@@ -25,6 +25,11 @@ Active card-intake preview branch from `tinder-intake-preview`:
 - [Card Intake](https://blnkk-framer-site-expor-git-fdb1ba-ian900203-gmailcoms-projects.vercel.app/sourcing-profile)
 - [Admin](https://blnkk-framer-site-expor-git-fdb1ba-ian900203-gmailcoms-projects.vercel.app/admin)
 
+Active NPI Sprint preview branch from `npi-sprint-preview`:
+
+- [NPI Sprint Intake](https://blnkk-framer-site-expor-git-b1e0dc-ian900203-gmailcoms-projects.vercel.app/npi-sprint)
+- [Pull Request #4](https://github.com/ian900203/blnkk-framer-site-export/pull/4)
+
 Legacy preview branch from `admin-preview`:
 
 - [Home](https://blnkk-framer-site-expor-git-ac79e6-ian900203-gmailcoms-projects.vercel.app/)
