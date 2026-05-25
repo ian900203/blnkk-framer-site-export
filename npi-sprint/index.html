@@ -1,0 +1,1137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BLNKK NPI Sprint Intake</title>
+  <meta name="description" content="Create a Taiwan-ready NPI build package for prototype, EVT, and pilot production review.">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #070d18;
+      --panel: #0d1625;
+      --panel-2: #111d2f;
+      --ink: #f7fbff;
+      --text: #d8e2ee;
+      --muted: #8fa0b6;
+      --line: rgba(154, 184, 220, 0.22);
+      --line-strong: rgba(62, 211, 255, 0.5);
+      --cyan: #24d7ff;
+      --blue: #2f6dff;
+      --green: #35e3b3;
+      --red: #ff6d8b;
+      --paper: #f8fbff;
+      --paper-ink: #0b1220;
+      --shadow: 0 28px 90px rgba(0, 0, 0, 0.42);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 16% 8%, rgba(47, 109, 255, 0.24), transparent 34%),
+        radial-gradient(circle at 86% 16%, rgba(53, 227, 179, 0.16), transparent 30%),
+        linear-gradient(180deg, #050913 0%, #0a111d 48%, #09111e 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.95), transparent 78%);
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+
+    .shell {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(5, 9, 19, 0.82);
+      border-bottom: 1px solid rgba(154, 184, 220, 0.14);
+    }
+
+    .nav-inner {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand img:first-child {
+      width: 38px;
+      height: 38px;
+    }
+
+    .brand img:last-child {
+      width: 132px;
+      height: auto;
+      filter: brightness(0) invert(1);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .nav-link {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 0 12px;
+      color: #c9d5e6;
+    }
+
+    .nav-link:hover {
+      border-color: var(--line);
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .hero {
+      padding: 52px 0 26px;
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(340px, 0.72fr);
+      gap: 34px;
+      align-items: end;
+    }
+
+    .eyebrow {
+      margin-bottom: 14px;
+      color: #8fc9ff;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      max-width: 760px;
+      margin-bottom: 18px;
+      font-size: clamp(42px, 7vw, 84px);
+      line-height: 0.94;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 720px;
+      margin-bottom: 0;
+      color: var(--text);
+      font-size: 19px;
+      line-height: 1.64;
+    }
+
+    .snapshot {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(13, 22, 37, 0.72);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .snapshot-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      min-height: 94px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .stat strong {
+      display: block;
+      margin-bottom: 8px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+      line-height: 1.38;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .builder {
+      padding: 26px 0 76px;
+      display: grid;
+      grid-template-columns: minmax(0, 0.64fr) minmax(320px, 0.36fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .deck {
+      position: relative;
+      min-height: 620px;
+    }
+
+    .card {
+      display: none;
+      position: relative;
+      min-height: 620px;
+      border: 1px solid var(--line-strong);
+      border-radius: 14px;
+      overflow: hidden;
+      background:
+        linear-gradient(145deg, rgba(10, 20, 35, 0.96), rgba(15, 29, 48, 0.94)),
+        var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .card.active {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      animation: rise 0.22s ease both;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(36, 215, 255, 0.2), transparent 18%, transparent 82%, rgba(53, 227, 179, 0.14));
+      opacity: 0.36;
+    }
+
+    .card-head, .card-body, .card-foot {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-head {
+      padding: 24px 26px 16px;
+      border-bottom: 1px solid rgba(154, 184, 220, 0.16);
+    }
+
+    .step-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .step-pill {
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(36, 215, 255, 0.38);
+      border-radius: 999px;
+      padding: 0 12px;
+      color: var(--cyan);
+      background: rgba(36, 215, 255, 0.08);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(216, 226, 238, 0.24);
+    }
+
+    .dot.done { background: var(--green); }
+    .dot.active { width: 24px; background: var(--cyan); }
+
+    .card h2 {
+      margin-bottom: 10px;
+      font-size: clamp(30px, 4.2vw, 50px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .card-copy {
+      max-width: 680px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.56;
+    }
+
+    .card-body {
+      padding: 24px 26px 18px;
+      display: grid;
+      align-content: start;
+      gap: 18px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    label {
+      color: #b8c5d6;
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid rgba(154, 184, 220, 0.28);
+      border-radius: 8px;
+      background: rgba(2, 7, 16, 0.64);
+      color: var(--ink);
+      padding: 14px 14px;
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    textarea {
+      min-height: 122px;
+      resize: vertical;
+      line-height: 1.48;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 4px rgba(36, 215, 255, 0.12);
+      background: rgba(2, 7, 16, 0.82);
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .choice, .chip {
+      min-height: 54px;
+      border: 1px solid rgba(154, 184, 220, 0.28);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.035);
+      color: #d8e4f3;
+      padding: 13px 14px;
+      text-align: left;
+      font-weight: 820;
+      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+    }
+
+    .choice:hover, .chip:hover { transform: translateY(-1px); }
+
+    .choice.selected, .chip.selected {
+      border-color: rgba(53, 227, 179, 0.7);
+      background: rgba(53, 227, 179, 0.12);
+      color: #effffb;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .chip {
+      width: auto;
+      min-height: 44px;
+      white-space: nowrap;
+    }
+
+    .card-foot {
+      padding: 18px 26px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      border-top: 1px solid rgba(154, 184, 220, 0.16);
+    }
+
+    .button {
+      min-height: 48px;
+      border: 1px solid rgba(154, 184, 220, 0.3);
+      border-radius: 8px;
+      padding: 0 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.06);
+      font-weight: 900;
+      transition: transform 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+    }
+
+    .button:hover { transform: translateY(-1px); }
+
+    .button.primary {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      color: #ffffff;
+      box-shadow: 0 14px 34px rgba(36, 215, 255, 0.22);
+    }
+
+    .button.ghost {
+      color: var(--muted);
+      background: transparent;
+    }
+
+    .button.danger {
+      color: #ffdce4;
+      border-color: rgba(255, 109, 139, 0.36);
+      background: rgba(255, 109, 139, 0.08);
+    }
+
+    .summary {
+      position: sticky;
+      top: 104px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(13, 22, 37, 0.78);
+      box-shadow: var(--shadow);
+    }
+
+    .summary-head {
+      padding: 20px;
+      border-bottom: 1px solid rgba(154, 184, 220, 0.16);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .summary-head h2 {
+      margin-bottom: 8px;
+      font-size: 24px;
+      line-height: 1.08;
+    }
+
+    .summary-head p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.48;
+    }
+
+    .summary-body {
+      padding: 18px 20px 20px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .summary-line {
+      border-bottom: 1px solid rgba(154, 184, 220, 0.12);
+      padding-bottom: 12px;
+    }
+
+    .summary-line:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .summary-line span {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .summary-line strong, .summary-line p {
+      margin: 0;
+      color: #f2f7ff;
+      font-size: 14px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .review {
+      border: 1px solid rgba(154, 184, 220, 0.18);
+      border-radius: 8px;
+      background: rgba(2, 7, 16, 0.42);
+      padding: 16px;
+      color: #dbe7f7;
+      white-space: pre-wrap;
+      line-height: 1.55;
+      min-height: 240px;
+    }
+
+    .status {
+      min-height: 24px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .status.ok { color: var(--green); }
+    .status.error { color: #ff9aad; }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 900px) {
+      .hero, .builder {
+        grid-template-columns: 1fr;
+      }
+
+      .summary {
+        position: relative;
+        top: auto;
+      }
+
+      .deck, .card {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .shell {
+        width: min(100% - 28px, 1180px);
+      }
+
+      .nav-inner {
+        min-height: 72px;
+      }
+
+      .nav-actions .nav-link:not(.mobile-keep) {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 34px;
+      }
+
+      .snapshot-grid,
+      .field-grid,
+      .choice-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card-head,
+      .card-body,
+      .card-foot {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .card-foot {
+        align-items: stretch;
+        flex-direction: column-reverse;
+      }
+
+      .button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="shell nav-inner">
+      <a class="brand" href="/supply-search" aria-label="BLNKK NPI Sprint">
+        <img src="https://framerusercontent.com/images/NYeJGzUhu5OjdBsoqNX1ywNRg.png?width=960&amp;height=960" alt="" aria-hidden="true">
+        <img src="https://framerusercontent.com/images/UrrwUbK41hrsjeYDyQOYXxbrZPQ.png?width=2045&amp;height=444" alt="BLNKK">
+      </a>
+      <div class="nav-actions">
+        <a class="nav-link" href="/supply-search">Landing</a>
+        <a class="nav-link mobile-keep" href="#deck">NPI cards</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="shell hero">
+      <div>
+        <div class="eyebrow">BLNKK NPI Sprint</div>
+        <h1>Turn messy specs into a Taiwan-ready build package.</h1>
+        <p class="lead">
+          Tell BLNKK what needs to be built, what files are ready, and where the prototype is stuck.
+          We translate the request into a package Taiwan NPI shops can review.
+        </p>
+      </div>
+      <aside class="snapshot" aria-label="Profile output">
+        <div class="snapshot-grid">
+          <div class="stat">
+            <strong>7</strong>
+            <span>NPI cards</span>
+          </div>
+          <div class="stat">
+            <strong>24h</strong>
+            <span>initial review</span>
+          </div>
+          <div class="stat">
+            <strong>NPI</strong>
+            <span>Taiwan build layer</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="shell builder" id="deck">
+      <div class="deck" aria-live="polite">
+        <form id="profileForm">
+          <article class="card active" data-card="0">
+            <div class="card-head">
+              <div class="step-row">
+                <span class="step-pill">Buyer</span>
+                <div class="dots" data-dots></div>
+              </div>
+              <h2>Who is this build for?</h2>
+              <p class="card-copy">Only the basics needed to review and follow up.</p>
+            </div>
+            <div class="card-body">
+              <div class="field-grid">
+                <div class="field">
+                  <label for="companyName">Company</label>
+                  <input id="companyName" name="companyName" autocomplete="organization" required placeholder="Company name">
+                </div>
+                <div class="field">
+                  <label for="contactName">Contact</label>
+                  <input id="contactName" name="contactName" autocomplete="name" required placeholder="Your name">
+                </div>
+                <div class="field">
+                  <label for="email">Work email</label>
+                  <input id="email" name="email" type="email" autocomplete="email" required placeholder="name@company.com">
+                </div>
+                <div class="field">
+                  <label for="website">Website</label>
+                  <input id="website" name="website" autocomplete="url" placeholder="https://">
+                </div>
+              </div>
+            </div>
+            <div class="card-foot">
+              <a class="button ghost" href="/supply-search">Back to landing</a>
+              <button class="button primary" type="button" data-next>Keep going</button>
+            </div>
+          </article>
+
+          <article class="card" data-card="1">
+            <div class="card-head">
+              <div class="step-row">
+                <span class="step-pill">Stage</span>
+                <div class="dots" data-dots></div>
+              </div>
+              <h2>Where is the build stuck?</h2>
+              <p class="card-copy">Pick the current stage, then give BLNKK the project context.</p>
+            </div>
+            <div class="card-body">
+              <div class="choice-grid" data-single="stage">
+                <button class="choice" type="button" data-value="Rough concept / early architecture">Rough concept / early architecture</button>
+                <button class="choice" type="button" data-value="Prototype exists but needs redesign">Prototype exists but needs redesign</button>
+                <button class="choice" type="button" data-value="EVT / first build validation">EVT / first build validation</button>
+                <button class="choice" type="button" data-value="DVT / design validation">DVT / design validation</button>
+                <button class="choice" type="button" data-value="Pilot production / PVT preparation">Pilot production / PVT preparation</button>
+                <button class="choice" type="button" data-value="Stuck in BOM, assembly, sourcing, or testing">Stuck in BOM, assembly, sourcing, or testing</button>
+              </div>
+              <input type="hidden" id="stage" name="stage" required>
+              <div class="field">
+                <label for="building">Project context</label>
+                <textarea id="building" name="building" required placeholder="Example: We are building a compact inspection drone and need the camera/RF payload prepared for EVT."></textarea>
+              </div>
+              <div class="field">
+                <label for="system">Product or system</label>
+                <input id="system" name="system" placeholder="Drone, robot, sensor device, satellite subsystem, medical wearable, etc.">
+              </div>
+            </div>
+            <div class="card-foot">
+              <button class="button ghost" type="button" data-prev>Back</button>
+              <button class="button primary" type="button" data-next>Next card</button>
+            </div>
+          </article>
+
+          <article class="card" data-card="2">
+            <div class="card-head">
+              <div class="step-row">
+                <span class="step-pill">Module</span>
+                <div class="dots" data-dots></div>
+              </div>
+              <h2>What needs to be built?</h2>
+              <p class="card-copy">Focus on the module, subsystem, or build package, not a supplier list.</p>
+            </div>
+            <div class="card-body">
+              <div class="choice-grid" data-single="category">
+                <button class="choice" type="button" data-value="PCBA / electronics module">PCBA / electronics module</button>
+                <button class="choice" type="button" data-value="Camera / vision module">Camera / vision module</button>
+                <button class="choice" type="button" data-value="Sensor payload">Sensor payload</button>
+                <button class="choice" type="button" data-value="RF / communication module">RF / communication module</button>
+                <button class="choice" type="button" data-value="Robot joint / motion module">Robot joint / motion module</button>
+                <button class="choice" type="button" data-value="Enclosure, assembly, or test fixture">Enclosure, assembly, or test fixture</button>
+              </div>
+              <input type="hidden" id="category" name="category" required>
+              <div class="field">
+                <label for="need">Build request</label>
+                <textarea id="need" name="need" required placeholder="Example: Need a Taiwan NPI shop to review, quote, and build 10 EVT-ready RF data-link modules."></textarea>
+              </div>
+            </div>
+            <div class="card-foot">
+              <button class="button ghost" type="button" data-prev>Back</button>
+              <button class="button primary" type="button" data-next>Next card</button>
+            </div>
+          </article>
+
+          <article class="card" data-card="3">
+            <div class="card-head">
+              <div class="step-row">
+                <span class="step-pill">Files</span>
+                <div class="dots" data-dots></div>
+              </div>
+              <h2>What files are ready?</h2>
+              <p class="card-copy">This is what lets BLNKK turn the request into a factory-readable package.</p>
+            </div>
+            <div class="card-body">
+              <div class="chip-row" data-multi="files">
+                <button class="chip" type="button" data-value="BOM">BOM</button>
+                <button class="chip" type="button" data-value="CAD / STEP">CAD / STEP</button>
+                <button class="chip" type="button" data-value="Gerber / PCB files">Gerber / PCB files</button>
+                <button class="chip" type="button" data-value="Schematic">Schematic</button>
+                <button class="chip" type="button" data-value="Prototype photos / video">Prototype photos / video</button>
+                <button class="chip" type="button" data-value="Test requirements">Test requirements</button>
+                <button class="chip" type="button" data-value="No files ready yet">No files ready yet</button>
+              </div>
+              <div class="field">
+                <label for="missingInfo">Known missing information</label>
+                <input id="missingInfo" name="missingInfo" placeholder="Example: final enclosure CAD, test limits, connector spec, supplier NDA package.">
+              </div>
+            </div>
+            <div class="card-foot">
+              <button class="button ghost" type="button" data-prev>Back</button>
+              <button class="button primary" type="button" data-next>Next card</button>
+            </div>
+          </article>
+
+          <article class="card" data-card="4">
+            <div class="card-head">
+              <div class="step-row">
+                <span class="step-pill">Sprint goal</span>
+                <div class="dots" data-dots></div>
+              </div>
+              <h2>What should this sprint produce?</h2>
+              <p class="card-copy">Choose the useful output for the next 24-48 hours or first build cycle.</p>
+            </div>
+            <div class="card-body">
+              <div class="chip-row" data-multi="goals">
+                <button class="chip" type="button" data-value="Feasibility review">Feasibility review</button>
+                <button class="chip" type="button" data-value="DFM / DFA feedback">DFM / DFA feedback</button>
+                <button class="chip" type="button" data-value="NPI shop quote">NPI shop quote</button>
+                <button class="chip" type="button" data-value="Prototype build plan">Prototype build plan</button>
+                <button class="chip" type="button" data-value="Small-batch pilot path">Small-batch pilot path</button>
+                <button class="chip" type="button" data-value="Testing / fixture plan">Testing / fixture plan</button>
+              </div>
+              <div class="field">
+                <label for="sprintGoalNote">Success definition</label>
+                <input id="sprintGoalNote" name="sprintGoalNote" placeholder="Example: know whether Taiwan can quote and build 10 EVT units within 3 weeks.">
+              </div>
+            </div>
+            <div class="card-foot">
+              <button class="button ghost" type="button" data-prev>Back</button>
+              <button class="button primary" type="button" data-next>Next card</button>
+            </div>
+          </article>
+
+          <article class="card" data-card="5">
+            <div class="card-head">
+              <div class="step-row">
+                <span class="step-pill">Constraints</span>
+                <div class="dots" data-dots></div>
+              </div>
+              <h2>What constraints should BLNKK protect?</h2>
+              <p class="card-copy">Keep compliance as a trust layer, not the whole product.</p>
+            </div>
+            <div class="card-body">
+              <div class="chip-row" data-multi="must">
+                <button class="chip" type="button" data-value="Taiwan-based shop preferred">Taiwan-based shop preferred</button>
+                <button class="chip" type="button" data-value="Non-PRC ownership path">Non-PRC ownership path</button>
+                <button class="chip" type="button" data-value="NDA before disclosure">NDA before disclosure</button>
+                <button class="chip" type="button" data-value="Sensitive hardware / defense-aware">Sensitive hardware / defense-aware</button>
+                <button class="chip" type="button" data-value="Export / compliance concern">Export / compliance concern</button>
+                <button class="chip" type="button" data-value="Customer demo deadline">Customer demo deadline</button>
+              </div>
+              <div class="field-grid">
+                <div class="field">
+                  <label for="timeline">Timeline</label>
+                  <select id="timeline" name="timeline">
+                    <option value="">Select timeline</option>
+                    <option>ASAP / this week</option>
+                    <option>2-4 weeks</option>
+                    <option>1-3 months</option>
+                    <option>Planning stage</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="quantity">Build quantity</label>
+                  <input id="quantity" name="quantity" placeholder="1-10 EVT units, 50 beta units, 500 pilot units, etc.">
+                </div>
+              </div>
+            </div>
+            <div class="card-foot">
+              <button class="button ghost" type="button" data-prev>Back</button>
+              <button class="button primary" type="button" data-next>Review</button>
+            </div>
+          </article>
+
+          <article class="card" data-card="6">
+            <div class="card-head">
+              <div class="step-row">
+                <span class="step-pill">Review</span>
+                <div class="dots" data-dots></div>
+              </div>
+              <h2>Submit the NPI package</h2>
+              <p class="card-copy">BLNKK will review the build package and identify the next factory-readable step.</p>
+            </div>
+            <div class="card-body">
+              <div class="review" id="reviewText"></div>
+              <div class="status" id="statusText"></div>
+            </div>
+            <div class="card-foot">
+              <button class="button ghost" type="button" data-prev>Back</button>
+              <button class="button primary" type="submit" id="submitButton">Submit NPI package</button>
+            </div>
+          </article>
+
+          <article class="card" data-card="7">
+            <div class="card-head">
+              <div class="step-row">
+                <span class="step-pill">Sent</span>
+                <div class="dots" data-dots></div>
+              </div>
+              <h2>NPI package received.</h2>
+              <p class="card-copy">BLNKK has the request and can prepare it for Taiwan NPI shop review.</p>
+            </div>
+            <div class="card-body">
+              <div class="review" id="successText"></div>
+            </div>
+            <div class="card-foot">
+              <a class="button ghost" href="/supply-search">Back to landing</a>
+              <button class="button primary" type="button" id="newProfile">Create another</button>
+            </div>
+          </article>
+        </form>
+      </div>
+
+      <aside class="summary" aria-label="Live NPI package">
+        <div class="summary-head">
+          <h2>Live NPI package</h2>
+          <p>Updates as each card is completed.</p>
+        </div>
+        <div class="summary-body">
+          <div class="summary-line">
+            <span>Buyer</span>
+            <strong id="summaryBuyer">Company and contact</strong>
+          </div>
+          <div class="summary-line">
+            <span>Stage</span>
+            <p id="summaryBuilding">Build stage and project context</p>
+          </div>
+          <div class="summary-line">
+            <span>Module</span>
+            <p id="summarySourcing">Module and build request</p>
+          </div>
+          <div class="summary-line">
+            <span>Files</span>
+            <p id="summaryFiles">Available files</p>
+          </div>
+          <div class="summary-line">
+            <span>Sprint goal</span>
+            <p id="summaryNice">Target output</p>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const form = document.getElementById("profileForm");
+      const cards = [...document.querySelectorAll("[data-card]")];
+      const statusText = document.getElementById("statusText");
+      const submitButton = document.getElementById("submitButton");
+      const reviewText = document.getElementById("reviewText");
+      const successText = document.getElementById("successText");
+      const requiredByCard = new Map([
+        [0, ["companyName", "contactName", "email"]],
+        [1, ["stage", "building"]],
+        [2, ["category", "need"]],
+      ]);
+      let current = 0;
+      let submitting = false;
+
+      function value(name) {
+        return String(form.elements[name]?.value || "").trim();
+      }
+
+      function selectedValues(group) {
+        return [...document.querySelectorAll(`[data-multi="${group}"] .selected`)].map((button) => button.dataset.value);
+      }
+
+      function profileFromForm() {
+        return {
+          buyer: {
+            companyName: value("companyName"),
+            contactName: value("contactName"),
+            email: value("email"),
+            website: value("website"),
+          },
+          stage: value("stage"),
+          building: {
+            context: value("building"),
+            system: value("system"),
+          },
+          sourcing: {
+            category: value("category"),
+            need: value("need"),
+          },
+          files: {
+            ready: selectedValues("files"),
+            missingInfo: value("missingInfo"),
+          },
+          goals: {
+            outputs: selectedValues("goals"),
+            note: value("sprintGoalNote"),
+          },
+          must: {
+            requirements: selectedValues("must"),
+            timeline: value("timeline"),
+            quantity: value("quantity"),
+          },
+        };
+      }
+
+      function line(label, content) {
+        return `${label}: ${content || "N/A"}`;
+      }
+
+      function formatProfile(profile) {
+        return [
+          "BLNKK NPI Build Package",
+          "",
+          line("Company", profile.buyer.companyName),
+          line("Contact", profile.buyer.contactName),
+          line("Email", profile.buyer.email),
+          line("Website", profile.buyer.website),
+          "",
+          line("Build stage", profile.stage),
+          line("Project context", profile.building.context),
+          line("Product / system", profile.building.system),
+          "",
+          line("Module", profile.sourcing.category),
+          line("Build request", profile.sourcing.need),
+          "",
+          line("Files ready", profile.files.ready.join(", ")),
+          line("Missing information", profile.files.missingInfo),
+          "",
+          line("Sprint goals", profile.goals.outputs.join(", ")),
+          line("Success definition", profile.goals.note),
+          "",
+          line("Constraints", profile.must.requirements.join(", ")),
+          line("Timeline", profile.must.timeline),
+          line("Build quantity", profile.must.quantity),
+        ].join("\n");
+      }
+
+      function buildPayload(profile) {
+        return {
+          raw_message: profile.sourcing.need || profile.building.context || profile.goals.note,
+          company_name: profile.buyer.companyName,
+          email: profile.buyer.email,
+          website: profile.buyer.website,
+          sourcing_category: profile.sourcing.category,
+          timeline: profile.must.timeline,
+          nda_requirement: profile.must.requirements.join(", "),
+          ai_summary: JSON.stringify(profile).slice(0, 1200),
+          notes: formatProfile(profile).slice(0, 1200),
+          source_page: "npi_sprint_card_preview",
+          consent_text: "Buyer submitted a BLNKK NPI Sprint build package for review and Taiwan shop preparation.",
+          consent_version: "npi-sprint-card-v1",
+          agreed: true,
+          google_sheet_form_type: "npi_sprint_build_package",
+          messages: [
+            { role: "system", message: "NPI Sprint build package submitted from BLNKK preview route.", message_order: 1 },
+            { role: "user", message: formatProfile(profile), message_order: 2 },
+          ],
+          profile,
+        };
+      }
+
+      function updateDots() {
+        document.querySelectorAll("[data-dots]").forEach((container) => {
+          container.innerHTML = "";
+          cards.slice(0, 7).forEach((_, index) => {
+            const dot = document.createElement("span");
+            dot.className = `dot${index < current ? " done" : ""}${index === current ? " active" : ""}`;
+            container.appendChild(dot);
+          });
+        });
+      }
+
+      function updateSummary() {
+        const profile = profileFromForm();
+        document.getElementById("summaryBuyer").textContent = [profile.buyer.companyName, profile.buyer.contactName].filter(Boolean).join(" / ") || "Company and contact";
+        document.getElementById("summaryBuilding").textContent = [profile.stage, profile.building.context, profile.building.system].filter(Boolean).join(" / ") || "Build stage and project context";
+        document.getElementById("summarySourcing").textContent = [profile.sourcing.category, profile.sourcing.need].filter(Boolean).join(" / ") || "Module and build request";
+        document.getElementById("summaryFiles").textContent = [profile.files.ready.join(", "), profile.files.missingInfo].filter(Boolean).join(" / ") || "Available files";
+        document.getElementById("summaryNice").textContent = [profile.goals.outputs.join(", "), profile.goals.note, profile.must.requirements.join(", ")].filter(Boolean).join(" / ") || "Target output";
+        reviewText.textContent = formatProfile(profile);
+      }
+
+      function setCard(index) {
+        current = Math.max(0, Math.min(index, cards.length - 1));
+        cards.forEach((card, cardIndex) => card.classList.toggle("active", cardIndex === current));
+        updateDots();
+        updateSummary();
+        if (current > 0) {
+          document.getElementById("deck").scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+
+      function validateCard(index) {
+        const names = requiredByCard.get(index) || [];
+        for (const name of names) {
+          const field = form.elements[name];
+          if (!String(field?.value || "").trim()) {
+            field?.focus();
+            return false;
+          }
+        }
+        if (index === 0 && form.elements.email && !form.elements.email.checkValidity()) {
+          form.elements.email.focus();
+          return false;
+        }
+        return true;
+      }
+
+      async function submitProfile() {
+        if (submitting || !validateCard(6)) return;
+        submitting = true;
+        submitButton.disabled = true;
+        statusText.className = "status";
+        statusText.textContent = "Submitting profile...";
+
+        const profile = profileFromForm();
+        try {
+          const response = await fetch("/api/buyer-requests", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(buildPayload(profile)),
+          });
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok || !data.ok) {
+            throw new Error(data.error || "Submission failed.");
+          }
+          statusText.className = "status ok";
+          statusText.textContent = "Submitted.";
+          successText.textContent = formatProfile(profile);
+          setCard(7);
+        } catch (error) {
+          statusText.className = "status error";
+          statusText.textContent = error.message || "Submission failed. Please try again.";
+        } finally {
+          submitting = false;
+          submitButton.disabled = false;
+        }
+      }
+
+      document.querySelectorAll("[data-single]").forEach((group) => {
+        const target = document.getElementById(group.dataset.single);
+        group.addEventListener("click", (event) => {
+          const button = event.target.closest(".choice");
+          if (!button) return;
+          group.querySelectorAll(".choice").forEach((choice) => choice.classList.remove("selected"));
+          button.classList.add("selected");
+          target.value = button.dataset.value;
+          updateSummary();
+        });
+      });
+
+      document.querySelectorAll("[data-multi]").forEach((group) => {
+        group.addEventListener("click", (event) => {
+          const button = event.target.closest(".chip");
+          if (!button) return;
+          button.classList.toggle("selected");
+          updateSummary();
+        });
+      });
+
+      document.querySelectorAll("[data-next]").forEach((button) => {
+        button.addEventListener("click", () => {
+          if (validateCard(current)) setCard(current + 1);
+        });
+      });
+
+      document.querySelectorAll("[data-prev]").forEach((button) => {
+        button.addEventListener("click", () => setCard(current - 1));
+      });
+
+      document.getElementById("newProfile").addEventListener("click", () => {
+        form.reset();
+        document.querySelectorAll(".selected").forEach((button) => button.classList.remove("selected"));
+        statusText.textContent = "";
+        setCard(0);
+      });
+
+      form.addEventListener("input", updateSummary);
+      form.addEventListener("change", updateSummary);
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        submitProfile();
+      });
+
+      updateDots();
+      updateSummary();
+    })();
+  </script>
+</body>
+</html>
