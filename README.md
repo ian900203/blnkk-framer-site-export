@@ -15,7 +15,17 @@ Production preview from `main`:
 - [Supply Search](https://blnkk-framer-site-export.vercel.app/supply-search)
 - [Admin](https://blnkk-framer-site-export.vercel.app/admin)
 
-Preview branch from `admin-preview`:
+Active card-intake preview branch from `tinder-intake-preview`:
+
+- [Home](https://blnkk-framer-site-expor-git-fdb1ba-ian900203-gmailcoms-projects.vercel.app/)
+- [TW](https://blnkk-framer-site-expor-git-fdb1ba-ian900203-gmailcoms-projects.vercel.app/tw)
+- [CSA](https://blnkk-framer-site-expor-git-fdb1ba-ian900203-gmailcoms-projects.vercel.app/csa)
+- [Protocol](https://blnkk-framer-site-expor-git-fdb1ba-ian900203-gmailcoms-projects.vercel.app/protocol)
+- [Supply Search](https://blnkk-framer-site-expor-git-fdb1ba-ian900203-gmailcoms-projects.vercel.app/supply-search)
+- [Card Intake](https://blnkk-framer-site-expor-git-fdb1ba-ian900203-gmailcoms-projects.vercel.app/sourcing-profile)
+- [Admin](https://blnkk-framer-site-expor-git-fdb1ba-ian900203-gmailcoms-projects.vercel.app/admin)
+
+Legacy preview branch from `admin-preview`:
 
 - [Home](https://blnkk-framer-site-expor-git-ac79e6-ian900203-gmailcoms-projects.vercel.app/)
 - [TW](https://blnkk-framer-site-expor-git-ac79e6-ian900203-gmailcoms-projects.vercel.app/tw)
