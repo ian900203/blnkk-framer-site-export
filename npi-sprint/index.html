@@ -3,31 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BLNKK NPI Sprint Intake</title>
-  <meta name="description" content="Create a Taiwan-ready NPI build package for prototype, EVT, and pilot production review.">
+  <title>BLNKK NPI-to-PVT Terminal</title>
+  <meta name="description" content="Turn prototype chaos into a factory-ready Taiwan NPI package, supplier pod, and PVT readiness path.">
   <style>
     :root {
       color-scheme: dark;
-      --bg: #070d18;
-      --panel: #0d1625;
-      --panel-2: #111d2f;
-      --ink: #f7fbff;
-      --text: #d8e2ee;
-      --muted: #8fa0b6;
+      --bg: #06101d;
+      --panel: #0d1828;
+      --panel-2: #111f34;
+      --ink: #f8fbff;
+      --text: #d8e4f3;
+      --muted: #92a3bb;
       --line: rgba(154, 184, 220, 0.22);
-      --line-strong: rgba(62, 211, 255, 0.5);
+      --line-strong: rgba(36, 215, 255, 0.52);
       --cyan: #24d7ff;
       --blue: #2f6dff;
       --green: #35e3b3;
+      --amber: #ffd166;
       --red: #ff6d8b;
-      --paper: #f8fbff;
-      --paper-ink: #0b1220;
       --shadow: 0 28px 90px rgba(0, 0, 0, 0.42);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
     * { box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -35,9 +33,9 @@
       min-width: 320px;
       color: var(--ink);
       background:
-        radial-gradient(circle at 16% 8%, rgba(47, 109, 255, 0.24), transparent 34%),
-        radial-gradient(circle at 86% 16%, rgba(53, 227, 179, 0.16), transparent 30%),
-        linear-gradient(180deg, #050913 0%, #0a111d 48%, #09111e 100%);
+        linear-gradient(90deg, rgba(6, 16, 29, 0.93), rgba(6, 16, 29, 0.72)),
+        url("https://images.unsplash.com/photo-1640955785023-1854685dae05?auto=format&fit=crop&w=2200&q=85") center / cover fixed,
+        var(--bg);
     }
 
     body::before {
@@ -55,6 +53,7 @@
     button, input, select, textarea { font: inherit; }
     button { cursor: pointer; }
     a { color: inherit; text-decoration: none; }
+    h1, h2, h3, p { margin-top: 0; }
 
     .shell {
       width: min(1180px, calc(100% - 40px));
@@ -66,7 +65,7 @@
       top: 0;
       z-index: 20;
       backdrop-filter: blur(18px);
-      background: rgba(5, 9, 19, 0.82);
+      background: rgba(5, 9, 19, 0.86);
       border-bottom: 1px solid rgba(154, 184, 220, 0.14);
     }
 
@@ -102,7 +101,7 @@
       gap: 10px;
       color: var(--muted);
       font-size: 14px;
-      font-weight: 750;
+      font-weight: 760;
     }
 
     .nav-link {
@@ -122,15 +121,16 @@
     }
 
     .hero {
-      padding: 52px 0 26px;
+      min-height: calc(100svh - 82px);
       display: grid;
-      grid-template-columns: minmax(0, 0.9fr) minmax(340px, 0.72fr);
-      gap: 34px;
-      align-items: end;
+      grid-template-columns: minmax(0, 0.9fr) minmax(340px, 0.62fr);
+      gap: 38px;
+      align-items: center;
+      padding: 64px 0 72px;
     }
 
     .eyebrow {
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       color: #8fc9ff;
       font-size: 12px;
       font-weight: 900;
@@ -138,65 +138,224 @@
       text-transform: uppercase;
     }
 
-    h1, h2, h3, p { margin-top: 0; }
-
     h1 {
-      max-width: 760px;
-      margin-bottom: 18px;
-      font-size: clamp(42px, 7vw, 84px);
+      max-width: 820px;
+      margin-bottom: 22px;
+      font-size: clamp(44px, 7.6vw, 92px);
       line-height: 0.94;
       letter-spacing: 0;
     }
 
     .lead {
-      max-width: 720px;
-      margin-bottom: 0;
+      max-width: 740px;
+      margin-bottom: 30px;
       color: var(--text);
       font-size: 19px;
-      line-height: 1.64;
+      line-height: 1.68;
     }
 
-    .snapshot {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(13, 22, 37, 0.72);
-      box-shadow: var(--shadow);
-      padding: 18px;
-    }
-
-    .snapshot-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+    .hero-actions, .chip-row {
+      display: flex;
+      flex-wrap: wrap;
       gap: 10px;
     }
 
-    .stat {
-      min-height: 94px;
-      border: 1px solid var(--line);
+    .button {
+      min-height: 48px;
+      border: 1px solid rgba(154, 184, 220, 0.3);
       border-radius: 8px;
-      padding: 14px;
+      padding: 0 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.06);
+      font-weight: 900;
+      transition: transform 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+    }
+
+    .button:hover { transform: translateY(-1px); }
+
+    .button.primary {
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      color: #ffffff;
+      box-shadow: 0 14px 34px rgba(36, 215, 255, 0.22);
+    }
+
+    .button.light {
+      color: #0b1220;
+      background: #ffffff;
+      border-color: #ffffff;
+    }
+
+    .button.ghost {
+      color: var(--muted);
+      background: transparent;
+    }
+
+    .terminal {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(7, 13, 24, 0.82);
+      box-shadow: var(--shadow);
+    }
+
+    .terminal-top {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 16px;
+      border-bottom: 1px solid rgba(154, 184, 220, 0.16);
+      color: #aebbd0;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       background: rgba(255, 255, 255, 0.035);
     }
 
-    .stat strong {
-      display: block;
-      margin-bottom: 8px;
+    .terminal-body {
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .terminal-line {
+      min-height: 42px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid rgba(154, 184, 220, 0.14);
+      border-radius: 8px;
+      padding: 12px;
+      background: rgba(2, 7, 16, 0.46);
+      color: #dce8f8;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .terminal-line span:first-child {
+      color: var(--cyan);
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .terminal-line small {
+      color: var(--green);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .proof {
+      padding: 0 0 42px;
+    }
+
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .proof-item {
+      min-height: 128px;
+      padding: 22px;
+      background: rgba(13, 24, 40, 0.88);
+    }
+
+    .proof-item strong {
+      display: block;
+      font-size: 30px;
       line-height: 1;
     }
 
-    .stat span {
+    .proof-item span {
+      display: block;
+      margin-top: 12px;
       color: var(--muted);
-      font-size: 12px;
-      font-weight: 750;
-      line-height: 1.38;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .section {
+      padding: 62px 0;
+      background: rgba(6, 16, 29, 0.76);
+      border-top: 1px solid rgba(154, 184, 220, 0.12);
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 28px;
+    }
+
+    .section h2 {
+      margin-bottom: 12px;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .model-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .model-card, .panel, .card, .summary {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(13, 24, 40, 0.88);
+      box-shadow: var(--shadow);
+    }
+
+    .model-card {
+      min-height: 220px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .model-card h3 {
+      margin-bottom: 12px;
+      font-size: 21px;
+      line-height: 1.18;
+    }
+
+    .model-card p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.58;
+    }
+
+    .price {
+      margin-bottom: 20px;
+      color: var(--green);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+      font-weight: 900;
     }
 
     .builder {
-      padding: 26px 0 76px;
+      padding: 44px 0 82px;
       display: grid;
       grid-template-columns: minmax(0, 0.64fr) minmax(320px, 0.36fr);
       gap: 22px;
@@ -205,20 +364,15 @@
 
     .deck {
       position: relative;
-      min-height: 620px;
+      min-height: 660px;
     }
 
     .card {
       display: none;
       position: relative;
-      min-height: 620px;
-      border: 1px solid var(--line-strong);
-      border-radius: 14px;
+      min-height: 660px;
       overflow: hidden;
-      background:
-        linear-gradient(145deg, rgba(10, 20, 35, 0.96), rgba(15, 29, 48, 0.94)),
-        var(--panel);
-      box-shadow: var(--shadow);
+      border-color: var(--line-strong);
     }
 
     .card.active {
@@ -238,7 +392,7 @@
       inset: 0;
       pointer-events: none;
       background: linear-gradient(90deg, rgba(36, 215, 255, 0.2), transparent 18%, transparent 82%, rgba(53, 227, 179, 0.14));
-      opacity: 0.36;
+      opacity: 0.34;
     }
 
     .card-head, .card-body, .card-foot {
@@ -338,13 +492,13 @@
       border-radius: 8px;
       background: rgba(2, 7, 16, 0.64);
       color: var(--ink);
-      padding: 14px 14px;
+      padding: 14px;
       outline: none;
       transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
     }
 
     textarea {
-      min-height: 122px;
+      min-height: 118px;
       resize: vertical;
       line-height: 1.48;
     }
@@ -381,12 +535,6 @@
       color: #effffb;
     }
 
-    .chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
     .chip {
       width: auto;
       min-height: 44px;
@@ -402,49 +550,11 @@
       border-top: 1px solid rgba(154, 184, 220, 0.16);
     }
 
-    .button {
-      min-height: 48px;
-      border: 1px solid rgba(154, 184, 220, 0.3);
-      border-radius: 8px;
-      padding: 0 18px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      color: var(--ink);
-      background: rgba(255, 255, 255, 0.06);
-      font-weight: 900;
-      transition: transform 0.16s ease, background 0.16s ease, border-color 0.16s ease;
-    }
-
-    .button:hover { transform: translateY(-1px); }
-
-    .button.primary {
-      border-color: transparent;
-      background: linear-gradient(135deg, var(--cyan), var(--blue));
-      color: #ffffff;
-      box-shadow: 0 14px 34px rgba(36, 215, 255, 0.22);
-    }
-
-    .button.ghost {
-      color: var(--muted);
-      background: transparent;
-    }
-
-    .button.danger {
-      color: #ffdce4;
-      border-color: rgba(255, 109, 139, 0.36);
-      background: rgba(255, 109, 139, 0.08);
-    }
-
     .summary {
       position: sticky;
       top: 104px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
       overflow: hidden;
-      background: rgba(13, 22, 37, 0.78);
-      box-shadow: var(--shadow);
+      background: rgba(13, 24, 40, 0.88);
     }
 
     .summary-head {
@@ -500,15 +610,70 @@
       overflow-wrap: anywhere;
     }
 
-    .review {
+    .review, .result-box {
       border: 1px solid rgba(154, 184, 220, 0.18);
       border-radius: 8px;
       background: rgba(2, 7, 16, 0.42);
       padding: 16px;
       color: #dbe7f7;
-      white-space: pre-wrap;
       line-height: 1.55;
-      min-height: 240px;
+    }
+
+    .review {
+      white-space: pre-wrap;
+      min-height: 160px;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .score-card {
+      border: 1px solid rgba(53, 227, 179, 0.28);
+      border-radius: 8px;
+      padding: 16px;
+      background: rgba(53, 227, 179, 0.075);
+    }
+
+    .score-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 34px;
+      line-height: 1;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    .score-card span, .result-box span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .risk-list, .pod-list {
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+
+    .risk-list li, .pod-list li {
+      border: 1px solid rgba(154, 184, 220, 0.14);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.035);
+      color: #dbe7f7;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .risk-list b {
+      color: var(--amber);
+      margin-right: 8px;
     }
 
     .candidate-panel {
@@ -613,10 +778,8 @@
     .status.ok { color: var(--green); }
     .status.error { color: #ff9aad; }
 
-    .hidden { display: none !important; }
-
-    @media (max-width: 900px) {
-      .hero, .builder {
+    @media (max-width: 980px) {
+      .hero, .builder, .model-grid {
         grid-template-columns: 1fr;
       }
 
@@ -628,6 +791,10 @@
       .deck, .card {
         min-height: auto;
       }
+
+      .proof-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
     @media (max-width: 620px) {
@@ -635,21 +802,16 @@
         width: min(100% - 28px, 1180px);
       }
 
-      .nav-inner {
-        min-height: 72px;
-      }
-
       .nav-actions .nav-link:not(.mobile-keep) {
         display: none;
       }
 
       .hero {
-        padding-top: 34px;
+        min-height: auto;
+        padding-top: 44px;
       }
 
-      .snapshot-grid,
-      .field-grid,
-      .choice-grid {
+      .field-grid, .choice-grid, .result-grid, .proof-grid {
         grid-template-columns: 1fr;
       }
 
@@ -674,13 +836,14 @@
 <body>
   <header class="nav">
     <div class="shell nav-inner">
-      <a class="brand" href="/supply-search" aria-label="BLNKK NPI Sprint">
+      <a class="brand" href="/supply-search" aria-label="BLNKK NPI-to-PVT Terminal">
         <img src="https://framerusercontent.com/images/NYeJGzUhu5OjdBsoqNX1ywNRg.png?width=960&amp;height=960" alt="" aria-hidden="true">
         <img src="https://framerusercontent.com/images/UrrwUbK41hrsjeYDyQOYXxbrZPQ.png?width=2045&amp;height=444" alt="BLNKK">
       </a>
       <div class="nav-actions">
         <a class="nav-link" href="/supply-search">Landing</a>
-        <a class="nav-link mobile-keep" href="#deck">NPI cards</a>
+        <a class="nav-link" href="#model">Tracks</a>
+        <a class="nav-link mobile-keep" href="#deck">Start intake</a>
       </div>
     </div>
   </header>
@@ -688,29 +851,82 @@
   <main>
     <section class="shell hero">
       <div>
-        <div class="eyebrow">BLNKK NPI Sprint</div>
-        <h1>Turn messy specs into a Taiwan-ready build package.</h1>
+        <div class="eyebrow">BLNKK NPI-to-PVT Terminal</div>
+        <h1>Turn prototype chaos into a Taiwan-ready build sprint.</h1>
         <p class="lead">
-          Tell BLNKK what needs to be built, where the prototype is stuck, and what files are ready.
-          We turn the request into a factory-readable package and match it against the first 200 Taiwan NPI candidates.
+          Upload the messy reality: BOM gaps, CAD/Gerber files, test notes, target quantities, and constraints.
+          BLNKK turns it into a Factory-Ready Package, routes it to the right Taiwan NPI Supplier Pod,
+          and keeps PVT/MPI readiness visible without over-promising mass production on day one.
         </p>
+        <div class="hero-actions">
+          <a class="button light" href="#deck">Start NPI intake</a>
+          <a class="button" href="#model">See service tracks</a>
+        </div>
       </div>
-      <aside class="snapshot" aria-label="Profile output">
-        <div class="snapshot-grid">
-          <div class="stat">
-            <strong>6</strong>
-            <span>NPI cards</span>
-          </div>
-          <div class="stat">
-            <strong>24h</strong>
-            <span>initial review</span>
-          </div>
-          <div class="stat">
-            <strong>200</strong>
-            <span>candidate shops</span>
-          </div>
+      <aside class="terminal" aria-label="Sync-8 terminal preview">
+        <div class="terminal-top">
+          <span>Sync-8 protocol</span>
+          <span>Non-PRC aware</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line"><span>01</span><div>AI sanitizer audits BOM, CAD, Gerber, drawings, and missing acceptance criteria.</div><small>DATA RESCUE</small></div>
+          <div class="terminal-line"><span>02</span><div>BLNKK grades blockers with S0-S3 severity before supplier disclosure.</div><small>RISK LOCK</small></div>
+          <div class="terminal-line"><span>03</span><div>Taiwan Supplier Pod receives a factory-readable package, not a vague sourcing request.</div><small>NPI POD</small></div>
+          <div class="terminal-line"><span>04</span><div>Buyer wakes up to a breakfast report: status, questions, risks, and next 24h actions.</div><small>SYNC-8</small></div>
         </div>
       </aside>
+    </section>
+
+    <section class="proof">
+      <div class="shell proof-grid">
+        <div class="proof-item"><strong>NPI</strong><span>Front-door wedge for urgent prototype-to-pilot execution.</span></div>
+        <div class="proof-item"><strong>PVT</strong><span>Upgrade path for 100-500 unit readiness and transfer planning.</span></div>
+        <div class="proof-item"><strong>S0-S3</strong><span>Risk grading before a Taiwan shop loses time on incomplete files.</span></div>
+        <div class="proof-item"><strong>200</strong><span>Candidate data layer for NPI-capable Taiwan supplier research.</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="model">
+      <div class="shell">
+        <div class="section-head">
+          <div class="eyebrow">Product model</div>
+          <h2>Do not sell MPI first. Sell the path from NPI to PVT.</h2>
+          <p>
+            MPI remains the later credibility path. The first commercial wedge is helping hardware teams move from
+            messy EVT/DVT files into a quote-ready Taiwan build process.
+          </p>
+        </div>
+        <div class="model-grid">
+          <article class="model-card">
+            <div>
+              <div class="price">US$2,500</div>
+              <h3>NPI Readiness Sprint</h3>
+              <p>Audit buyer files, identify S0/S1 blockers, and produce a first Factory-Ready Package.</p>
+            </div>
+          </article>
+          <article class="model-card">
+            <div>
+              <div class="price">US$5,000</div>
+              <h3>Supplier Pod Sprint</h3>
+              <p>Route a cleaned package to a Taiwan Supplier Pod for DFM, quoteability, and build path review.</p>
+            </div>
+          </article>
+          <article class="model-card">
+            <div>
+              <div class="price">US$10k-15k</div>
+              <h3>PVT Transition Sprint</h3>
+              <p>For teams moving toward 100-500 units, fixture/test planning, supply hardening, and transfer readiness.</p>
+            </div>
+          </article>
+          <article class="model-card">
+            <div>
+              <div class="price">US$6k-12k/mo</div>
+              <h3>Sync-8 Terminal</h3>
+              <p>Ongoing cross-time-zone execution layer with breakfast reports, supplier logs, and risk control.</p>
+            </div>
+          </article>
+        </div>
+      </div>
     </section>
 
     <section class="shell builder" id="deck">
@@ -722,8 +938,8 @@
                 <span class="step-pill">Buyer</span>
                 <div class="dots" data-dots></div>
               </div>
-              <h2>Who is this build for?</h2>
-              <p class="card-copy">Only the basics needed to review and follow up.</p>
+              <h2>Who owns this build?</h2>
+              <p class="card-copy">Only the details needed to turn this into a BLNKK work package.</p>
             </div>
             <div class="card-body">
               <div class="field-grid">
@@ -757,26 +973,26 @@
                 <span class="step-pill">Stage</span>
                 <div class="dots" data-dots></div>
               </div>
-              <h2>Where is the build stuck?</h2>
-              <p class="card-copy">Pick the current stage, then explain the pain that needs to move in the next sprint.</p>
+              <h2>Where is the product between EVT and PVT?</h2>
+              <p class="card-copy">This tells BLNKK whether the request is readiness, supplier pod, or PVT transition work.</p>
             </div>
             <div class="card-body">
               <div class="choice-grid" data-single="stage">
-                <button class="choice" type="button" data-value="Rough concept / early architecture">Rough concept / early architecture</button>
-                <button class="choice" type="button" data-value="Prototype exists but needs redesign">Prototype exists but needs redesign</button>
-                <button class="choice" type="button" data-value="EVT / first build validation">EVT / first build validation</button>
+                <button class="choice" type="button" data-value="EVT / first working units">EVT / first working units</button>
                 <button class="choice" type="button" data-value="DVT / design validation">DVT / design validation</button>
-                <button class="choice" type="button" data-value="Pilot production / PVT preparation">Pilot production / PVT preparation</button>
-                <button class="choice" type="button" data-value="Stuck in BOM, assembly, sourcing, or testing">Stuck in BOM, assembly, sourcing, or testing</button>
+                <button class="choice" type="button" data-value="PVT readiness / pilot build">PVT readiness / pilot build</button>
+                <button class="choice" type="button" data-value="MP / 500+ unit path">MP / 500+ unit path</button>
+                <button class="choice" type="button" data-value="Prototype exists but files are messy">Prototype exists but files are messy</button>
+                <button class="choice" type="button" data-value="Concept exists but no build package">Concept exists but no build package</button>
               </div>
               <input type="hidden" id="stage" name="stage" required>
               <div class="field">
-                <label for="building">Where is it blocked?</label>
-                <textarea id="building" name="building" required placeholder="Example: We have a working prototype, but BOM cleanup, enclosure fit, and EVT assembly are blocking the next customer demo."></textarea>
+                <label for="building">Current build reality</label>
+                <textarea id="building" name="building" required placeholder="Example: Working prototype exists, but BOM cleanup, enclosure fit, and EVT assembly are blocking the next customer demo."></textarea>
               </div>
               <div class="field">
                 <label for="system">Product or system</label>
-                <input id="system" name="system" placeholder="Drone, robot, sensor device, satellite subsystem, medical wearable, etc.">
+                <input id="system" name="system" placeholder="Drone, robot joint, sensor device, satellite subsystem, medical wearable, etc.">
               </div>
             </div>
             <div class="card-foot">
@@ -788,26 +1004,26 @@
           <article class="card" data-card="2">
             <div class="card-head">
               <div class="step-row">
-                <span class="step-pill">Module</span>
+                <span class="step-pill">Bottleneck</span>
                 <div class="dots" data-dots></div>
               </div>
-              <h2>What module needs an NPI shop?</h2>
-              <p class="card-copy">Focus on the package a Taiwan shop could quote, review, or build.</p>
+              <h2>What is blocking supplier review?</h2>
+              <p class="card-copy">BLNKK should know what must be rescued before Taiwan shops receive the package.</p>
             </div>
             <div class="card-body">
-              <div class="choice-grid" data-single="category">
-                <button class="choice" type="button" data-value="PCBA / electronics module">PCBA / electronics module</button>
-                <button class="choice" type="button" data-value="Camera / vision module">Camera / vision module</button>
-                <button class="choice" type="button" data-value="Sensor payload">Sensor payload</button>
-                <button class="choice" type="button" data-value="RF / communication module">RF / communication module</button>
-                <button class="choice" type="button" data-value="Robot joint / motion module">Robot joint / motion module</button>
-                <button class="choice" type="button" data-value="Battery / power module">Battery / power module</button>
-                <button class="choice" type="button" data-value="Enclosure, assembly, or test fixture">Enclosure, assembly, or test fixture</button>
+              <div class="chip-row" data-multi="bottlenecks">
+                <button class="chip" type="button" data-value="BOM incomplete or messy">BOM incomplete or messy</button>
+                <button class="chip" type="button" data-value="CAD / Gerber mismatch">CAD / Gerber mismatch</button>
+                <button class="chip" type="button" data-value="EOL or shortage risk">EOL or shortage risk</button>
+                <button class="chip" type="button" data-value="No test plan / acceptance criteria">No test plan / acceptance criteria</button>
+                <button class="chip" type="button" data-value="Supplier not responding">Supplier not responding</button>
+                <button class="chip" type="button" data-value="Need small-batch pilot build">Need small-batch pilot build</button>
+                <button class="chip" type="button" data-value="Need DFM / DFA feedback">Need DFM / DFA feedback</button>
+                <button class="chip" type="button" data-value="Need Taiwan supplier pod">Need Taiwan supplier pod</button>
               </div>
-              <input type="hidden" id="category" name="category" required>
               <div class="field">
-                <label for="need">NPI request</label>
-                <textarea id="need" name="need" required placeholder="Example: Need a Taiwan NPI shop to review files, quote, and build 10 EVT-ready RF data-link modules."></textarea>
+                <label for="bottleneckNote">Most painful blocker</label>
+                <textarea id="bottleneckNote" name="bottleneckNote" placeholder="Example: U.S. vendors can quote PCBA but cannot coordinate enclosure, test fixture, and sensor integration quickly."></textarea>
               </div>
             </div>
             <div class="card-foot">
@@ -819,11 +1035,11 @@
           <article class="card" data-card="3">
             <div class="card-head">
               <div class="step-row">
-                <span class="step-pill">Files</span>
+                <span class="step-pill">Package</span>
                 <div class="dots" data-dots></div>
               </div>
-              <h2>What files are ready?</h2>
-              <p class="card-copy">The goal is to know whether a shop can review the package without a long back-and-forth.</p>
+              <h2>What files can BLNKK sanitize?</h2>
+              <p class="card-copy">The goal is a Factory-Ready Package a supplier can quote, review, or build from.</p>
             </div>
             <div class="card-body">
               <div class="chip-row" data-multi="files">
@@ -831,9 +1047,10 @@
                 <button class="chip" type="button" data-value="CAD / STEP">CAD / STEP</button>
                 <button class="chip" type="button" data-value="Gerber / PCB files">Gerber / PCB files</button>
                 <button class="chip" type="button" data-value="Schematic">Schematic</button>
+                <button class="chip" type="button" data-value="Firmware / flashing notes">Firmware / flashing notes</button>
+                <button class="chip" type="button" data-value="Test notes">Test notes</button>
+                <button class="chip" type="button" data-value="Acceptance criteria">Acceptance criteria</button>
                 <button class="chip" type="button" data-value="Prototype photos / video">Prototype photos / video</button>
-                <button class="chip" type="button" data-value="Test requirements">Test requirements</button>
-                <button class="chip" type="button" data-value="Target cost / volume assumptions">Target cost / volume assumptions</button>
                 <button class="chip" type="button" data-value="No files ready yet">No files ready yet</button>
               </div>
               <div class="field">
@@ -850,25 +1067,35 @@
           <article class="card" data-card="4">
             <div class="card-head">
               <div class="step-row">
-                <span class="step-pill">Sprint goal</span>
+                <span class="step-pill">Build pod</span>
                 <div class="dots" data-dots></div>
               </div>
-              <h2>What should this sprint produce?</h2>
-              <p class="card-copy">Choose the useful output for the next 24-48 hours or first NPI cycle.</p>
+              <h2>What workstreams must Taiwan cover?</h2>
+              <p class="card-copy">This creates the first Supplier Pod shape instead of a flat supplier list.</p>
             </div>
             <div class="card-body">
-              <div class="chip-row" data-multi="goals">
-                <button class="chip" type="button" data-value="Feasibility review">Feasibility review</button>
-                <button class="chip" type="button" data-value="DFM / DFA feedback">DFM / DFA feedback</button>
-                <button class="chip" type="button" data-value="NPI shop quote">NPI shop quote</button>
-                <button class="chip" type="button" data-value="Shop shortlist for outreach">Shop shortlist for outreach</button>
-                <button class="chip" type="button" data-value="Prototype build plan">Prototype build plan</button>
-                <button class="chip" type="button" data-value="Small-batch pilot path">Small-batch pilot path</button>
-                <button class="chip" type="button" data-value="Testing / fixture plan">Testing / fixture plan</button>
+              <div class="choice-grid" data-single="category">
+                <button class="choice" type="button" data-value="PCBA / electronics module">PCBA / electronics module</button>
+                <button class="choice" type="button" data-value="Camera / vision module">Camera / vision module</button>
+                <button class="choice" type="button" data-value="Sensor payload">Sensor payload</button>
+                <button class="choice" type="button" data-value="RF / communication module">RF / communication module</button>
+                <button class="choice" type="button" data-value="Robot joint / motion module">Robot joint / motion module</button>
+                <button class="choice" type="button" data-value="Battery / power module">Battery / power module</button>
+                <button class="choice" type="button" data-value="Enclosure, assembly, or test fixture">Enclosure, assembly, or test fixture</button>
+              </div>
+              <input type="hidden" id="category" name="category" required>
+              <div class="chip-row" data-multi="workstreams">
+                <button class="chip" type="button" data-value="PCBA / SMT">PCBA / SMT</button>
+                <button class="chip" type="button" data-value="Box-build assembly">Box-build assembly</button>
+                <button class="chip" type="button" data-value="Cable / harness">Cable / harness</button>
+                <button class="chip" type="button" data-value="Fixture / functional test">Fixture / functional test</button>
+                <button class="chip" type="button" data-value="Enclosure / CNC / tooling">Enclosure / CNC / tooling</button>
+                <button class="chip" type="button" data-value="RF / camera / sensor integration">RF / camera / sensor integration</button>
+                <button class="chip" type="button" data-value="US logistics handoff">US logistics handoff</button>
               </div>
               <div class="field">
-                <label for="sprintGoalNote">Success definition</label>
-                <input id="sprintGoalNote" name="sprintGoalNote" placeholder="Example: know whether Taiwan can quote and build 10 EVT units within 3 weeks.">
+                <label for="need">NPI request</label>
+                <textarea id="need" name="need" required placeholder="Example: Need Taiwan NPI pod to sanitize files, quote, and prepare 20 EVT RF data-link modules with test fixture plan."></textarea>
               </div>
             </div>
             <div class="card-foot">
@@ -883,8 +1110,8 @@
                 <span class="step-pill">Constraints</span>
                 <div class="dots" data-dots></div>
               </div>
-              <h2>What constraints should BLNKK protect?</h2>
-              <p class="card-copy">Keep compliance as a trust layer while the main value stays NPI speed.</p>
+              <h2>What must BLNKK protect?</h2>
+              <p class="card-copy">Compliance is the trust layer. NPI speed is still the main job.</p>
             </div>
             <div class="card-body">
               <div class="chip-row" data-multi="must">
@@ -908,8 +1135,42 @@
                 </div>
                 <div class="field">
                   <label for="quantity">Build quantity</label>
-                  <input id="quantity" name="quantity" placeholder="1-10 EVT units, 50 beta units, 500 pilot units, etc.">
+                  <select id="quantity" name="quantity">
+                    <option value="">Select quantity</option>
+                    <option>1-10 EVT units</option>
+                    <option>20-100 DVT units</option>
+                    <option>100-500 PVT units</option>
+                    <option>500+ MP units</option>
+                  </select>
                 </div>
+              </div>
+            </div>
+            <div class="card-foot">
+              <button class="button ghost" type="button" data-prev>Back</button>
+              <button class="button primary" type="button" data-next>Next card</button>
+            </div>
+          </article>
+
+          <article class="card" data-card="6">
+            <div class="card-head">
+              <div class="step-row">
+                <span class="step-pill">Track</span>
+                <div class="dots" data-dots></div>
+              </div>
+              <h2>What should BLNKK deliver first?</h2>
+              <p class="card-copy">Pick the output that matches the next decision, not the entire manufacturing lifecycle.</p>
+            </div>
+            <div class="card-body">
+              <div class="choice-grid" data-single="serviceTrack">
+                <button class="choice" type="button" data-value="NPI Readiness Sprint">NPI Readiness Sprint</button>
+                <button class="choice" type="button" data-value="Supplier Pod Sprint">Supplier Pod Sprint</button>
+                <button class="choice" type="button" data-value="PVT Transition Sprint">PVT Transition Sprint</button>
+                <button class="choice" type="button" data-value="Sync-8 Terminal">Sync-8 Terminal</button>
+              </div>
+              <input type="hidden" id="serviceTrack" name="serviceTrack">
+              <div class="field">
+                <label for="sprintGoalNote">Success definition</label>
+                <input id="sprintGoalNote" name="sprintGoalNote" placeholder="Example: know whether Taiwan can quote and build 20 EVT units within 3 weeks.">
               </div>
             </div>
             <div class="card-foot">
@@ -918,27 +1179,45 @@
             </div>
           </article>
 
-          <article class="card" data-card="6">
+          <article class="card" data-card="7">
             <div class="card-head">
               <div class="step-row">
-                <span class="step-pill">Review</span>
+                <span class="step-pill">Readiness</span>
                 <div class="dots" data-dots></div>
               </div>
-              <h2>Submit the NPI package</h2>
-              <p class="card-copy">BLNKK will review the build package and identify the next factory-readable step.</p>
+              <h2>Factory-ready preview</h2>
+              <p class="card-copy">This is not a raw supplier directory. It is the first package, risk, pod, and next-action view.</p>
             </div>
             <div class="card-body">
-              <div class="review" id="reviewText"></div>
+              <div class="result-grid">
+                <div class="score-card">
+                  <strong id="readinessScore">--</strong>
+                  <span>NPI readiness score</span>
+                </div>
+                <div class="result-box">
+                  <span>Recommended track</span>
+                  <h3 id="recommendedTrack" style="margin:10px 0 0;">NPI Readiness Sprint</h3>
+                </div>
+              </div>
+              <div class="result-box">
+                <span>S0-S3 risk map</span>
+                <ul class="risk-list" id="riskList"></ul>
+              </div>
+              <div class="result-box">
+                <span>Suggested supplier pod</span>
+                <ul class="pod-list" id="podList"></ul>
+              </div>
               <div class="candidate-panel">
                 <div class="candidate-head">
                   <div>
-                    <h3>Matched Taiwan NPI candidates</h3>
-                    <p>Preview shortlist from the 200-candidate v2 data layer. All entries remain candidate-only until BLNKK verifies MOQ, team size, NDA handling, and willingness to accept small NPI orders.</p>
+                    <h3>Candidate layer for BLNKK review</h3>
+                    <p>Preview shortlist from the 200-candidate v2 data layer. Names remain candidate-only until BLNKK verifies MOQ, response speed, NDA handling, and NPI willingness.</p>
                   </div>
                   <span class="candidate-meta" id="candidateMeta">200 records</span>
                 </div>
                 <div class="candidate-list" id="candidateList"></div>
               </div>
+              <div class="review" id="reviewText"></div>
               <div class="status" id="statusText"></div>
             </div>
             <div class="card-foot">
@@ -947,16 +1226,25 @@
             </div>
           </article>
 
-          <article class="card" data-card="7">
+          <article class="card" data-card="8">
             <div class="card-head">
               <div class="step-row">
                 <span class="step-pill">Sent</span>
                 <div class="dots" data-dots></div>
               </div>
               <h2>NPI package received.</h2>
-              <p class="card-copy">BLNKK has the request and can prepare it for Taiwan NPI shop review.</p>
+              <p class="card-copy">BLNKK can now prepare the first Taiwan-ready action set.</p>
             </div>
             <div class="card-body">
+              <div class="result-box">
+                <span>Next 24 hours</span>
+                <ul class="pod-list">
+                  <li>Sanitize buyer files into a Factory-Ready Package.</li>
+                  <li>Lock S0/S1 blockers before supplier disclosure.</li>
+                  <li>Route to the first Taiwan Supplier Pod only after package review.</li>
+                  <li>Prepare a Sync-8 breakfast report with open questions and next decisions.</li>
+                </ul>
+              </div>
               <div class="review" id="successText"></div>
             </div>
             <div class="card-foot">
@@ -969,7 +1257,7 @@
 
       <aside class="summary" aria-label="Live NPI package">
         <div class="summary-head">
-          <h2>Live NPI package</h2>
+          <h2>Live Factory-Ready Package</h2>
           <p>Updates as each card is completed.</p>
         </div>
         <div class="summary-body">
@@ -979,19 +1267,23 @@
           </div>
           <div class="summary-line">
             <span>Stage</span>
-            <p id="summaryBuilding">Build stage and project context</p>
+            <p id="summaryBuilding">EVT / DVT / PVT context</p>
           </div>
           <div class="summary-line">
-            <span>Module</span>
-            <p id="summarySourcing">Module and build request</p>
+            <span>Bottleneck</span>
+            <p id="summaryBottleneck">Current blockers</p>
           </div>
           <div class="summary-line">
-            <span>Files</span>
+            <span>Package</span>
             <p id="summaryFiles">Available files</p>
           </div>
           <div class="summary-line">
-            <span>Sprint goal</span>
-            <p id="summaryNice">Target output</p>
+            <span>Pod</span>
+            <p id="summarySourcing">Workstreams and module</p>
+          </div>
+          <div class="summary-line">
+            <span>Track</span>
+            <p id="summaryTrack">Recommended output</p>
           </div>
         </div>
       </aside>
@@ -1008,10 +1300,14 @@
       const successText = document.getElementById("successText");
       const candidateList = document.getElementById("candidateList");
       const candidateMeta = document.getElementById("candidateMeta");
+      const riskList = document.getElementById("riskList");
+      const podList = document.getElementById("podList");
+      const readinessScore = document.getElementById("readinessScore");
+      const recommendedTrack = document.getElementById("recommendedTrack");
       const requiredByCard = new Map([
         [0, ["companyName", "contactName", "email"]],
         [1, ["stage", "building"]],
-        [2, ["category", "need"]],
+        [4, ["category", "need"]],
       ]);
       let current = 0;
       let submitting = false;
@@ -1038,22 +1334,27 @@
             context: value("building"),
             system: value("system"),
           },
-          sourcing: {
-            category: value("category"),
-            need: value("need"),
+          bottlenecks: {
+            selected: selectedValues("bottlenecks"),
+            note: value("bottleneckNote"),
           },
           files: {
             ready: selectedValues("files"),
             missingInfo: value("missingInfo"),
           },
-          goals: {
-            outputs: selectedValues("goals"),
-            note: value("sprintGoalNote"),
+          sourcing: {
+            category: value("category"),
+            workstreams: selectedValues("workstreams"),
+            need: value("need"),
           },
           must: {
             requirements: selectedValues("must"),
             timeline: value("timeline"),
             quantity: value("quantity"),
+          },
+          goal: {
+            serviceTrack: value("serviceTrack"),
+            note: value("sprintGoalNote"),
           },
         };
       }
@@ -1064,7 +1365,7 @@
 
       function formatProfile(profile) {
         return [
-          "BLNKK NPI Build Package",
+          "BLNKK NPI-to-PVT Factory-Ready Package",
           "",
           line("Company", profile.buyer.companyName),
           line("Contact", profile.buyer.contactName),
@@ -1072,44 +1373,160 @@
           line("Website", profile.buyer.website),
           "",
           line("Build stage", profile.stage),
-          line("Project context", profile.building.context),
+          line("Current build reality", profile.building.context),
           line("Product / system", profile.building.system),
           "",
-          line("Module", profile.sourcing.category),
-          line("Build request", profile.sourcing.need),
+          line("Bottlenecks", profile.bottlenecks.selected.join(", ")),
+          line("Most painful blocker", profile.bottlenecks.note),
           "",
           line("Files ready", profile.files.ready.join(", ")),
           line("Missing information", profile.files.missingInfo),
           "",
-          line("Sprint goals", profile.goals.outputs.join(", ")),
-          line("Success definition", profile.goals.note),
+          line("Primary module", profile.sourcing.category),
+          line("Workstreams", profile.sourcing.workstreams.join(", ")),
+          line("NPI request", profile.sourcing.need),
           "",
           line("Constraints", profile.must.requirements.join(", ")),
           line("Timeline", profile.must.timeline),
           line("Build quantity", profile.must.quantity),
+          "",
+          line("Requested service track", profile.goal.serviceTrack),
+          line("Success definition", profile.goal.note),
         ].join("\n");
       }
 
+      function inferReadiness(profile) {
+        const files = profile.files.ready;
+        const bottlenecks = profile.bottlenecks.selected;
+        const stage = profile.stage;
+        const quantity = profile.must.quantity;
+        let score = 38;
+
+        const fileWeights = {
+          "BOM": 10,
+          "CAD / STEP": 7,
+          "Gerber / PCB files": 10,
+          "Schematic": 7,
+          "Firmware / flashing notes": 4,
+          "Test notes": 7,
+          "Acceptance criteria": 8,
+          "Prototype photos / video": 4,
+        };
+
+        files.forEach((item) => {
+          score += fileWeights[item] || 0;
+        });
+
+        if (stage.includes("EVT")) score += 6;
+        if (stage.includes("DVT")) score += 10;
+        if (stage.includes("PVT")) score += 12;
+        if (stage.includes("MP")) score += 8;
+        if (profile.must.timeline.includes("ASAP")) score -= 4;
+        if (files.includes("No files ready yet")) score -= 24;
+        if (bottlenecks.includes("No test plan / acceptance criteria")) score -= 8;
+        if (bottlenecks.includes("CAD / Gerber mismatch")) score -= 7;
+        if (bottlenecks.includes("BOM incomplete or messy")) score -= 7;
+        if (quantity.includes("100-500")) score += 4;
+        if (quantity.includes("500+")) score -= 5;
+
+        score = Math.max(18, Math.min(96, score));
+
+        let track = profile.goal.serviceTrack;
+        if (!track) {
+          if (quantity.includes("500+") || stage.includes("MP")) track = "PVT/MPI Readiness Review";
+          else if (quantity.includes("100-500") || stage.includes("PVT")) track = "PVT Transition Sprint";
+          else if (score >= 68) track = "Supplier Pod Sprint";
+          else track = "NPI Readiness Sprint";
+        }
+
+        const risks = [];
+        if (files.includes("No files ready yet")) {
+          risks.push(["S0", "No supplier-ready package exists yet. Start with NPI Data Rescue before supplier disclosure."]);
+        }
+        if (!files.includes("BOM")) {
+          risks.push(["S0", "BOM is missing or not selected. Taiwan shops cannot quote reliably without a cleaned BOM."]);
+        }
+        if (profile.sourcing.category.includes("PCBA") && !files.includes("Gerber / PCB files")) {
+          risks.push(["S0", "Gerber / PCB files are missing for a PCBA request. Quoteability will be blocked."]);
+        }
+        if (bottlenecks.includes("EOL or shortage risk")) {
+          risks.push(["S1", "Component lifecycle risk needs alternate proposal before quote or pilot build."]);
+        }
+        if (bottlenecks.includes("CAD / Gerber mismatch")) {
+          risks.push(["S1", "CAD/Gerber mismatch can create rework. Lock revision and file index before outreach."]);
+        }
+        if (!files.includes("Test notes") && !files.includes("Acceptance criteria")) {
+          risks.push(["S1", "Test plan and acceptance criteria are not selected. Build success will be hard to verify."]);
+        }
+        if (profile.must.timeline.includes("ASAP")) {
+          risks.push(["S2", "ASAP timeline needs a Sync-8 handoff cadence and daily decision owner."]);
+        }
+        if (profile.must.requirements.includes("Sensitive hardware / defense-aware")) {
+          risks.push(["S2", "Sensitive hardware should be routed through NDA and Non-PRC review before disclosure."]);
+        }
+        if (!risks.length) {
+          risks.push(["S3", "Package has enough signal for first-pass review. BLNKK should still verify MOQ and DFM fit."]);
+        }
+
+        const pod = [];
+        if (profile.sourcing.workstreams.length) {
+          pod.push(`Prime pod: ${profile.sourcing.workstreams[0]}`);
+          profile.sourcing.workstreams.slice(1, 4).forEach((item) => pod.push(`Support pod: ${item}`));
+        } else if (profile.sourcing.category) {
+          pod.push(`Prime pod: ${profile.sourcing.category}`);
+          pod.push("Support pod: DFM / file sanitization");
+          pod.push("Support pod: fixture and acceptance review");
+        } else {
+          pod.push("Prime pod: NPI readiness analyst");
+          pod.push("Support pod: supplier routing after files are cleaned");
+        }
+        pod.push("BLNKK layer: S0-S3 risk lock, supplier question log, and Sync-8 breakfast report.");
+
+        return { score, track, risks, pod };
+      }
+
+      function renderReadiness() {
+        const profile = profileFromForm();
+        const result = inferReadiness(profile);
+        readinessScore.textContent = `${result.score}`;
+        recommendedTrack.textContent = result.track;
+        riskList.innerHTML = "";
+        result.risks.forEach(([level, text]) => {
+          const item = document.createElement("li");
+          item.innerHTML = `<b>${level}</b>${text}`;
+          riskList.appendChild(item);
+        });
+        podList.innerHTML = "";
+        result.pod.forEach((text) => {
+          const item = document.createElement("li");
+          item.textContent = text;
+          podList.appendChild(item);
+        });
+        return result;
+      }
+
       function buildPayload(profile) {
+        const readiness = inferReadiness(profile);
         return {
-          raw_message: profile.sourcing.need || profile.building.context || profile.goals.note,
+          raw_message: profile.sourcing.need || profile.building.context || profile.goal.note,
           company_name: profile.buyer.companyName,
           email: profile.buyer.email,
           website: profile.buyer.website,
           sourcing_category: profile.sourcing.category,
           timeline: profile.must.timeline,
           nda_requirement: profile.must.requirements.join(", "),
-          ai_summary: JSON.stringify(profile).slice(0, 1200),
+          ai_summary: JSON.stringify({ profile, readiness }).slice(0, 1200),
           notes: formatProfile(profile).slice(0, 1200),
-          source_page: "npi_sprint_card_preview",
-          consent_text: "Buyer submitted a BLNKK NPI Sprint build package for review and Taiwan shop preparation.",
-          consent_version: "npi-sprint-card-v1",
+          source_page: "npi_to_pvt_terminal_preview",
+          consent_text: "Buyer submitted a BLNKK NPI-to-PVT Factory-Ready Package for review and Taiwan shop preparation.",
+          consent_version: "npi-to-pvt-terminal-v1",
           agreed: true,
-          google_sheet_form_type: "npi_sprint_build_package",
+          google_sheet_form_type: "npi_to_pvt_terminal_package",
           npi_candidate_source: "BLNKK NPI candidate list v2",
           npi_candidate_snapshot: matchedCandidates.slice(0, 5),
+          readiness_snapshot: readiness,
           messages: [
-            { role: "system", message: "NPI Sprint build package submitted from BLNKK preview route.", message_order: 1 },
+            { role: "system", message: "NPI-to-PVT Factory-Ready Package submitted from BLNKK preview route.", message_order: 1 },
             { role: "user", message: formatProfile(profile), message_order: 2 },
           ],
           profile,
@@ -1123,7 +1540,7 @@
 
         if (!matchedCandidates.length) {
           const empty = document.createElement("p");
-          empty.textContent = "Complete the module and build request cards to preview matching candidates.";
+          empty.textContent = "Complete the module and NPI request cards to preview candidate-layer matches.";
           candidateList.appendChild(empty);
           return;
         }
@@ -1142,11 +1559,15 @@
           score.className = "candidate-score";
           score.textContent = `${Math.round(candidate.match_score)} pts`;
 
+          const workstreams = Array.isArray(candidate.workstreams) ? candidate.workstreams.join(", ") : candidate.npi_fit_type;
+          const stageFit = Array.isArray(candidate.stage_fit) ? candidate.stage_fit.join(" / ") : "EVT";
           const copy = document.createElement("p");
-          copy.textContent = `${candidate.npi_fit_type} - ${candidate.use_case || candidate.capability_summary || "NPI-adjacent capability"}`;
+          copy.textContent = `${candidate.npi_fit_type} - ${workstreams} - stage fit: ${stageFit}`;
 
           const note = document.createElement("small");
-          note.textContent = `${candidate.verification_status || "candidate"} / small-shop verified: ${candidate.is_small_shop_verified ? "yes" : "no"}`;
+          const moq = candidate.ops_profile?.moq_fit || "verify pilot MOQ";
+          const responseTime = candidate.ops_profile?.response_time || "verify response time";
+          note.textContent = `${candidate.verification_status || "candidate"} / ${moq} / ${responseTime} / verify NDA handling before buyer disclosure.`;
 
           top.append(title, score);
           card.append(top, copy, note);
@@ -1169,7 +1590,9 @@
               stage: profile.stage,
               system: profile.building.system,
               files: profile.files.ready.join(", "),
-              goals: profile.goals.outputs.join(", "),
+              bottlenecks: profile.bottlenecks.selected.join(", "),
+              workstreams: profile.sourcing.workstreams.join(", "),
+              goals: profile.goal.serviceTrack,
               constraints: profile.must.requirements.join(", "),
               quantity: profile.must.quantity,
               limit: 5,
@@ -1181,7 +1604,7 @@
         } catch (error) {
           candidateList.innerHTML = "";
           const message = document.createElement("p");
-          message.textContent = "Candidate matching is unavailable in this preview. The NPI package can still be submitted.";
+          message.textContent = "Candidate matching is unavailable in this preview. The package can still be submitted.";
           candidateList.appendChild(message);
           candidateMeta.textContent = "Offline";
         }
@@ -1190,7 +1613,7 @@
       function updateDots() {
         document.querySelectorAll("[data-dots]").forEach((container) => {
           container.innerHTML = "";
-          cards.slice(0, 7).forEach((_, index) => {
+          cards.slice(0, 8).forEach((_, index) => {
             const dot = document.createElement("span");
             dot.className = `dot${index < current ? " done" : ""}${index === current ? " active" : ""}`;
             container.appendChild(dot);
@@ -1201,11 +1624,13 @@
       function updateSummary() {
         const profile = profileFromForm();
         document.getElementById("summaryBuyer").textContent = [profile.buyer.companyName, profile.buyer.contactName].filter(Boolean).join(" / ") || "Company and contact";
-        document.getElementById("summaryBuilding").textContent = [profile.stage, profile.building.context, profile.building.system].filter(Boolean).join(" / ") || "Build stage and project context";
-        document.getElementById("summarySourcing").textContent = [profile.sourcing.category, profile.sourcing.need].filter(Boolean).join(" / ") || "Module and build request";
+        document.getElementById("summaryBuilding").textContent = [profile.stage, profile.building.context, profile.building.system].filter(Boolean).join(" / ") || "EVT / DVT / PVT context";
+        document.getElementById("summaryBottleneck").textContent = [profile.bottlenecks.selected.join(", "), profile.bottlenecks.note].filter(Boolean).join(" / ") || "Current blockers";
         document.getElementById("summaryFiles").textContent = [profile.files.ready.join(", "), profile.files.missingInfo].filter(Boolean).join(" / ") || "Available files";
-        document.getElementById("summaryNice").textContent = [profile.goals.outputs.join(", "), profile.goals.note, profile.must.requirements.join(", ")].filter(Boolean).join(" / ") || "Target output";
+        document.getElementById("summarySourcing").textContent = [profile.sourcing.category, profile.sourcing.workstreams.join(", "), profile.sourcing.need].filter(Boolean).join(" / ") || "Workstreams and module";
+        document.getElementById("summaryTrack").textContent = [profile.goal.serviceTrack, profile.goal.note, profile.must.quantity].filter(Boolean).join(" / ") || "Recommended output";
         reviewText.textContent = formatProfile(profile);
+        if (current === 7) renderReadiness();
       }
 
       function setCard(index) {
@@ -1213,7 +1638,10 @@
         cards.forEach((card, cardIndex) => card.classList.toggle("active", cardIndex === current));
         updateDots();
         updateSummary();
-        if (current === 6) loadCandidates();
+        if (current === 7) {
+          renderReadiness();
+          loadCandidates();
+        }
         if (current > 0) {
           document.getElementById("deck").scrollIntoView({ behavior: "smooth", block: "start" });
         }
@@ -1236,11 +1664,11 @@
       }
 
       async function submitProfile() {
-        if (submitting || !validateCard(6)) return;
+        if (submitting || !validateCard(7)) return;
         submitting = true;
         submitButton.disabled = true;
         statusText.className = "status";
-        statusText.textContent = "Submitting profile...";
+        statusText.textContent = "Submitting NPI-to-PVT package...";
 
         const profile = profileFromForm();
         try {
@@ -1256,7 +1684,7 @@
           statusText.className = "status ok";
           statusText.textContent = "Submitted.";
           successText.textContent = formatProfile(profile);
-          setCard(7);
+          setCard(8);
         } catch (error) {
           statusText.className = "status error";
           statusText.textContent = error.message || "Submission failed. Please try again.";
@@ -1313,6 +1741,7 @@
 
       updateDots();
       updateSummary();
+      renderReadiness();
       renderCandidates([], { total_candidates: 200 });
     })();
   </script>

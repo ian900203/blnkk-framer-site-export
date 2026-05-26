@@ -62,6 +62,45 @@ function scoreCandidate(candidate, query, requestedFits) {
   return Math.round((candidate.score / 10) + fitScore + tokenScore + confidenceScore);
 }
 
+function inferWorkstreams(candidate) {
+  const text = normalize([
+    candidate.category,
+    candidate.npi_fit_type,
+    candidate.use_case,
+    candidate.capability_summary,
+  ].join(" "));
+  const workstreams = [];
+  if (text.includes("pcba") || text.includes("smt") || text.includes("electronics") || text.includes("controller")) workstreams.push("PCBA / SMT");
+  if (text.includes("camera") || text.includes("vision") || text.includes("sensor") || text.includes("lidar")) workstreams.push("RF / camera / sensor integration");
+  if (text.includes("rf") || text.includes("communication") || text.includes("antenna") || text.includes("wireless")) workstreams.push("RF / communication module");
+  if (text.includes("motor") || text.includes("power") || text.includes("battery") || text.includes("robot")) workstreams.push("Power / motion module");
+  if (text.includes("fixture") || text.includes("test") || text.includes("inspection") || text.includes("aoi")) workstreams.push("Fixture / functional test");
+  if (text.includes("cnc") || text.includes("machining") || text.includes("enclosure") || text.includes("tooling") || text.includes("3d print")) workstreams.push("Enclosure / CNC / tooling");
+  if (text.includes("connector") || text.includes("cable") || text.includes("harness")) workstreams.push("Cable / harness");
+  return [...new Set(workstreams.length ? workstreams : [candidate.npi_fit_type || "NPI review"])].slice(0, 4);
+}
+
+function inferStageFit(candidate) {
+  const text = normalize([candidate.use_case, candidate.capability_summary, candidate.npi_fit_type].join(" "));
+  const stages = ["EVT"];
+  if (text.includes("dvt") || text.includes("validation") || text.includes("test") || text.includes("fixture") || candidate.score >= 180) stages.push("DVT");
+  if (text.includes("pilot") || text.includes("assembly") || text.includes("turnkey") || candidate.score >= 220) stages.push("PVT-readiness");
+  return stages;
+}
+
+function inferOpsProfile(candidate) {
+  const high = candidate.confidence_level === "High";
+  const medium = candidate.confidence_level === "Medium";
+  return {
+    npi_willingness: high ? "verify-positive" : medium ? "candidate-likely" : "unverified",
+    moq_fit: candidate.is_small_shop_verified ? "small-batch likely" : "verify sample / pilot MOQ",
+    response_time: candidate.is_small_shop_verified ? "target 24-48h after BLNKK contact" : "unknown until phone/email verification",
+    english_fae: high ? "likely available / verify owner" : "unknown / BLNKK translation layer needed",
+    dfm_quality: medium || high ? "public capability suggests first-pass DFM review" : "unverified",
+    compliance_readiness: "Non-PRC / NDAA path requires BLNKK verification",
+  };
+}
+
 module.exports = async function handler(req, res) {
   if (allowCors(req, res)) return;
   if (req.method !== "POST") return sendJson(res, 405, { ok: false, error: "POST only." });
@@ -74,6 +113,8 @@ module.exports = async function handler(req, res) {
       body.stage,
       body.system,
       body.files,
+      body.bottlenecks,
+      body.workstreams,
       body.goals,
       body.constraints,
       body.quantity,
@@ -101,6 +142,9 @@ module.exports = async function handler(req, res) {
         confidence_level: candidate.confidence_level,
         verification_status: candidate.verification_status,
         is_small_shop_verified: candidate.is_small_shop_verified,
+        stage_fit: inferStageFit(candidate),
+        workstreams: inferWorkstreams(candidate),
+        ops_profile: inferOpsProfile(candidate),
         next_verification: candidate.recommended_next_verification,
         website: candidate.website,
       }));

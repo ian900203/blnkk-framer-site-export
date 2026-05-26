@@ -25,10 +25,10 @@ Active card-intake preview branch from `tinder-intake-preview`:
 - [Card Intake](https://blnkk-framer-site-expor-git-fdb1ba-ian900203-gmailcoms-projects.vercel.app/sourcing-profile)
 - [Admin](https://blnkk-framer-site-expor-git-fdb1ba-ian900203-gmailcoms-projects.vercel.app/admin)
 
-Active NPI Sprint preview branch from `npi-sprint-preview`:
+Active NPI-to-PVT Terminal preview branch from `npi-sprint-preview`:
 
-- [Supply Search Landing](https://blnkk-framer-site-expor-git-b1e0dc-ian900203-gmailcoms-projects.vercel.app/supply-search)
-- [NPI Sprint](https://blnkk-framer-site-expor-git-b1e0dc-ian900203-gmailcoms-projects.vercel.app/npi-sprint)
+- [NPI-to-PVT Landing](https://blnkk-framer-site-expor-git-b1e0dc-ian900203-gmailcoms-projects.vercel.app/supply-search)
+- [NPI-to-PVT Terminal](https://blnkk-framer-site-expor-git-b1e0dc-ian900203-gmailcoms-projects.vercel.app/npi-sprint)
 - [NPI Candidate API](https://blnkk-framer-site-expor-git-b1e0dc-ian900203-gmailcoms-projects.vercel.app/api/npi-candidates)
 - [NPI Candidate Google Sheet](https://docs.google.com/spreadsheets/d/114n04Nu6lRYz5pd5S68JvxvKgzMgdWV2jOAlHbH7L0M/edit)
 
@@ -64,7 +64,8 @@ This is not yet a rebuilt app. The exported files are live-site captures that pr
 - `home.html`, `tw.html`, `csa.html`, `protocol.html`: raw captured HTML for each live page.
 - `framer-custom-code-notes.md`: notes about the Home/CSA custom-code issue fixed before this export.
 - `admin/index.html`: Admin v0 preview for launch readiness, CSA intake, matching review, and meeting pipeline planning.
-- `supply-search/index.html`: Supply Search landing and buyer entry route.
+- `supply-search/index.html`: NPI-to-PVT landing and buyer entry route.
+- `npi-sprint/index.html`: NPI-to-PVT Terminal preview with Factory-Ready Package intake, S0-S3 risk map, Supplier Pod routing, and PVT/MPI readiness track.
 - `api/*`: Vercel API routes for Supabase health, supplier matching, buyer requests, and protected Admin data.
 
 ## Supabase / Vercel Environment
