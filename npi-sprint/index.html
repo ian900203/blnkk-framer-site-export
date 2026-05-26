@@ -511,6 +511,98 @@
       min-height: 240px;
     }
 
+    .candidate-panel {
+      border: 1px solid rgba(53, 227, 179, 0.24);
+      border-radius: 10px;
+      background: rgba(53, 227, 179, 0.055);
+      padding: 16px;
+    }
+
+    .candidate-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .candidate-head h3 {
+      margin: 0 0 5px;
+      font-size: 18px;
+      line-height: 1.16;
+    }
+
+    .candidate-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.44;
+    }
+
+    .candidate-meta {
+      flex: 0 0 auto;
+      border: 1px solid rgba(36, 215, 255, 0.24);
+      border-radius: 999px;
+      padding: 7px 10px;
+      color: var(--cyan);
+      background: rgba(36, 215, 255, 0.07);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .candidate-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .candidate {
+      border: 1px solid rgba(154, 184, 220, 0.16);
+      border-radius: 8px;
+      padding: 13px;
+      background: rgba(2, 7, 16, 0.44);
+    }
+
+    .candidate-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .candidate strong {
+      display: block;
+      color: #f5f9ff;
+      font-size: 15px;
+      line-height: 1.25;
+    }
+
+    .candidate-score {
+      flex: 0 0 auto;
+      color: var(--green);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .candidate p {
+      margin: 0;
+      color: #aebbd0;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .candidate small {
+      display: block;
+      margin-top: 8px;
+      color: #7e8ba2;
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
     .status {
       min-height: 24px;
       color: var(--muted);
@@ -599,14 +691,14 @@
         <div class="eyebrow">BLNKK NPI Sprint</div>
         <h1>Turn messy specs into a Taiwan-ready build package.</h1>
         <p class="lead">
-          Tell BLNKK what needs to be built, what files are ready, and where the prototype is stuck.
-          We translate the request into a package Taiwan NPI shops can review.
+          Tell BLNKK what needs to be built, where the prototype is stuck, and what files are ready.
+          We turn the request into a factory-readable package and match it against the first 200 Taiwan NPI candidates.
         </p>
       </div>
       <aside class="snapshot" aria-label="Profile output">
         <div class="snapshot-grid">
           <div class="stat">
-            <strong>7</strong>
+            <strong>6</strong>
             <span>NPI cards</span>
           </div>
           <div class="stat">
@@ -614,8 +706,8 @@
             <span>initial review</span>
           </div>
           <div class="stat">
-            <strong>NPI</strong>
-            <span>Taiwan build layer</span>
+            <strong>200</strong>
+            <span>candidate shops</span>
           </div>
         </div>
       </aside>
@@ -666,7 +758,7 @@
                 <div class="dots" data-dots></div>
               </div>
               <h2>Where is the build stuck?</h2>
-              <p class="card-copy">Pick the current stage, then give BLNKK the project context.</p>
+              <p class="card-copy">Pick the current stage, then explain the pain that needs to move in the next sprint.</p>
             </div>
             <div class="card-body">
               <div class="choice-grid" data-single="stage">
@@ -679,8 +771,8 @@
               </div>
               <input type="hidden" id="stage" name="stage" required>
               <div class="field">
-                <label for="building">Project context</label>
-                <textarea id="building" name="building" required placeholder="Example: We are building a compact inspection drone and need the camera/RF payload prepared for EVT."></textarea>
+                <label for="building">Where is it blocked?</label>
+                <textarea id="building" name="building" required placeholder="Example: We have a working prototype, but BOM cleanup, enclosure fit, and EVT assembly are blocking the next customer demo."></textarea>
               </div>
               <div class="field">
                 <label for="system">Product or system</label>
@@ -699,8 +791,8 @@
                 <span class="step-pill">Module</span>
                 <div class="dots" data-dots></div>
               </div>
-              <h2>What needs to be built?</h2>
-              <p class="card-copy">Focus on the module, subsystem, or build package, not a supplier list.</p>
+              <h2>What module needs an NPI shop?</h2>
+              <p class="card-copy">Focus on the package a Taiwan shop could quote, review, or build.</p>
             </div>
             <div class="card-body">
               <div class="choice-grid" data-single="category">
@@ -709,12 +801,13 @@
                 <button class="choice" type="button" data-value="Sensor payload">Sensor payload</button>
                 <button class="choice" type="button" data-value="RF / communication module">RF / communication module</button>
                 <button class="choice" type="button" data-value="Robot joint / motion module">Robot joint / motion module</button>
+                <button class="choice" type="button" data-value="Battery / power module">Battery / power module</button>
                 <button class="choice" type="button" data-value="Enclosure, assembly, or test fixture">Enclosure, assembly, or test fixture</button>
               </div>
               <input type="hidden" id="category" name="category" required>
               <div class="field">
-                <label for="need">Build request</label>
-                <textarea id="need" name="need" required placeholder="Example: Need a Taiwan NPI shop to review, quote, and build 10 EVT-ready RF data-link modules."></textarea>
+                <label for="need">NPI request</label>
+                <textarea id="need" name="need" required placeholder="Example: Need a Taiwan NPI shop to review files, quote, and build 10 EVT-ready RF data-link modules."></textarea>
               </div>
             </div>
             <div class="card-foot">
@@ -730,7 +823,7 @@
                 <div class="dots" data-dots></div>
               </div>
               <h2>What files are ready?</h2>
-              <p class="card-copy">This is what lets BLNKK turn the request into a factory-readable package.</p>
+              <p class="card-copy">The goal is to know whether a shop can review the package without a long back-and-forth.</p>
             </div>
             <div class="card-body">
               <div class="chip-row" data-multi="files">
@@ -740,6 +833,7 @@
                 <button class="chip" type="button" data-value="Schematic">Schematic</button>
                 <button class="chip" type="button" data-value="Prototype photos / video">Prototype photos / video</button>
                 <button class="chip" type="button" data-value="Test requirements">Test requirements</button>
+                <button class="chip" type="button" data-value="Target cost / volume assumptions">Target cost / volume assumptions</button>
                 <button class="chip" type="button" data-value="No files ready yet">No files ready yet</button>
               </div>
               <div class="field">
@@ -760,13 +854,14 @@
                 <div class="dots" data-dots></div>
               </div>
               <h2>What should this sprint produce?</h2>
-              <p class="card-copy">Choose the useful output for the next 24-48 hours or first build cycle.</p>
+              <p class="card-copy">Choose the useful output for the next 24-48 hours or first NPI cycle.</p>
             </div>
             <div class="card-body">
               <div class="chip-row" data-multi="goals">
                 <button class="chip" type="button" data-value="Feasibility review">Feasibility review</button>
                 <button class="chip" type="button" data-value="DFM / DFA feedback">DFM / DFA feedback</button>
                 <button class="chip" type="button" data-value="NPI shop quote">NPI shop quote</button>
+                <button class="chip" type="button" data-value="Shop shortlist for outreach">Shop shortlist for outreach</button>
                 <button class="chip" type="button" data-value="Prototype build plan">Prototype build plan</button>
                 <button class="chip" type="button" data-value="Small-batch pilot path">Small-batch pilot path</button>
                 <button class="chip" type="button" data-value="Testing / fixture plan">Testing / fixture plan</button>
@@ -789,7 +884,7 @@
                 <div class="dots" data-dots></div>
               </div>
               <h2>What constraints should BLNKK protect?</h2>
-              <p class="card-copy">Keep compliance as a trust layer, not the whole product.</p>
+              <p class="card-copy">Keep compliance as a trust layer while the main value stays NPI speed.</p>
             </div>
             <div class="card-body">
               <div class="chip-row" data-multi="must">
@@ -834,6 +929,16 @@
             </div>
             <div class="card-body">
               <div class="review" id="reviewText"></div>
+              <div class="candidate-panel">
+                <div class="candidate-head">
+                  <div>
+                    <h3>Matched Taiwan NPI candidates</h3>
+                    <p>Preview shortlist from the 200-candidate v2 data layer. All entries remain candidate-only until BLNKK verifies MOQ, team size, NDA handling, and willingness to accept small NPI orders.</p>
+                  </div>
+                  <span class="candidate-meta" id="candidateMeta">200 records</span>
+                </div>
+                <div class="candidate-list" id="candidateList"></div>
+              </div>
               <div class="status" id="statusText"></div>
             </div>
             <div class="card-foot">
@@ -901,6 +1006,8 @@
       const submitButton = document.getElementById("submitButton");
       const reviewText = document.getElementById("reviewText");
       const successText = document.getElementById("successText");
+      const candidateList = document.getElementById("candidateList");
+      const candidateMeta = document.getElementById("candidateMeta");
       const requiredByCard = new Map([
         [0, ["companyName", "contactName", "email"]],
         [1, ["stage", "building"]],
@@ -908,6 +1015,7 @@
       ]);
       let current = 0;
       let submitting = false;
+      let matchedCandidates = [];
 
       function value(name) {
         return String(form.elements[name]?.value || "").trim();
@@ -998,12 +1106,85 @@
           consent_version: "npi-sprint-card-v1",
           agreed: true,
           google_sheet_form_type: "npi_sprint_build_package",
+          npi_candidate_source: "BLNKK NPI candidate list v2",
+          npi_candidate_snapshot: matchedCandidates.slice(0, 5),
           messages: [
             { role: "system", message: "NPI Sprint build package submitted from BLNKK preview route.", message_order: 1 },
             { role: "user", message: formatProfile(profile), message_order: 2 },
           ],
           profile,
         };
+      }
+
+      function renderCandidates(matches, meta = {}) {
+        matchedCandidates = matches || [];
+        candidateList.innerHTML = "";
+        candidateMeta.textContent = `${meta.total_candidates || 200} records`;
+
+        if (!matchedCandidates.length) {
+          const empty = document.createElement("p");
+          empty.textContent = "Complete the module and build request cards to preview matching candidates.";
+          candidateList.appendChild(empty);
+          return;
+        }
+
+        matchedCandidates.forEach((candidate, index) => {
+          const card = document.createElement("article");
+          card.className = "candidate";
+
+          const top = document.createElement("div");
+          top.className = "candidate-top";
+
+          const title = document.createElement("strong");
+          title.textContent = `${index + 1}. ${candidate.company_name}`;
+
+          const score = document.createElement("span");
+          score.className = "candidate-score";
+          score.textContent = `${Math.round(candidate.match_score)} pts`;
+
+          const copy = document.createElement("p");
+          copy.textContent = `${candidate.npi_fit_type} - ${candidate.use_case || candidate.capability_summary || "NPI-adjacent capability"}`;
+
+          const note = document.createElement("small");
+          note.textContent = `${candidate.verification_status || "candidate"} / small-shop verified: ${candidate.is_small_shop_verified ? "yes" : "no"}`;
+
+          top.append(title, score);
+          card.append(top, copy, note);
+          candidateList.appendChild(card);
+        });
+      }
+
+      async function loadCandidates() {
+        const profile = profileFromForm();
+        renderCandidates([], { total_candidates: 200 });
+        candidateMeta.textContent = "Matching...";
+
+        try {
+          const response = await fetch("/api/npi-candidates", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              category: profile.sourcing.category,
+              need: profile.sourcing.need,
+              stage: profile.stage,
+              system: profile.building.system,
+              files: profile.files.ready.join(", "),
+              goals: profile.goals.outputs.join(", "),
+              constraints: profile.must.requirements.join(", "),
+              quantity: profile.must.quantity,
+              limit: 5,
+            }),
+          });
+          const payload = await response.json().catch(() => ({}));
+          if (!response.ok || !payload.ok) throw new Error(payload.error || "Candidate matching failed.");
+          renderCandidates(payload.data, payload);
+        } catch (error) {
+          candidateList.innerHTML = "";
+          const message = document.createElement("p");
+          message.textContent = "Candidate matching is unavailable in this preview. The NPI package can still be submitted.";
+          candidateList.appendChild(message);
+          candidateMeta.textContent = "Offline";
+        }
       }
 
       function updateDots() {
@@ -1032,6 +1213,7 @@
         cards.forEach((card, cardIndex) => card.classList.toggle("active", cardIndex === current));
         updateDots();
         updateSummary();
+        if (current === 6) loadCandidates();
         if (current > 0) {
           document.getElementById("deck").scrollIntoView({ behavior: "smooth", block: "start" });
         }
@@ -1131,6 +1313,7 @@
 
       updateDots();
       updateSummary();
+      renderCandidates([], { total_candidates: 200 });
     })();
   </script>
 </body>
