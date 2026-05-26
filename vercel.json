@@ -21,6 +21,10 @@
     {
       "source": "/protocol",
       "destination": "/protocol.html"
+    },
+    {
+      "source": "/npi-sprint",
+      "destination": "/npi-sprint/index.html"
     }
   ]
 }
