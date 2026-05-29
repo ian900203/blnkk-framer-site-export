@@ -1,0 +1,26 @@
+# Custom gitleaks config for BLNKK.
+# Allowlists known-public values so we keep the scan strict on real secrets.
+
+title = "BLNKK gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Known-public identifiers and historical Framer snippet fixtures."
+paths = [
+  # Snapshot HTML captured from the live Framer site (history only).
+  '''^home\.html$''',
+  '''^tw\.html$''',
+  '''^csa\.html$''',
+  '''^csa/index\.html$''',
+  '''^protocol\.html$''',
+  '''^index\.html$''',
+  '''^pages/.*''',
+  # Historical Framer custom-code notes.
+  '''^framer-custom-code-notes\.md$''',
+]
+regexes = [
+  # Supabase project ref is public.
+  '''wldesafdtscwvaikpmkq''',
+]

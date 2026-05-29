@@ -955,6 +955,20 @@
       const $ = (selector) => document.querySelector(selector);
       const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
+      function escapeHtml(value) {
+        return String(value == null ? "" : value).replace(/[&<>"']/g, (c) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        }[c]));
+      }
+
+      function setText(el, value) {
+        if (el) el.textContent = value == null ? "" : String(value);
+      }
+
       function getAdminToken() {
         return localStorage.getItem(adminTokenKey) || "";
       }
@@ -1059,20 +1073,29 @@
 
       function renderChecks() {
         const target = $("#launchChecks");
-        target.innerHTML = "";
+        target.textContent = "";
         let ready = 0;
 
         state.checks.forEach(([id, label, checked]) => {
           if (checked) ready += 1;
           const item = document.createElement("label");
           item.className = "check-item";
-          item.innerHTML = `
-            <span>
-              <span class="page-title">${label}</span>
-              <span class="page-meta">${checked ? "Marked ready" : "Needs review before domain switch"}</span>
-            </span>
-            <input type="checkbox" ${checked ? "checked" : ""} data-check="${id}" />
-          `;
+
+          const labelGroup = document.createElement("span");
+          const title = document.createElement("span");
+          title.className = "page-title";
+          title.textContent = label;
+          const meta = document.createElement("span");
+          meta.className = "page-meta";
+          meta.textContent = checked ? "Marked ready" : "Needs review before domain switch";
+          labelGroup.append(title, meta);
+
+          const input = document.createElement("input");
+          input.type = "checkbox";
+          input.checked = !!checked;
+          input.dataset.check = String(id == null ? "" : id);
+
+          item.append(labelGroup, input);
           target.appendChild(item);
         });
 
@@ -1082,94 +1105,151 @@
       }
 
       function renderPages() {
-        $("#pageList").innerHTML = pages
-          .map(([path, title, meta, status]) => {
-            const badgeClass = status === "Ready" ? "green" : status === "Review" ? "blue" : "amber";
-            return `
-              <div class="page-item">
-                <div>
-                  <div class="page-title">${title}</div>
-                  <div class="page-meta">${path} · ${meta}</div>
-                </div>
-                <div class="actions">
-                  <a class="button" href="${path}" target="_blank" rel="noreferrer">Open</a>
-                  <span class="badge ${badgeClass}">${status}</span>
-                </div>
-              </div>
-            `;
-          })
-          .join("");
+        const target = $("#pageList");
+        target.textContent = "";
+        pages.forEach(([path, title, meta, status]) => {
+          const badgeClass = status === "Ready" ? "green" : status === "Review" ? "blue" : "amber";
+          const item = document.createElement("div");
+          item.className = "page-item";
+
+          const left = document.createElement("div");
+          const titleEl = document.createElement("div");
+          titleEl.className = "page-title";
+          titleEl.textContent = title;
+          const metaEl = document.createElement("div");
+          metaEl.className = "page-meta";
+          metaEl.textContent = `${path} · ${meta}`;
+          left.append(titleEl, metaEl);
+
+          const right = document.createElement("div");
+          right.className = "actions";
+          const link = document.createElement("a");
+          link.className = "button";
+          link.href = path;
+          link.target = "_blank";
+          link.rel = "noreferrer";
+          link.textContent = "Open";
+          const badge = document.createElement("span");
+          badge.className = `badge ${badgeClass}`;
+          badge.textContent = status;
+          right.append(link, badge);
+
+          item.append(left, right);
+          target.appendChild(item);
+        });
       }
 
       function renderQuestions() {
-        $("#questionTabs").innerHTML = state.questions
-          .map(
-            (question) =>
-              `<button class="${question.id === activeQuestion ? "active" : ""}" data-question="${question.id}">${question.stage}</button>`
-          )
-          .join("");
+        const tabs = $("#questionTabs");
+        tabs.textContent = "";
+        state.questions.forEach((question) => {
+          const button = document.createElement("button");
+          if (question.id === activeQuestion) button.classList.add("active");
+          button.dataset.question = String(question.id == null ? "" : question.id);
+          button.textContent = question.stage == null ? "" : String(question.stage);
+          tabs.appendChild(button);
+        });
 
         const question = state.questions.find((item) => item.id === activeQuestion);
-        $("#questionStage").value = question.stage;
-        $("#questionType").value = question.type;
-        $("#questionRequired").value = question.required;
-        $("#questionPrompt").value = question.prompt;
-        $("#questionOptions").value = question.options;
+        if (!question) return;
+        $("#questionStage").value = question.stage || "";
+        $("#questionType").value = question.type || "";
+        $("#questionRequired").value = question.required || "";
+        $("#questionPrompt").value = question.prompt || "";
+        $("#questionOptions").value = question.options || "";
       }
 
       function renderMatching() {
-        $("#matchingRows").innerHTML = matchingQueues
-          .map(([queue, purpose, action, status]) => {
-            const badgeClass = status === "Open" ? "amber" : "blue";
-            return `
-              <tr>
-                <td><strong>${queue}</strong></td>
-                <td>${purpose}</td>
-                <td>${action}</td>
-                <td><span class="badge ${badgeClass}">${status}</span></td>
-              </tr>
-            `;
-          })
-          .join("");
+        const target = $("#matchingRows");
+        target.textContent = "";
+        matchingQueues.forEach(([queue, purpose, action, status]) => {
+          const badgeClass = status === "Open" ? "amber" : "blue";
+          const tr = document.createElement("tr");
+
+          const tdQueue = document.createElement("td");
+          const strong = document.createElement("strong");
+          strong.textContent = queue;
+          tdQueue.appendChild(strong);
+
+          const tdPurpose = document.createElement("td");
+          tdPurpose.textContent = purpose;
+
+          const tdAction = document.createElement("td");
+          tdAction.textContent = action;
+
+          const tdStatus = document.createElement("td");
+          const badge = document.createElement("span");
+          badge.className = `badge ${badgeClass}`;
+          badge.textContent = status;
+          tdStatus.appendChild(badge);
+
+          tr.append(tdQueue, tdPurpose, tdAction, tdStatus);
+          target.appendChild(tr);
+        });
       }
 
       function renderRecentRequests(requests) {
         const target = $("#recentRequests");
         if (!target) return;
+        target.textContent = "";
 
         if (!requests.length) {
-          target.innerHTML = `<div class="mini-card"><strong>No recent requests loaded</strong><span class="hint">Enter token and refresh data.</span></div>`;
+          const card = document.createElement("div");
+          card.className = "mini-card";
+          const strong = document.createElement("strong");
+          strong.textContent = "No recent requests loaded";
+          const hint = document.createElement("span");
+          hint.className = "hint";
+          hint.textContent = "Enter token and refresh data.";
+          card.append(strong, hint);
+          target.appendChild(card);
           return;
         }
 
-        target.innerHTML = requests
-          .map((request) => {
-            const title = request.company_name || request.email || "Unknown buyer";
-            const meta = [request.sourcing_category, request.status, request.source_page].filter(Boolean).join(" · ");
-            return `
-              <div class="mini-card">
-                <strong>${title}</strong>
-                <span class="hint">${meta || "New request"} · ${new Date(request.created_at).toLocaleString()}</span>
-              </div>
-            `;
-          })
-          .join("");
+        requests.forEach((request) => {
+          const card = document.createElement("div");
+          card.className = "mini-card";
+
+          const strong = document.createElement("strong");
+          strong.textContent = request.company_name || request.email || "Unknown buyer";
+
+          const metaParts = [request.sourcing_category, request.status, request.source_page]
+            .filter(Boolean)
+            .join(" · ");
+          const dateStr = request.created_at ? new Date(request.created_at).toLocaleString() : "";
+
+          const hint = document.createElement("span");
+          hint.className = "hint";
+          hint.textContent = `${metaParts || "New request"}${dateStr ? " · " + dateStr : ""}`;
+
+          card.append(strong, hint);
+          target.appendChild(card);
+        });
       }
 
       function renderMeetings() {
-        $("#meetingPipeline").innerHTML = meetings
-          .map(
-            ([title, meta, stage]) => `
-              <div class="pipeline-item">
-                <div>
-                  <div class="pipeline-title">${title}</div>
-                  <div class="pipeline-meta">${meta}</div>
-                </div>
-                <span class="badge blue">${stage}</span>
-              </div>
-            `
-          )
-          .join("");
+        const target = $("#meetingPipeline");
+        target.textContent = "";
+        meetings.forEach(([title, meta, stage]) => {
+          const item = document.createElement("div");
+          item.className = "pipeline-item";
+
+          const left = document.createElement("div");
+          const titleEl = document.createElement("div");
+          titleEl.className = "pipeline-title";
+          titleEl.textContent = title;
+          const metaEl = document.createElement("div");
+          metaEl.className = "pipeline-meta";
+          metaEl.textContent = meta;
+          left.append(titleEl, metaEl);
+
+          const badge = document.createElement("span");
+          badge.className = "badge blue";
+          badge.textContent = stage;
+
+          item.append(left, badge);
+          target.appendChild(item);
+        });
       }
 
       function showSection(sectionId) {

@@ -1,7 +1,7 @@
 const { allowCors, countRows, handleError, requireSupabaseEnv, sendJson } = require("./_supabase");
 
 module.exports = async function handler(req, res) {
-  if (allowCors(req, res)) return;
+  if (allowCors(req, res, { mode: "public" })) return;
   if (req.method !== "GET") return sendJson(res, 405, { ok: false, error: "GET only." });
   if (!requireSupabaseEnv(res)) return;
 

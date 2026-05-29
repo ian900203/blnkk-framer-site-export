@@ -509,6 +509,67 @@
       background: rgba(2, 7, 16, 0.82);
     }
 
+    .upload-zone {
+      display: grid;
+      gap: 14px;
+      border: 1px dashed rgba(36, 215, 255, 0.42);
+      border-radius: 12px;
+      padding: 22px;
+      background: rgba(36, 215, 255, 0.06);
+    }
+
+    .upload-zone input[type="file"] {
+      min-height: auto;
+      padding: 14px;
+      border-style: dashed;
+      background: rgba(2, 7, 16, 0.72);
+    }
+
+    .upload-hint {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.52;
+    }
+
+    .upload-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .upload-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      border: 1px solid rgba(154, 184, 220, 0.18);
+      border-radius: 8px;
+      padding: 12px;
+      background: rgba(2, 7, 16, 0.48);
+    }
+
+    .upload-item strong {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 13px;
+    }
+
+    .upload-item span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .upload-badge {
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
     .choice-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -645,6 +706,14 @@
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
     }
 
+    .score-card small {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
     .score-card span, .result-box span {
       color: var(--muted);
       font-size: 12px;
@@ -671,9 +740,39 @@
       line-height: 1.45;
     }
 
+    .risk-list li {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .risk-main {
+      min-width: 0;
+    }
+
     .risk-list b {
       color: var(--amber);
       margin-right: 8px;
+    }
+
+    .fix-button {
+      min-height: 34px;
+      border: 1px solid rgba(36, 215, 255, 0.4);
+      border-radius: 8px;
+      padding: 0 12px;
+      color: var(--cyan);
+      background: rgba(36, 215, 255, 0.08);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .fix-button:hover {
+      border-color: rgba(36, 215, 255, 0.72);
+      background: rgba(36, 215, 255, 0.14);
     }
 
     .candidate-panel {
@@ -1067,6 +1166,32 @@
           <article class="card" data-card="4">
             <div class="card-head">
               <div class="step-row">
+                <span class="step-pill">Upload</span>
+                <div class="dots" data-dots></div>
+              </div>
+              <h2>Upload the messy build package.</h2>
+              <p class="card-copy">Optional for preview, but this is the real NPI handoff: BOM, Gerber ZIP, CAD/STEP, drawings, test notes, and prototype evidence.</p>
+            </div>
+            <div class="card-body">
+              <div class="upload-zone">
+                <div class="field">
+                  <label for="packageFiles">Build files</label>
+                  <input id="packageFiles" name="packageFiles" type="file" multiple accept=".bom,.csv,.doc,.docx,.dwg,.dxf,.gerber,.heic,.jpeg,.jpg,.json,.md,.mov,.mp4,.pdf,.png,.ppt,.pptx,.sch,.step,.stl,.stp,.txt,.xls,.xlsm,.xlsx,.zip">
+                </div>
+                <p class="upload-hint">Private preview limit: 8 files, 25MB each. Files are uploaded to a private Supabase Storage bucket through short-lived signed URLs; BLNKK will disclose files only after NDA / review.</p>
+                <div class="upload-list" id="uploadList" aria-live="polite"></div>
+                <div class="status" id="uploadStatus"></div>
+              </div>
+            </div>
+            <div class="card-foot">
+              <button class="button ghost" type="button" data-prev>Back</button>
+              <button class="button primary" type="button" data-next>Next card</button>
+            </div>
+          </article>
+
+          <article class="card" data-card="5">
+            <div class="card-head">
+              <div class="step-row">
                 <span class="step-pill">Build pod</span>
                 <div class="dots" data-dots></div>
               </div>
@@ -1104,7 +1229,7 @@
             </div>
           </article>
 
-          <article class="card" data-card="5">
+          <article class="card" data-card="6">
             <div class="card-head">
               <div class="step-row">
                 <span class="step-pill">Constraints</span>
@@ -1151,7 +1276,7 @@
             </div>
           </article>
 
-          <article class="card" data-card="6">
+          <article class="card" data-card="7">
             <div class="card-head">
               <div class="step-row">
                 <span class="step-pill">Track</span>
@@ -1179,7 +1304,7 @@
             </div>
           </article>
 
-          <article class="card" data-card="7">
+          <article class="card" data-card="8">
             <div class="card-head">
               <div class="step-row">
                 <span class="step-pill">Readiness</span>
@@ -1193,6 +1318,7 @@
                 <div class="score-card">
                   <strong id="readinessScore">--</strong>
                   <span>NPI readiness score</span>
+                  <small>Out of 100. Scores under 60 usually mean BLNKK should rescue files before supplier disclosure.</small>
                 </div>
                 <div class="result-box">
                   <span>Recommended track</span>
@@ -1211,7 +1337,7 @@
                 <div class="candidate-head">
                   <div>
                     <h3>Candidate layer for BLNKK review</h3>
-                    <p>Preview shortlist from the 200-candidate v2 data layer. Names remain candidate-only until BLNKK verifies MOQ, response speed, NDA handling, and NPI willingness.</p>
+                    <p>Preview shortlist from the 200-candidate v2 data layer. Match points are ranking signals, not a percentage. Names remain candidate-only until BLNKK verifies MOQ, response speed, NDA handling, and NPI willingness.</p>
                   </div>
                   <span class="candidate-meta" id="candidateMeta">200 records</span>
                 </div>
@@ -1226,7 +1352,7 @@
             </div>
           </article>
 
-          <article class="card" data-card="8">
+          <article class="card" data-card="9">
             <div class="card-head">
               <div class="step-row">
                 <span class="step-pill">Sent</span>
@@ -1304,13 +1430,22 @@
       const podList = document.getElementById("podList");
       const readinessScore = document.getElementById("readinessScore");
       const recommendedTrack = document.getElementById("recommendedTrack");
+      const packageFiles = document.getElementById("packageFiles");
+      const uploadList = document.getElementById("uploadList");
+      const uploadStatus = document.getElementById("uploadStatus");
+      const maxUploadFiles = 8;
+      const maxUploadBytes = 25 * 1024 * 1024;
+      const allowedUploadExtensions = new Set(["bom", "csv", "doc", "docx", "dwg", "dxf", "gerber", "heic", "jpeg", "jpg", "json", "md", "mov", "mp4", "pdf", "png", "ppt", "pptx", "sch", "step", "stl", "stp", "txt", "xls", "xlsm", "xlsx", "zip"]);
       const requiredByCard = new Map([
         [0, ["companyName", "contactName", "email"]],
         [1, ["stage", "building"]],
-        [4, ["category", "need"]],
+        [5, ["category", "need"]],
       ]);
       let current = 0;
       let submitting = false;
+      let uploadingFiles = false;
+      let stagedUploadSignature = "";
+      let uploadedFiles = [];
       let matchedCandidates = [];
 
       function value(name) {
@@ -1319,6 +1454,166 @@
 
       function selectedValues(group) {
         return [...document.querySelectorAll(`[data-multi="${group}"] .selected`)].map((button) => button.dataset.value);
+      }
+
+      function selectedFiles() {
+        return packageFiles ? [...packageFiles.files] : [];
+      }
+
+      function fileExtension(name) {
+        const match = String(name || "").match(/\.([a-z0-9]+)$/i);
+        return match ? match[1].toLowerCase() : "";
+      }
+
+      function formatBytes(bytes) {
+        if (!bytes) return "0 B";
+        const units = ["B", "KB", "MB", "GB"];
+        let value = bytes;
+        let index = 0;
+        while (value >= 1024 && index < units.length - 1) {
+          value /= 1024;
+          index += 1;
+        }
+        return `${value.toFixed(index ? 1 : 0)} ${units[index]}`;
+      }
+
+      function uploadSignature(files = selectedFiles()) {
+        return files.map((file) => `${file.name}:${file.size}:${file.lastModified}`).join("|");
+      }
+
+      function validateUploadFiles(files = selectedFiles()) {
+        if (files.length > maxUploadFiles) {
+          throw new Error(`Upload up to ${maxUploadFiles} files per NPI package.`);
+        }
+        files.forEach((file) => {
+          const ext = fileExtension(file.name);
+          if (!allowedUploadExtensions.has(ext)) {
+            throw new Error(`${file.name} is not an allowed NPI file type.`);
+          }
+          if (file.size > maxUploadBytes) {
+            throw new Error(`${file.name} is larger than the 25MB preview limit.`);
+          }
+        });
+      }
+
+      function renderUploads(state = "idle", message = "") {
+        const files = selectedFiles();
+        uploadList.innerHTML = "";
+
+        const items = uploadedFiles.length ? uploadedFiles : files.map((file) => ({
+          originalName: file.name,
+          size: file.size,
+          contentType: file.type || "application/octet-stream",
+          status: "staged",
+        }));
+
+        if (!items.length) {
+          uploadStatus.className = "status";
+          uploadStatus.textContent = message || "No files selected yet.";
+          return;
+        }
+
+        items.forEach((item) => {
+          const row = document.createElement("div");
+          row.className = "upload-item";
+
+          const main = document.createElement("div");
+          const name = document.createElement("strong");
+          name.textContent = item.originalName;
+          const meta = document.createElement("span");
+          meta.textContent = [formatBytes(item.size), item.contentType].filter(Boolean).join(" / ");
+          main.append(name, meta);
+
+          const badge = document.createElement("div");
+          badge.className = "upload-badge";
+          badge.textContent = item.uploadedAt ? "Uploaded" : state === "uploading" ? "Uploading" : "Ready";
+
+          row.append(main, badge);
+          uploadList.appendChild(row);
+        });
+
+        uploadStatus.className = state === "error" ? "status error" : state === "ok" ? "status ok" : "status";
+        uploadStatus.textContent = message || (uploadedFiles.length ? `${uploadedFiles.length} file${uploadedFiles.length === 1 ? "" : "s"} uploaded to private storage.` : "Files are staged for private upload.");
+      }
+
+      async function uploadSelectedFiles() {
+        const files = selectedFiles();
+        const signature = uploadSignature(files);
+        if (!files.length) {
+          uploadedFiles = [];
+          stagedUploadSignature = "";
+          renderUploads("idle", "No files selected yet.");
+          return [];
+        }
+        if (uploadedFiles.length && stagedUploadSignature === signature) return uploadedFiles;
+
+        validateUploadFiles(files);
+        uploadingFiles = true;
+        renderUploads("uploading", "Requesting private upload links...");
+
+        try {
+          const response = await fetch("/api/npi-upload-url", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              company_name: value("companyName"),
+              email: value("email"),
+              files: files.map((file) => ({
+                name: file.name,
+                size: file.size,
+                type: file.type || "application/octet-stream",
+              })),
+            }),
+          });
+          const payload = await response.json().catch(() => ({}));
+          if (!response.ok || !payload.ok) throw new Error(payload.error || "Could not create private upload links.");
+
+          const completed = [];
+          for (let index = 0; index < files.length; index += 1) {
+            const file = files[index];
+            const target = payload.uploads[index];
+            if (!target?.signedUrl) throw new Error(`Missing upload URL for ${file.name}.`);
+
+            renderUploads("uploading", `Uploading ${file.name}...`);
+            const formData = new FormData();
+            formData.append("cacheControl", "3600");
+            formData.append("", file);
+
+            const uploadResponse = await fetch(target.signedUrl, {
+              method: "PUT",
+              headers: { "x-upsert": "false" },
+              body: formData,
+            });
+            if (!uploadResponse.ok) {
+              const text = await uploadResponse.text().catch(() => "");
+              throw new Error(`Upload failed for ${file.name}${text ? `: ${text.slice(0, 160)}` : "."}`);
+            }
+
+            completed.push({
+              bucket: target.bucket,
+              path: target.path,
+              originalName: target.originalName || file.name,
+              size: file.size,
+              contentType: file.type || target.contentType || "application/octet-stream",
+              uploadedAt: new Date().toISOString(),
+            });
+            uploadedFiles = completed;
+            renderUploads("uploading", `${completed.length}/${files.length} file${files.length === 1 ? "" : "s"} uploaded...`);
+          }
+
+          stagedUploadSignature = signature;
+          uploadedFiles = completed;
+          renderUploads("ok");
+          updateSummary();
+          return uploadedFiles;
+        } catch (error) {
+          uploadedFiles = [];
+          stagedUploadSignature = "";
+          renderUploads("error", error.message || "File upload failed.");
+          throw error;
+        } finally {
+          uploadingFiles = false;
+        }
       }
 
       function profileFromForm() {
@@ -1341,6 +1636,7 @@
           files: {
             ready: selectedValues("files"),
             missingInfo: value("missingInfo"),
+            uploaded: uploadedFiles,
           },
           sourcing: {
             category: value("category"),
@@ -1380,6 +1676,7 @@
           line("Most painful blocker", profile.bottlenecks.note),
           "",
           line("Files ready", profile.files.ready.join(", ")),
+          line("Uploaded files", profile.files.uploaded.map((file) => `${file.originalName} (${file.bucket}/${file.path})`).join(", ")),
           line("Missing information", profile.files.missingInfo),
           "",
           line("Primary module", profile.sourcing.category),
@@ -1416,6 +1713,7 @@
         files.forEach((item) => {
           score += fileWeights[item] || 0;
         });
+        if (profile.files.uploaded.length) score += Math.min(12, profile.files.uploaded.length * 3);
 
         if (stage.includes("EVT")) score += 6;
         if (stage.includes("DVT")) score += 10;
@@ -1441,31 +1739,31 @@
 
         const risks = [];
         if (files.includes("No files ready yet")) {
-          risks.push(["S0", "No supplier-ready package exists yet. Start with NPI Data Rescue before supplier disclosure."]);
+          risks.push(["S0", "No supplier-ready package exists yet. Start with NPI Data Rescue before supplier disclosure.", 3]);
         }
         if (!files.includes("BOM")) {
-          risks.push(["S0", "BOM is missing or not selected. Taiwan shops cannot quote reliably without a cleaned BOM."]);
+          risks.push(["S0", "BOM is missing or not selected. Taiwan shops cannot quote reliably without a cleaned BOM.", 3]);
         }
         if (profile.sourcing.category.includes("PCBA") && !files.includes("Gerber / PCB files")) {
-          risks.push(["S0", "Gerber / PCB files are missing for a PCBA request. Quoteability will be blocked."]);
+          risks.push(["S0", "Gerber / PCB files are missing for a PCBA request. Quoteability will be blocked.", 3]);
         }
         if (bottlenecks.includes("EOL or shortage risk")) {
-          risks.push(["S1", "Component lifecycle risk needs alternate proposal before quote or pilot build."]);
+          risks.push(["S1", "Component lifecycle risk needs alternate proposal before quote or pilot build.", 2]);
         }
         if (bottlenecks.includes("CAD / Gerber mismatch")) {
-          risks.push(["S1", "CAD/Gerber mismatch can create rework. Lock revision and file index before outreach."]);
+          risks.push(["S1", "CAD/Gerber mismatch can create rework. Lock revision and file index before outreach.", 3]);
         }
         if (!files.includes("Test notes") && !files.includes("Acceptance criteria")) {
-          risks.push(["S1", "Test plan and acceptance criteria are not selected. Build success will be hard to verify."]);
+          risks.push(["S1", "Test plan and acceptance criteria are not selected. Build success will be hard to verify.", 3]);
         }
         if (profile.must.timeline.includes("ASAP")) {
-          risks.push(["S2", "ASAP timeline needs a Sync-8 handoff cadence and daily decision owner."]);
+          risks.push(["S2", "ASAP timeline needs a Sync-8 handoff cadence and daily decision owner.", 6]);
         }
         if (profile.must.requirements.includes("Sensitive hardware / defense-aware")) {
-          risks.push(["S2", "Sensitive hardware should be routed through NDA and Non-PRC review before disclosure."]);
+          risks.push(["S2", "Sensitive hardware should be routed through NDA and Non-PRC review before disclosure.", 6]);
         }
         if (!risks.length) {
-          risks.push(["S3", "Package has enough signal for first-pass review. BLNKK should still verify MOQ and DFM fit."]);
+          risks.push(["S3", "Package has enough signal for first-pass review. BLNKK should still verify MOQ and DFM fit.", 8]);
         }
 
         const pod = [];
@@ -1488,12 +1786,24 @@
       function renderReadiness() {
         const profile = profileFromForm();
         const result = inferReadiness(profile);
-        readinessScore.textContent = `${result.score}`;
+        readinessScore.textContent = `${result.score}/100`;
         recommendedTrack.textContent = result.track;
         riskList.innerHTML = "";
-        result.risks.forEach(([level, text]) => {
+        result.risks.forEach(([level, text, targetCard]) => {
           const item = document.createElement("li");
-          item.innerHTML = `<b>${level}</b>${text}`;
+          const main = document.createElement("div");
+          main.className = "risk-main";
+          const tag = document.createElement("b");
+          tag.textContent = level;
+          main.append(tag, document.createTextNode(text));
+
+          const fix = document.createElement("button");
+          fix.className = "fix-button";
+          fix.type = "button";
+          fix.textContent = targetCard === 8 ? "Review" : "Fix";
+          fix.addEventListener("click", () => setCard(targetCard));
+
+          item.append(main, fix);
           riskList.appendChild(item);
         });
         podList.innerHTML = "";
@@ -1522,6 +1832,7 @@
           consent_version: "npi-to-pvt-terminal-v1",
           agreed: true,
           google_sheet_form_type: "npi_to_pvt_terminal_package",
+          uploaded_files: profile.files.uploaded,
           npi_candidate_source: "BLNKK NPI candidate list v2",
           npi_candidate_snapshot: matchedCandidates.slice(0, 5),
           readiness_snapshot: readiness,
@@ -1557,7 +1868,7 @@
 
           const score = document.createElement("span");
           score.className = "candidate-score";
-          score.textContent = `${Math.round(candidate.match_score)} pts`;
+          score.textContent = `${Math.round(candidate.match_score)} match pts`;
 
           const workstreams = Array.isArray(candidate.workstreams) ? candidate.workstreams.join(", ") : candidate.npi_fit_type;
           const stageFit = Array.isArray(candidate.stage_fit) ? candidate.stage_fit.join(" / ") : "EVT";
@@ -1613,7 +1924,7 @@
       function updateDots() {
         document.querySelectorAll("[data-dots]").forEach((container) => {
           container.innerHTML = "";
-          cards.slice(0, 8).forEach((_, index) => {
+        cards.slice(0, cards.length - 1).forEach((_, index) => {
             const dot = document.createElement("span");
             dot.className = `dot${index < current ? " done" : ""}${index === current ? " active" : ""}`;
             container.appendChild(dot);
@@ -1626,11 +1937,11 @@
         document.getElementById("summaryBuyer").textContent = [profile.buyer.companyName, profile.buyer.contactName].filter(Boolean).join(" / ") || "Company and contact";
         document.getElementById("summaryBuilding").textContent = [profile.stage, profile.building.context, profile.building.system].filter(Boolean).join(" / ") || "EVT / DVT / PVT context";
         document.getElementById("summaryBottleneck").textContent = [profile.bottlenecks.selected.join(", "), profile.bottlenecks.note].filter(Boolean).join(" / ") || "Current blockers";
-        document.getElementById("summaryFiles").textContent = [profile.files.ready.join(", "), profile.files.missingInfo].filter(Boolean).join(" / ") || "Available files";
+        document.getElementById("summaryFiles").textContent = [profile.files.ready.join(", "), profile.files.uploaded.length ? `${profile.files.uploaded.length} uploaded file${profile.files.uploaded.length === 1 ? "" : "s"}` : "", profile.files.missingInfo].filter(Boolean).join(" / ") || "Available files";
         document.getElementById("summarySourcing").textContent = [profile.sourcing.category, profile.sourcing.workstreams.join(", "), profile.sourcing.need].filter(Boolean).join(" / ") || "Workstreams and module";
         document.getElementById("summaryTrack").textContent = [profile.goal.serviceTrack, profile.goal.note, profile.must.quantity].filter(Boolean).join(" / ") || "Recommended output";
         reviewText.textContent = formatProfile(profile);
-        if (current === 7) renderReadiness();
+        if (current === 8) renderReadiness();
       }
 
       function setCard(index) {
@@ -1638,7 +1949,7 @@
         cards.forEach((card, cardIndex) => card.classList.toggle("active", cardIndex === current));
         updateDots();
         updateSummary();
-        if (current === 7) {
+        if (current === 8) {
           renderReadiness();
           loadCandidates();
         }
@@ -1664,14 +1975,15 @@
       }
 
       async function submitProfile() {
-        if (submitting || !validateCard(7)) return;
+        if (submitting || !validateCard(8)) return;
         submitting = true;
         submitButton.disabled = true;
         statusText.className = "status";
         statusText.textContent = "Submitting NPI-to-PVT package...";
 
-        const profile = profileFromForm();
         try {
+          await uploadSelectedFiles();
+          const profile = profileFromForm();
           const response = await fetch("/api/buyer-requests", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -1684,7 +1996,7 @@
           statusText.className = "status ok";
           statusText.textContent = "Submitted.";
           successText.textContent = formatProfile(profile);
-          setCard(8);
+          setCard(9);
         } catch (error) {
           statusText.className = "status error";
           statusText.textContent = error.message || "Submission failed. Please try again.";
@@ -1716,8 +2028,17 @@
       });
 
       document.querySelectorAll("[data-next]").forEach((button) => {
-        button.addEventListener("click", () => {
-          if (validateCard(current)) setCard(current + 1);
+        button.addEventListener("click", async () => {
+          if (!validateCard(current) || uploadingFiles) return;
+          button.disabled = true;
+          try {
+            if (current === 4) await uploadSelectedFiles();
+            setCard(current + 1);
+          } catch (_) {
+            // The upload card already shows the actionable error.
+          } finally {
+            button.disabled = false;
+          }
         });
       });
 
@@ -1728,8 +2049,23 @@
       document.getElementById("newProfile").addEventListener("click", () => {
         form.reset();
         document.querySelectorAll(".selected").forEach((button) => button.classList.remove("selected"));
+        uploadedFiles = [];
+        stagedUploadSignature = "";
+        renderUploads("idle", "No files selected yet.");
         statusText.textContent = "";
         setCard(0);
+      });
+
+      packageFiles.addEventListener("change", () => {
+        uploadedFiles = [];
+        stagedUploadSignature = "";
+        try {
+          validateUploadFiles();
+          renderUploads("idle");
+        } catch (error) {
+          renderUploads("error", error.message || "File selection is not valid.");
+        }
+        updateSummary();
       });
 
       form.addEventListener("input", updateSummary);
@@ -1741,6 +2077,7 @@
 
       updateDots();
       updateSummary();
+      renderUploads("idle", "No files selected yet.");
       renderReadiness();
       renderCandidates([], { total_candidates: 200 });
     })();

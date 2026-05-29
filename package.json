@@ -1,0 +1,14 @@
+{
+  "name": "blnkk-framer-site-export",
+  "version": "0.1.0",
+  "private": true,
+  "description": "BLNKK Framer-export snapshot deployed on Vercel. Static HTML + Vercel Serverless API routes that talk to Supabase and Google Apps Script.",
+  "scripts": {
+    "lint:json": "node scripts/check-json.js",
+    "lint:syntax": "node scripts/check-api-syntax.js"
+  },
+  "dependencies": {
+    "@upstash/ratelimit": "^2.0.5",
+    "@upstash/redis": "^1.34.3"
+  }
+}

@@ -1,28 +1,28 @@
 const {
   allowCors,
-  countRows,
+  countRowsAdmin,
   handleError,
   requireAdmin,
   requireServiceRoleEnv,
   requireSupabaseEnv,
   sendJson,
-  supabaseFetch,
+  supabaseServiceFetch,
 } = require("./_supabase");
 
 module.exports = async function handler(req, res) {
-  if (allowCors(req, res)) return;
+  if (allowCors(req, res, { mode: "admin" })) return;
   if (req.method !== "GET") return sendJson(res, 405, { ok: false, error: "GET only." });
   if (!requireSupabaseEnv(res) || !requireServiceRoleEnv(res) || !requireAdmin(req, res)) return;
 
   try {
     const [supplierCards, buyerRequests, supplierReplies, intakeSubmissions] = await Promise.all([
-      countRows("public_supplier_directory_cards", "status=eq.active&visibility_tier=eq.public"),
-      countRows("buyer_requests"),
-      countRows("supplier_replies"),
-      countRows("supplier_intake_submissions"),
+      countRowsAdmin("public_supplier_directory_cards", "status=eq.active&visibility_tier=eq.public"),
+      countRowsAdmin("buyer_requests"),
+      countRowsAdmin("supplier_replies"),
+      countRowsAdmin("supplier_intake_submissions"),
     ]);
 
-    const { data: recentRequests } = await supabaseFetch(
+    const { data: recentRequests } = await supabaseServiceFetch(
       "/buyer_requests?select=id,created_at,company_name,email,sourcing_category,status,source_page&order=created_at.desc&limit=5"
     );
 

@@ -1,4 +1,5 @@
 const { allowCors, handleError, readBody, sendJson } = require("./_supabase");
+const { enforceRateLimit } = require("./_protect");
 
 function cleanText(value, maxLength = 4000) {
   return String(value || "").trim().slice(0, maxLength);
@@ -32,16 +33,17 @@ async function postGoogleAppsScript(url, payload) {
 }
 
 module.exports = async function handler(req, res) {
-  if (allowCors(req, res)) return;
+  if (allowCors(req, res, { mode: "public" })) return;
   if (req.method !== "POST") return sendJson(res, 405, { ok: false, error: "POST only." });
 
   const url = process.env.GOOGLE_APPS_SCRIPT_URL;
   if (!url) {
     return sendJson(res, 500, {
       ok: false,
-      error: "Missing GOOGLE_APPS_SCRIPT_URL in Vercel environment variables.",
+      error: "GOOGLE_APPS_SCRIPT_URL is not configured.",
     });
   }
+  if (await enforceRateLimit(req, res, sendJson, { scope: "google-sheet-buyer" })) return;
 
   try {
     const body = await readBody(req);
@@ -52,13 +54,13 @@ module.exports = async function handler(req, res) {
 
     const formType = cleanText(body.google_sheet_form_type || body.formType || body.google_sheet_type || body.type, 80) || "buyer";
     const gasResponse = await postGoogleAppsScript(url, {
-        ...body,
-        formType,
-        type: formType,
-        raw_message: rawMessage,
-        message: rawMessage,
-        source: "vercel_google_sheet_bridge",
-        source_page: cleanText(body.source_page, 120) || "vercel_site",
+      ...body,
+      formType,
+      type: formType,
+      raw_message: rawMessage,
+      message: rawMessage,
+      source: "vercel_google_sheet_bridge",
+      source_page: cleanText(body.source_page, 120) || "vercel_site",
     });
 
     const data = await readGoogleAppsScriptResponse(gasResponse);
@@ -67,7 +69,6 @@ module.exports = async function handler(req, res) {
       return sendJson(res, 502, {
         ok: false,
         error: data?.message || data?.error || `Google Apps Script returned ${gasResponse.status}`,
-        data,
       });
     }
 

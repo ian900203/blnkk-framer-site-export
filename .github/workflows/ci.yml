@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  basic-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Validate JSON files
+        run: node scripts/check-json.js
+
+      - name: Validate API route syntax
+        run: node scripts/check-api-syntax.js
+
+      - name: Scan for committed secrets (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          config-path: .gitleaks.toml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: false

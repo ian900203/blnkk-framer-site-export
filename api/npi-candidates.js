@@ -1,4 +1,5 @@
 const { allowCors, handleError, sendJson } = require("./_supabase");
+const { enforceRateLimit } = require("./_protect");
 const candidates = require("../data/npi-shop-candidates-v2.json");
 
 const CATEGORY_MAP = [
@@ -102,8 +103,9 @@ function inferOpsProfile(candidate) {
 }
 
 module.exports = async function handler(req, res) {
-  if (allowCors(req, res)) return;
+  if (allowCors(req, res, { mode: "public" })) return;
   if (req.method !== "POST") return sendJson(res, 405, { ok: false, error: "POST only." });
+  if (await enforceRateLimit(req, res, sendJson, { scope: "npi-candidates" })) return;
 
   try {
     const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : req.body || {};
