@@ -867,6 +867,10 @@
       line-height: 1.35;
     }
 
+    .internal-only {
+      display: none !important;
+    }
+
     .status {
       min-height: 24px;
       color: var(--muted);
@@ -941,7 +945,7 @@
       </a>
       <div class="nav-actions">
         <a class="nav-link" href="/supply-search">Landing</a>
-        <a class="nav-link" href="#model">Tracks</a>
+        <a class="nav-link" href="#model">Next steps</a>
         <a class="nav-link mobile-keep" href="#deck">Start intake</a>
       </div>
     </div>
@@ -950,78 +954,77 @@
   <main>
     <section class="shell hero">
       <div>
-        <div class="eyebrow">BLNKK NPI-to-PVT Terminal</div>
-        <h1>Turn prototype chaos into a Taiwan-ready build sprint.</h1>
+        <div class="eyebrow">BLNKK Build Package Intake</div>
+        <h1>Upload your hardware build package. BLNKK reviews the Taiwan path.</h1>
         <p class="lead">
-          Upload the messy reality: BOM gaps, CAD/Gerber files, test notes, target quantities, and constraints.
-          BLNKK turns it into a Factory-Ready Package, routes it to the right Taiwan NPI Supplier Pod,
-          and keeps PVT/MPI readiness visible without over-promising mass production on day one.
+          Share your BOM, CAD/Gerber files, test notes, target quantity, timeline, and what is blocking the next build.
+          BLNKK reviews the package privately, asks for missing details, and tells you whether Taiwan can support the next step.
         </p>
         <div class="hero-actions">
-          <a class="button light" href="#deck">Start NPI intake</a>
-          <a class="button" href="#model">See service tracks</a>
+          <a class="button light" href="#deck">Start build intake</a>
+          <a class="button" href="#model">What happens next</a>
         </div>
       </div>
-      <aside class="terminal" aria-label="Sync-8 terminal preview">
+      <aside class="terminal" aria-label="BLNKK review process">
         <div class="terminal-top">
-          <span>Sync-8 protocol</span>
-          <span>Non-PRC aware</span>
+          <span>Private review</span>
+          <span>NDA-aware</span>
         </div>
         <div class="terminal-body">
-          <div class="terminal-line"><span>01</span><div>AI sanitizer audits BOM, CAD, Gerber, drawings, and missing acceptance criteria.</div><small>DATA RESCUE</small></div>
-          <div class="terminal-line"><span>02</span><div>BLNKK grades blockers with S0-S3 severity before supplier disclosure.</div><small>RISK LOCK</small></div>
-          <div class="terminal-line"><span>03</span><div>Taiwan Supplier Pod receives a factory-readable package, not a vague sourcing request.</div><small>NPI POD</small></div>
-          <div class="terminal-line"><span>04</span><div>Buyer wakes up to a breakfast report: status, questions, risks, and next 24h actions.</div><small>SYNC-8</small></div>
+          <div class="terminal-line"><span>01</span><div>You upload files, notes, quantities, timeline, and constraints.</div><small>UPLOAD</small></div>
+          <div class="terminal-line"><span>02</span><div>BLNKK checks what is missing before any supplier disclosure.</div><small>REVIEW</small></div>
+          <div class="terminal-line"><span>03</span><div>We prepare supplier-ready questions and protect sensitive files.</div><small>PACKAGE</small></div>
+          <div class="terminal-line"><span>04</span><div>You get a clear next step: fix the package, quote path, or first Taiwan calls.</div><small>NEXT STEP</small></div>
         </div>
       </aside>
     </section>
 
     <section class="proof">
       <div class="shell proof-grid">
-        <div class="proof-item"><strong>NPI</strong><span>Front-door wedge for urgent prototype-to-pilot execution.</span></div>
-        <div class="proof-item"><strong>PVT</strong><span>Upgrade path for 100-500 unit readiness and transfer planning.</span></div>
-        <div class="proof-item"><strong>S0-S3</strong><span>Risk grading before a Taiwan shop loses time on incomplete files.</span></div>
-        <div class="proof-item"><strong>200</strong><span>Candidate data layer for NPI-capable Taiwan supplier research.</span></div>
+        <div class="proof-item"><strong>Files</strong><span>BOM, CAD, Gerber, drawings, test notes, photos, and blockers.</span></div>
+        <div class="proof-item"><strong>Private</strong><span>Supplier disclosure waits until BLNKK reviews NDA and package readiness.</span></div>
+        <div class="proof-item"><strong>48h</strong><span>Target window for first questions or a recommended next step.</span></div>
+        <div class="proof-item"><strong>Taiwan</strong><span>BLNKK checks which Taiwan build path is realistic for the next stage.</span></div>
       </div>
     </section>
 
     <section class="section" id="model">
       <div class="shell">
         <div class="section-head">
-          <div class="eyebrow">Product model</div>
-          <h2>Do not sell MPI first. Sell the path from NPI to PVT.</h2>
+          <div class="eyebrow">What happens next</div>
+          <h2>Upload once. BLNKK turns it into a clear next step.</h2>
           <p>
-            MPI remains the later credibility path. The first commercial wedge is helping hardware teams move from
-            messy EVT/DVT files into a quote-ready Taiwan build process.
+            This page is for buyers. Internal supplier scoring, candidate ranking, and routing stay with BLNKK until
+            the package is ready and disclosure rules are clear.
           </p>
         </div>
         <div class="model-grid">
           <article class="model-card">
             <div>
-              <div class="price">US$2,500</div>
-              <h3>NPI Readiness Sprint</h3>
-              <p>Audit buyer files, identify S0/S1 blockers, and produce a first Factory-Ready Package.</p>
+              <div class="price">Step 1</div>
+              <h3>Upload the build package</h3>
+              <p>Share the files you have and the blocker you need BLNKK to understand first.</p>
             </div>
           </article>
           <article class="model-card">
             <div>
-              <div class="price">US$5,000</div>
-              <h3>Supplier Pod Sprint</h3>
-              <p>Route a cleaned package to a Taiwan Supplier Pod for DFM, quoteability, and build path review.</p>
+              <div class="price">Step 2</div>
+              <h3>BLNKK reviews privately</h3>
+              <p>We check missing BOM, CAD, test, quantity, NDA, and Taiwan-fit questions before outreach.</p>
             </div>
           </article>
           <article class="model-card">
             <div>
-              <div class="price">US$10k-15k</div>
-              <h3>PVT Transition Sprint</h3>
-              <p>For teams moving toward 100-500 units, fixture/test planning, supply hardening, and transfer readiness.</p>
+              <div class="price">Step 3</div>
+              <h3>You get clarifying questions</h3>
+              <p>If the package is incomplete, BLNKK tells you what to fix before suppliers spend time on it.</p>
             </div>
           </article>
           <article class="model-card">
             <div>
-              <div class="price">US$6k-12k/mo</div>
-              <h3>Sync-8 Terminal</h3>
-              <p>Ongoing cross-time-zone execution layer with breakfast reports, supplier logs, and risk control.</p>
+              <div class="price">Step 4</div>
+              <h3>Then we discuss Taiwan options</h3>
+              <p>Supplier names and comparisons are shared only after BLNKK verifies fit and disclosure rules.</p>
             </div>
           </article>
         </div>
@@ -1287,10 +1290,10 @@
             </div>
             <div class="card-body">
               <div class="choice-grid" data-single="serviceTrack">
-                <button class="choice" type="button" data-value="NPI Readiness Sprint">NPI Readiness Sprint</button>
-                <button class="choice" type="button" data-value="Supplier Pod Sprint">Supplier Pod Sprint</button>
-                <button class="choice" type="button" data-value="PVT Transition Sprint">PVT Transition Sprint</button>
-                <button class="choice" type="button" data-value="Sync-8 Terminal">Sync-8 Terminal</button>
+                <button class="choice" type="button" data-value="Check whether Taiwan can quote this build">Check whether Taiwan can quote this build</button>
+                <button class="choice" type="button" data-value="Find a prototype or pilot-build path">Find a prototype or pilot-build path</button>
+                <button class="choice" type="button" data-value="Fix the package before supplier disclosure">Fix the package before supplier disclosure</button>
+                <button class="choice" type="button" data-value="Plan a path toward 100-500 units">Plan a path toward 100-500 units</button>
               </div>
               <input type="hidden" id="serviceTrack" name="serviceTrack">
               <div class="field">
@@ -1310,30 +1313,30 @@
                 <span class="step-pill">Readiness</span>
                 <div class="dots" data-dots></div>
               </div>
-              <h2>Factory-ready preview</h2>
-              <p class="card-copy">This is not a raw supplier directory. It is the first package, risk, pod, and next-action view.</p>
+              <h2>Review before submitting.</h2>
+              <p class="card-copy">BLNKK will use this to decide what to ask next. Supplier matching and internal scores stay hidden until BLNKK verifies the package and disclosure path.</p>
             </div>
             <div class="card-body">
               <div class="result-grid">
                 <div class="score-card">
                   <strong id="readinessScore">--</strong>
-                  <span>NPI readiness score</span>
-                  <small>Out of 100. Scores under 60 usually mean BLNKK should rescue files before supplier disclosure.</small>
+                  <span>Buyer-facing status</span>
+                  <small>This is not a supplier score. It tells you whether BLNKK should ask for more files before outreach.</small>
                 </div>
                 <div class="result-box">
-                  <span>Recommended track</span>
-                  <h3 id="recommendedTrack" style="margin:10px 0 0;">NPI Readiness Sprint</h3>
+                  <span>Likely next step</span>
+                  <h3 id="recommendedTrack" style="margin:10px 0 0;">BLNKK package review</h3>
                 </div>
               </div>
               <div class="result-box">
-                <span>S0-S3 risk map</span>
+                <span>Items BLNKK may ask you to clarify</span>
                 <ul class="risk-list" id="riskList"></ul>
               </div>
               <div class="result-box">
-                <span>Suggested supplier pod</span>
+                <span>How BLNKK will handle it</span>
                 <ul class="pod-list" id="podList"></ul>
               </div>
-              <div class="candidate-panel">
+              <div class="candidate-panel internal-only">
                 <div class="candidate-head">
                   <div>
                     <h3>Candidate layer for BLNKK review</h3>
@@ -1343,7 +1346,7 @@
                 </div>
                 <div class="candidate-list" id="candidateList"></div>
               </div>
-              <div class="review" id="reviewText"></div>
+              <div class="review internal-only" id="reviewText"></div>
               <div class="status" id="statusText"></div>
             </div>
             <div class="card-foot">
@@ -1731,54 +1734,54 @@
 
         let track = profile.goal.serviceTrack;
         if (!track) {
-          if (quantity.includes("500+") || stage.includes("MP")) track = "PVT/MPI Readiness Review";
-          else if (quantity.includes("100-500") || stage.includes("PVT")) track = "PVT Transition Sprint";
-          else if (score >= 68) track = "Supplier Pod Sprint";
-          else track = "NPI Readiness Sprint";
+          if (quantity.includes("500+") || stage.includes("MP")) track = "Plan a path toward 100-500 units";
+          else if (quantity.includes("100-500") || stage.includes("PVT")) track = "Check pilot-build readiness";
+          else if (score >= 68) track = "Review Taiwan supplier options";
+          else track = "Clarify missing build-package details";
         }
 
         const risks = [];
         if (files.includes("No files ready yet")) {
-          risks.push(["S0", "No supplier-ready package exists yet. Start with NPI Data Rescue before supplier disclosure.", 3]);
+          risks.push(["S0", "No files are ready yet. BLNKK can still review the request, but will need a file plan before supplier outreach.", 3]);
         }
         if (!files.includes("BOM")) {
-          risks.push(["S0", "BOM is missing or not selected. Taiwan shops cannot quote reliably without a cleaned BOM.", 3]);
+          risks.push(["S0", "BOM is missing or not selected. Taiwan shops usually need a BOM before reliable quoting.", 3]);
         }
         if (profile.sourcing.category.includes("PCBA") && !files.includes("Gerber / PCB files")) {
-          risks.push(["S0", "Gerber / PCB files are missing for a PCBA request. Quoteability will be blocked.", 3]);
+          risks.push(["S0", "Gerber / PCB files are missing for a PCBA request. BLNKK may ask for these before outreach.", 3]);
         }
         if (bottlenecks.includes("EOL or shortage risk")) {
-          risks.push(["S1", "Component lifecycle risk needs alternate proposal before quote or pilot build.", 2]);
+          risks.push(["S1", "Component lifecycle or shortage risk may require alternate parts before quoting.", 2]);
         }
         if (bottlenecks.includes("CAD / Gerber mismatch")) {
-          risks.push(["S1", "CAD/Gerber mismatch can create rework. Lock revision and file index before outreach.", 3]);
+          risks.push(["S1", "CAD/Gerber mismatch can create rework. BLNKK may ask you to confirm the correct revision.", 3]);
         }
         if (!files.includes("Test notes") && !files.includes("Acceptance criteria")) {
-          risks.push(["S1", "Test plan and acceptance criteria are not selected. Build success will be hard to verify.", 3]);
+          risks.push(["S1", "Test notes or acceptance criteria are missing. BLNKK may ask how a successful build should be verified.", 3]);
         }
         if (profile.must.timeline.includes("ASAP")) {
-          risks.push(["S2", "ASAP timeline needs a Sync-8 handoff cadence and daily decision owner.", 6]);
+          risks.push(["S2", "ASAP timeline needs a clear decision owner and fast answers to supplier questions.", 6]);
         }
         if (profile.must.requirements.includes("Sensitive hardware / defense-aware")) {
-          risks.push(["S2", "Sensitive hardware should be routed through NDA and Non-PRC review before disclosure.", 6]);
+          risks.push(["S2", "Sensitive hardware should go through NDA and origin review before supplier disclosure.", 6]);
         }
         if (!risks.length) {
-          risks.push(["S3", "Package has enough signal for first-pass review. BLNKK should still verify MOQ and DFM fit.", 8]);
+          risks.push(["S3", "This has enough information for BLNKK to start a first-pass review.", 8]);
         }
 
         const pod = [];
         if (profile.sourcing.workstreams.length) {
-          pod.push(`Prime pod: ${profile.sourcing.workstreams[0]}`);
-          profile.sourcing.workstreams.slice(1, 4).forEach((item) => pod.push(`Support pod: ${item}`));
+          pod.push(`Main review area: ${profile.sourcing.workstreams[0]}`);
+          profile.sourcing.workstreams.slice(1, 4).forEach((item) => pod.push(`Also check: ${item}`));
         } else if (profile.sourcing.category) {
-          pod.push(`Prime pod: ${profile.sourcing.category}`);
-          pod.push("Support pod: DFM / file sanitization");
-          pod.push("Support pod: fixture and acceptance review");
+          pod.push(`Main review area: ${profile.sourcing.category}`);
+          pod.push("BLNKK will check whether the files are ready for supplier review.");
+          pod.push("BLNKK may ask for test criteria, drawings, quantities, or NDA details.");
         } else {
-          pod.push("Prime pod: NPI readiness analyst");
-          pod.push("Support pod: supplier routing after files are cleaned");
+          pod.push("BLNKK will first understand the product and blocker.");
+          pod.push("Supplier outreach waits until the package is clear enough.");
         }
-        pod.push("BLNKK layer: S0-S3 risk lock, supplier question log, and Sync-8 breakfast report.");
+        pod.push("Supplier names are not shown here. BLNKK reviews fit, response speed, NDA handling, and willingness first.");
 
         return { score, track, risks, pod };
       }
@@ -1786,7 +1789,7 @@
       function renderReadiness() {
         const profile = profileFromForm();
         const result = inferReadiness(profile);
-        readinessScore.textContent = `${result.score}/100`;
+        readinessScore.textContent = result.score >= 68 ? "Ready for BLNKK review" : "Needs BLNKK review";
         recommendedTrack.textContent = result.track;
         riskList.innerHTML = "";
         result.risks.forEach(([level, text, targetCard]) => {
@@ -1794,7 +1797,7 @@
           const main = document.createElement("div");
           main.className = "risk-main";
           const tag = document.createElement("b");
-          tag.textContent = level;
+          tag.textContent = level === "S3" ? "OK" : "Check";
           main.append(tag, document.createTextNode(text));
 
           const fix = document.createElement("button");
