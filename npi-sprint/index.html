@@ -576,6 +576,40 @@
       gap: 12px;
     }
 
+    .form-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+
+    .form-meta span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      border: 1px solid rgba(154, 184, 220, 0.24);
+      border-radius: 999px;
+      padding: 0 10px;
+      color: #aebbd0;
+      background: rgba(255, 255, 255, 0.035);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .form-meta .required {
+      border-color: rgba(53, 227, 179, 0.36);
+      color: var(--green);
+      background: rgba(53, 227, 179, 0.08);
+    }
+
+    .form-meta .optional {
+      border-color: rgba(154, 184, 220, 0.2);
+      color: var(--muted);
+    }
+
     .choice, .chip {
       min-height: 54px;
       border: 1px solid rgba(154, 184, 220, 0.28);
@@ -1044,6 +1078,7 @@
               <p class="card-copy">Only the details needed to turn this into a BLNKK work package.</p>
             </div>
             <div class="card-body">
+              <div class="form-meta"><span class="required">Required</span><span>Company, contact, work email</span><span class="optional">Website optional</span></div>
               <div class="field-grid">
                 <div class="field">
                   <label for="companyName">Company</label>
@@ -1072,189 +1107,139 @@
           <article class="card" data-card="1">
             <div class="card-head">
               <div class="step-row">
-                <span class="step-pill">Stage</span>
+                <span class="step-pill">Build</span>
                 <div class="dots" data-dots></div>
               </div>
-              <h2>Where is the product between EVT and PVT?</h2>
-              <p class="card-copy">This tells BLNKK whether the request is readiness, supplier pod, or PVT transition work.</p>
+              <h2>What are you building or trying to fix?</h2>
+              <p class="card-copy">Use plain language. A short description is enough for BLNKK to start reviewing the request.</p>
             </div>
             <div class="card-body">
+              <div class="form-meta"><span class="optional">Optional</span><span>Select one</span><span>Current stage</span></div>
               <div class="choice-grid" data-single="stage">
-                <button class="choice" type="button" data-value="EVT / first working units">EVT / first working units</button>
-                <button class="choice" type="button" data-value="DVT / design validation">DVT / design validation</button>
-                <button class="choice" type="button" data-value="PVT readiness / pilot build">PVT readiness / pilot build</button>
-                <button class="choice" type="button" data-value="MP / 500+ unit path">MP / 500+ unit path</button>
-                <button class="choice" type="button" data-value="Prototype exists but files are messy">Prototype exists but files are messy</button>
-                <button class="choice" type="button" data-value="Concept exists but no build package">Concept exists but no build package</button>
+                <button class="choice" type="button" data-value="Concept or design stage">Concept or design stage</button>
+                <button class="choice" type="button" data-value="Prototype exists">Prototype exists</button>
+                <button class="choice" type="button" data-value="Need sample / pilot build">Need sample / pilot build</button>
+                <button class="choice" type="button" data-value="Preparing for 100+ units">Preparing for 100+ units</button>
               </div>
-              <input type="hidden" id="stage" name="stage" required>
+              <input type="hidden" id="stage" name="stage">
+              <div class="form-meta"><span class="required">Required</span><span>Product/module + current status</span></div>
               <div class="field">
-                <label for="building">Current build reality</label>
-                <textarea id="building" name="building" required placeholder="Example: Working prototype exists, but BOM cleanup, enclosure fit, and EVT assembly are blocking the next customer demo."></textarea>
+                <label for="system">Product or module <span aria-hidden="true">*</span></label>
+                <input id="system" name="system" required placeholder="Drone payload, camera module, robot joint, sensor device, PCBA, enclosure, etc.">
               </div>
               <div class="field">
-                <label for="system">Product or system</label>
-                <input id="system" name="system" placeholder="Drone, robot joint, sensor device, satellite subsystem, medical wearable, etc.">
+                <label for="building">What is happening now? <span aria-hidden="true">*</span></label>
+                <textarea id="building" name="building" required placeholder="Example: We have a working prototype, but BOM cleanup and enclosure fit are blocking the next demo."></textarea>
               </div>
             </div>
             <div class="card-foot">
               <button class="button ghost" type="button" data-prev>Back</button>
-              <button class="button primary" type="button" data-next>Next card</button>
+              <button class="button primary" type="button" data-next>Next</button>
             </div>
           </article>
 
           <article class="card" data-card="2">
             <div class="card-head">
               <div class="step-row">
-                <span class="step-pill">Bottleneck</span>
+                <span class="step-pill">Help</span>
                 <div class="dots" data-dots></div>
               </div>
-              <h2>What is blocking supplier review?</h2>
-              <p class="card-copy">BLNKK should know what must be rescued before Taiwan shops receive the package.</p>
+              <h2>What do you want BLNKK to help with first?</h2>
+              <p class="card-copy">Pick one main area, then select any blockers that apply. If you are unsure, choose the closest option.</p>
             </div>
             <div class="card-body">
+              <div class="form-meta"><span class="required">Required</span><span>Select one closest match</span></div>
+              <div class="choice-grid" data-single="category">
+                <button class="choice" type="button" data-value="PCBA / electronics module">PCBA / electronics module</button>
+                <button class="choice" type="button" data-value="Camera / vision / sensor module">Camera / vision / sensor module</button>
+                <button class="choice" type="button" data-value="RF / communication module">RF / communication module</button>
+                <button class="choice" type="button" data-value="Battery / power / motion module">Battery / power / motion module</button>
+                <button class="choice" type="button" data-value="Enclosure / mechanical / test fixture">Enclosure / mechanical / test fixture</button>
+                <button class="choice" type="button" data-value="Not sure yet">Not sure yet</button>
+              </div>
+              <input type="hidden" id="category" name="category" required>
+              <div class="form-meta"><span class="optional">Optional</span><span>Select all blockers that apply</span></div>
               <div class="chip-row" data-multi="bottlenecks">
-                <button class="chip" type="button" data-value="BOM incomplete or messy">BOM incomplete or messy</button>
+                <button class="chip" type="button" data-value="BOM incomplete or messy">BOM incomplete</button>
                 <button class="chip" type="button" data-value="CAD / Gerber mismatch">CAD / Gerber mismatch</button>
-                <button class="chip" type="button" data-value="EOL or shortage risk">EOL or shortage risk</button>
-                <button class="chip" type="button" data-value="No test plan / acceptance criteria">No test plan / acceptance criteria</button>
-                <button class="chip" type="button" data-value="Supplier not responding">Supplier not responding</button>
-                <button class="chip" type="button" data-value="Need small-batch pilot build">Need small-batch pilot build</button>
-                <button class="chip" type="button" data-value="Need DFM / DFA feedback">Need DFM / DFA feedback</button>
-                <button class="chip" type="button" data-value="Need Taiwan supplier pod">Need Taiwan supplier pod</button>
+                <button class="chip" type="button" data-value="EOL or shortage risk">Parts shortage / EOL</button>
+                <button class="chip" type="button" data-value="No test plan / acceptance criteria">No test plan</button>
+                <button class="chip" type="button" data-value="Need small-batch pilot build">Need small pilot build</button>
+                <button class="chip" type="button" data-value="Need DFM / DFA feedback">Need DFM feedback</button>
               </div>
               <div class="field">
-                <label for="bottleneckNote">Most painful blocker</label>
-                <textarea id="bottleneckNote" name="bottleneckNote" placeholder="Example: U.S. vendors can quote PCBA but cannot coordinate enclosure, test fixture, and sensor integration quickly."></textarea>
+                  <label for="need">What outcome would be useful? <span aria-hidden="true">*</span></label>
+                  <textarea id="need" name="need" required placeholder="Example: Tell us whether Taiwan can quote and build 20 units in 3 weeks, and what files are missing."></textarea>
               </div>
+              <div class="field">
+                <label for="bottleneckNote">Extra blocker notes</label>
+                <textarea id="bottleneckNote" name="bottleneckNote" placeholder="Optional: supplier issues, target customer demo, known technical constraints, or parts you are worried about."></textarea>
+              </div>
+              <div class="chip-row internal-only" data-multi="workstreams"></div>
             </div>
             <div class="card-foot">
               <button class="button ghost" type="button" data-prev>Back</button>
-              <button class="button primary" type="button" data-next>Next card</button>
+              <button class="button primary" type="button" data-next>Next</button>
             </div>
           </article>
 
           <article class="card" data-card="3">
             <div class="card-head">
               <div class="step-row">
-                <span class="step-pill">Package</span>
+                <span class="step-pill">Files</span>
                 <div class="dots" data-dots></div>
               </div>
-              <h2>What files can BLNKK sanitize?</h2>
-              <p class="card-copy">The goal is a Factory-Ready Package a supplier can quote, review, or build from.</p>
+              <h2>What files can you share?</h2>
+              <p class="card-copy">Files are optional, but they help BLNKK understand whether suppliers can quote or review the build.</p>
             </div>
             <div class="card-body">
+              <div class="form-meta"><span class="optional">Optional</span><span>Select all files you have</span></div>
               <div class="chip-row" data-multi="files">
                 <button class="chip" type="button" data-value="BOM">BOM</button>
                 <button class="chip" type="button" data-value="CAD / STEP">CAD / STEP</button>
                 <button class="chip" type="button" data-value="Gerber / PCB files">Gerber / PCB files</button>
                 <button class="chip" type="button" data-value="Schematic">Schematic</button>
-                <button class="chip" type="button" data-value="Firmware / flashing notes">Firmware / flashing notes</button>
+                <button class="chip" type="button" data-value="Firmware / flashing notes">Firmware notes</button>
                 <button class="chip" type="button" data-value="Test notes">Test notes</button>
                 <button class="chip" type="button" data-value="Acceptance criteria">Acceptance criteria</button>
-                <button class="chip" type="button" data-value="Prototype photos / video">Prototype photos / video</button>
+                <button class="chip" type="button" data-value="Prototype photos / video">Photos / video</button>
                 <button class="chip" type="button" data-value="No files ready yet">No files ready yet</button>
               </div>
+              <div class="upload-zone">
+                <div class="field">
+                  <label for="packageFiles">Upload build files</label>
+                  <input id="packageFiles" name="packageFiles" type="file" multiple accept=".bom,.csv,.doc,.docx,.dwg,.dxf,.gerber,.heic,.jpeg,.jpg,.json,.md,.mov,.mp4,.pdf,.png,.ppt,.pptx,.sch,.step,.stl,.stp,.txt,.xls,.xlsm,.xlsx,.zip">
+                </div>
+                <p class="upload-hint">Optional. Private preview limit: 8 files, 25MB each. BLNKK reviews files before any supplier disclosure.</p>
+                <div class="upload-list" id="uploadList" aria-live="polite"></div>
+                <div class="status" id="uploadStatus"></div>
+              </div>
               <div class="field">
-                <label for="missingInfo">Known missing information</label>
-                <input id="missingInfo" name="missingInfo" placeholder="Example: final enclosure CAD, test limits, connector spec, supplier NDA package.">
+                <label for="missingInfo">What do you know is missing?</label>
+                <input id="missingInfo" name="missingInfo" placeholder="Optional: final CAD, test limits, connector spec, NDA package, etc.">
               </div>
             </div>
             <div class="card-foot">
               <button class="button ghost" type="button" data-prev>Back</button>
-              <button class="button primary" type="button" data-next>Next card</button>
+              <button class="button primary" type="button" data-next>Next</button>
             </div>
           </article>
 
           <article class="card" data-card="4">
             <div class="card-head">
               <div class="step-row">
-                <span class="step-pill">Upload</span>
+                <span class="step-pill">Timing</span>
                 <div class="dots" data-dots></div>
               </div>
-              <h2>Upload the messy build package.</h2>
-              <p class="card-copy">Optional for preview, but this is the real NPI handoff: BOM, Gerber ZIP, CAD/STEP, drawings, test notes, and prototype evidence.</p>
+              <h2>Timeline, quantity, and disclosure rules.</h2>
+              <p class="card-copy">These fields are optional, but they help BLNKK decide the right first response.</p>
             </div>
             <div class="card-body">
-              <div class="upload-zone">
-                <div class="field">
-                  <label for="packageFiles">Build files</label>
-                  <input id="packageFiles" name="packageFiles" type="file" multiple accept=".bom,.csv,.doc,.docx,.dwg,.dxf,.gerber,.heic,.jpeg,.jpg,.json,.md,.mov,.mp4,.pdf,.png,.ppt,.pptx,.sch,.step,.stl,.stp,.txt,.xls,.xlsm,.xlsx,.zip">
-                </div>
-                <p class="upload-hint">Private preview limit: 8 files, 25MB each. Files are uploaded to a private Supabase Storage bucket through short-lived signed URLs; BLNKK will disclose files only after NDA / review.</p>
-                <div class="upload-list" id="uploadList" aria-live="polite"></div>
-                <div class="status" id="uploadStatus"></div>
-              </div>
-            </div>
-            <div class="card-foot">
-              <button class="button ghost" type="button" data-prev>Back</button>
-              <button class="button primary" type="button" data-next>Next card</button>
-            </div>
-          </article>
-
-          <article class="card" data-card="5">
-            <div class="card-head">
-              <div class="step-row">
-                <span class="step-pill">Build pod</span>
-                <div class="dots" data-dots></div>
-              </div>
-              <h2>What workstreams must Taiwan cover?</h2>
-              <p class="card-copy">This creates the first Supplier Pod shape instead of a flat supplier list.</p>
-            </div>
-            <div class="card-body">
-              <div class="choice-grid" data-single="category">
-                <button class="choice" type="button" data-value="PCBA / electronics module">PCBA / electronics module</button>
-                <button class="choice" type="button" data-value="Camera / vision module">Camera / vision module</button>
-                <button class="choice" type="button" data-value="Sensor payload">Sensor payload</button>
-                <button class="choice" type="button" data-value="RF / communication module">RF / communication module</button>
-                <button class="choice" type="button" data-value="Robot joint / motion module">Robot joint / motion module</button>
-                <button class="choice" type="button" data-value="Battery / power module">Battery / power module</button>
-                <button class="choice" type="button" data-value="Enclosure, assembly, or test fixture">Enclosure, assembly, or test fixture</button>
-              </div>
-              <input type="hidden" id="category" name="category" required>
-              <div class="chip-row" data-multi="workstreams">
-                <button class="chip" type="button" data-value="PCBA / SMT">PCBA / SMT</button>
-                <button class="chip" type="button" data-value="Box-build assembly">Box-build assembly</button>
-                <button class="chip" type="button" data-value="Cable / harness">Cable / harness</button>
-                <button class="chip" type="button" data-value="Fixture / functional test">Fixture / functional test</button>
-                <button class="chip" type="button" data-value="Enclosure / CNC / tooling">Enclosure / CNC / tooling</button>
-                <button class="chip" type="button" data-value="RF / camera / sensor integration">RF / camera / sensor integration</button>
-                <button class="chip" type="button" data-value="US logistics handoff">US logistics handoff</button>
-              </div>
-              <div class="field">
-                <label for="need">NPI request</label>
-                <textarea id="need" name="need" required placeholder="Example: Need Taiwan NPI pod to sanitize files, quote, and prepare 20 EVT RF data-link modules with test fixture plan."></textarea>
-              </div>
-            </div>
-            <div class="card-foot">
-              <button class="button ghost" type="button" data-prev>Back</button>
-              <button class="button primary" type="button" data-next>Next card</button>
-            </div>
-          </article>
-
-          <article class="card" data-card="6">
-            <div class="card-head">
-              <div class="step-row">
-                <span class="step-pill">Constraints</span>
-                <div class="dots" data-dots></div>
-              </div>
-              <h2>What must BLNKK protect?</h2>
-              <p class="card-copy">Compliance is the trust layer. NPI speed is still the main job.</p>
-            </div>
-            <div class="card-body">
-              <div class="chip-row" data-multi="must">
-                <button class="chip" type="button" data-value="Taiwan-based shop preferred">Taiwan-based shop preferred</button>
-                <button class="chip" type="button" data-value="Non-PRC ownership path">Non-PRC ownership path</button>
-                <button class="chip" type="button" data-value="NDA before disclosure">NDA before disclosure</button>
-                <button class="chip" type="button" data-value="Sensitive hardware / defense-aware">Sensitive hardware / defense-aware</button>
-                <button class="chip" type="button" data-value="Export / compliance concern">Export / compliance concern</button>
-                <button class="chip" type="button" data-value="Customer demo deadline">Customer demo deadline</button>
-              </div>
               <div class="field-grid">
                 <div class="field">
                   <label for="timeline">Timeline</label>
                   <select id="timeline" name="timeline">
-                    <option value="">Select timeline</option>
+                    <option value="">Optional: select timeline</option>
                     <option>ASAP / this week</option>
                     <option>2-4 weeks</option>
                     <option>1-3 months</option>
@@ -1264,41 +1249,27 @@
                 <div class="field">
                   <label for="quantity">Build quantity</label>
                   <select id="quantity" name="quantity">
-                    <option value="">Select quantity</option>
+                    <option value="">Optional: select quantity</option>
                     <option>1-10 EVT units</option>
                     <option>20-100 DVT units</option>
                     <option>100-500 PVT units</option>
-                    <option>500+ MP units</option>
+                    <option>500+ units</option>
                   </select>
                 </div>
               </div>
-            </div>
-            <div class="card-foot">
-              <button class="button ghost" type="button" data-prev>Back</button>
-              <button class="button primary" type="button" data-next>Next card</button>
-            </div>
-          </article>
-
-          <article class="card" data-card="7">
-            <div class="card-head">
-              <div class="step-row">
-                <span class="step-pill">Track</span>
-                <div class="dots" data-dots></div>
-              </div>
-              <h2>What should BLNKK deliver first?</h2>
-              <p class="card-copy">Pick the output that matches the next decision, not the entire manufacturing lifecycle.</p>
-            </div>
-            <div class="card-body">
-              <div class="choice-grid" data-single="serviceTrack">
-                <button class="choice" type="button" data-value="Check whether Taiwan can quote this build">Check whether Taiwan can quote this build</button>
-                <button class="choice" type="button" data-value="Find a prototype or pilot-build path">Find a prototype or pilot-build path</button>
-                <button class="choice" type="button" data-value="Fix the package before supplier disclosure">Fix the package before supplier disclosure</button>
-                <button class="choice" type="button" data-value="Plan a path toward 100-500 units">Plan a path toward 100-500 units</button>
+              <div class="form-meta"><span class="optional">Optional</span><span>Select all constraints that apply</span></div>
+              <div class="chip-row" data-multi="must">
+                <button class="chip" type="button" data-value="Taiwan-based shop preferred">Taiwan preferred</button>
+                <button class="chip" type="button" data-value="Non-PRC ownership path">Non-PRC path</button>
+                <button class="chip" type="button" data-value="NDA before disclosure">NDA before disclosure</button>
+                <button class="chip" type="button" data-value="Sensitive hardware / defense-aware">Sensitive hardware</button>
+                <button class="chip" type="button" data-value="Export / compliance concern">Export / compliance concern</button>
+                <button class="chip" type="button" data-value="Customer demo deadline">Customer demo deadline</button>
               </div>
               <input type="hidden" id="serviceTrack" name="serviceTrack">
               <div class="field">
-                <label for="sprintGoalNote">Success definition</label>
-                <input id="sprintGoalNote" name="sprintGoalNote" placeholder="Example: know whether Taiwan can quote and build 20 EVT units within 3 weeks.">
+                <label for="sprintGoalNote">Anything else BLNKK should know?</label>
+                <input id="sprintGoalNote" name="sprintGoalNote" placeholder="Optional: deadline, NDA concern, target customer, preferred next step.">
               </div>
             </div>
             <div class="card-foot">
@@ -1307,7 +1278,7 @@
             </div>
           </article>
 
-          <article class="card" data-card="8">
+          <article class="card" data-card="5">
             <div class="card-head">
               <div class="step-row">
                 <span class="step-pill">Readiness</span>
@@ -1351,30 +1322,30 @@
             </div>
             <div class="card-foot">
               <button class="button ghost" type="button" data-prev>Back</button>
-              <button class="button primary" type="submit" id="submitButton">Submit NPI package</button>
+              <button class="button primary" type="submit" id="submitButton">Submit request</button>
             </div>
           </article>
 
-          <article class="card" data-card="9">
+          <article class="card" data-card="6">
             <div class="card-head">
               <div class="step-row">
                 <span class="step-pill">Sent</span>
                 <div class="dots" data-dots></div>
               </div>
-              <h2>NPI package received.</h2>
-              <p class="card-copy">BLNKK can now prepare the first Taiwan-ready action set.</p>
+              <h2>Request received.</h2>
+              <p class="card-copy">BLNKK will review your build package privately and follow up with the clearest next step.</p>
             </div>
             <div class="card-body">
               <div class="result-box">
                 <span>Next 24 hours</span>
                 <ul class="pod-list">
-                  <li>Sanitize buyer files into a Factory-Ready Package.</li>
-                  <li>Lock S0/S1 blockers before supplier disclosure.</li>
-                  <li>Route to the first Taiwan Supplier Pod only after package review.</li>
-                  <li>Prepare a Sync-8 breakfast report with open questions and next decisions.</li>
+                  <li>Review your files and notes before any supplier disclosure.</li>
+                  <li>Identify missing BOM, CAD, test, quantity, or NDA details.</li>
+                  <li>Decide whether the next step is package cleanup, supplier questions, or Taiwan-fit review.</li>
+                  <li>Follow up with clear questions or recommended next actions.</li>
                 </ul>
               </div>
-              <div class="review" id="successText"></div>
+              <div class="review" id="successText">BLNKK received your request. We will review the package privately and follow up with questions or recommended next steps.</div>
             </div>
             <div class="card-foot">
               <a class="button ghost" href="/supply-search">Back to landing</a>
@@ -1386,8 +1357,8 @@
 
       <aside class="summary" aria-label="Live NPI package">
         <div class="summary-head">
-          <h2>Live Factory-Ready Package</h2>
-          <p>Updates as each card is completed.</p>
+          <h2>Your request</h2>
+          <p>Updates as you complete the intake.</p>
         </div>
         <div class="summary-body">
           <div class="summary-line">
@@ -1395,24 +1366,24 @@
             <strong id="summaryBuyer">Company and contact</strong>
           </div>
           <div class="summary-line">
-            <span>Stage</span>
-            <p id="summaryBuilding">EVT / DVT / PVT context</p>
+            <span>Build</span>
+            <p id="summaryBuilding">Product and build context</p>
           </div>
           <div class="summary-line">
-            <span>Bottleneck</span>
-            <p id="summaryBottleneck">Current blockers</p>
+            <span>Help needed</span>
+            <p id="summaryBottleneck">Main need and blockers</p>
           </div>
           <div class="summary-line">
             <span>Package</span>
             <p id="summaryFiles">Available files</p>
           </div>
           <div class="summary-line">
-            <span>Pod</span>
-            <p id="summarySourcing">Workstreams and module</p>
+            <span>Focus</span>
+            <p id="summarySourcing">Main review area</p>
           </div>
           <div class="summary-line">
-            <span>Track</span>
-            <p id="summaryTrack">Recommended output</p>
+            <span>Timing</span>
+            <p id="summaryTrack">Timeline and quantity</p>
           </div>
         </div>
       </aside>
@@ -1441,8 +1412,8 @@
       const allowedUploadExtensions = new Set(["bom", "csv", "doc", "docx", "dwg", "dxf", "gerber", "heic", "jpeg", "jpg", "json", "md", "mov", "mp4", "pdf", "png", "ppt", "pptx", "sch", "step", "stl", "stp", "txt", "xls", "xlsm", "xlsx", "zip"]);
       const requiredByCard = new Map([
         [0, ["companyName", "contactName", "email"]],
-        [1, ["stage", "building"]],
-        [5, ["category", "need"]],
+        [1, ["system", "building"]],
+        [2, ["category", "need"]],
       ]);
       let current = 0;
       let submitting = false;
@@ -1671,7 +1642,7 @@
           line("Email", profile.buyer.email),
           line("Website", profile.buyer.website),
           "",
-          line("Build stage", profile.stage),
+          line("Current stage", profile.stage),
           line("Current build reality", profile.building.context),
           line("Product / system", profile.building.system),
           "",
@@ -1683,15 +1654,13 @@
           line("Missing information", profile.files.missingInfo),
           "",
           line("Primary module", profile.sourcing.category),
-          line("Workstreams", profile.sourcing.workstreams.join(", ")),
           line("NPI request", profile.sourcing.need),
           "",
           line("Constraints", profile.must.requirements.join(", ")),
           line("Timeline", profile.must.timeline),
           line("Build quantity", profile.must.quantity),
           "",
-          line("Requested service track", profile.goal.serviceTrack),
-          line("Success definition", profile.goal.note),
+          line("Additional notes", profile.goal.note),
         ].join("\n");
       }
 
@@ -1718,10 +1687,9 @@
         });
         if (profile.files.uploaded.length) score += Math.min(12, profile.files.uploaded.length * 3);
 
-        if (stage.includes("EVT")) score += 6;
-        if (stage.includes("DVT")) score += 10;
-        if (stage.includes("PVT")) score += 12;
-        if (stage.includes("MP")) score += 8;
+        if (stage.includes("Prototype")) score += 5;
+        if (stage.includes("sample") || stage.includes("pilot")) score += 8;
+        if (stage.includes("100+")) score += 10;
         if (profile.must.timeline.includes("ASAP")) score -= 4;
         if (files.includes("No files ready yet")) score -= 24;
         if (bottlenecks.includes("No test plan / acceptance criteria")) score -= 8;
@@ -1734,39 +1702,40 @@
 
         let track = profile.goal.serviceTrack;
         if (!track) {
-          if (quantity.includes("500+") || stage.includes("MP")) track = "Plan a path toward 100-500 units";
-          else if (quantity.includes("100-500") || stage.includes("PVT")) track = "Check pilot-build readiness";
+          if (quantity.includes("500+")) track = "Plan a path toward higher-volume build";
+          else if (quantity.includes("100-500") || stage.includes("100+")) track = "Check pilot-build readiness";
+          else if (stage.includes("sample") || stage.includes("pilot")) track = "Prepare sample-build questions";
           else if (score >= 68) track = "Review Taiwan supplier options";
           else track = "Clarify missing build-package details";
         }
 
         const risks = [];
         if (files.includes("No files ready yet")) {
-          risks.push(["S0", "No files are ready yet. BLNKK can still review the request, but will need a file plan before supplier outreach.", 3]);
+          risks.push(["Missing files", "No files are ready yet. BLNKK can still review the request, but will need a file plan before supplier outreach.", 3]);
         }
         if (!files.includes("BOM")) {
-          risks.push(["S0", "BOM is missing or not selected. Taiwan shops usually need a BOM before reliable quoting.", 3]);
+          risks.push(["Missing BOM", "BOM is missing or not selected. Taiwan shops usually need a BOM before reliable quoting.", 3]);
         }
         if (profile.sourcing.category.includes("PCBA") && !files.includes("Gerber / PCB files")) {
-          risks.push(["S0", "Gerber / PCB files are missing for a PCBA request. BLNKK may ask for these before outreach.", 3]);
+          risks.push(["Missing PCB file", "Gerber / PCB files are missing for a PCBA request. BLNKK may ask for these before outreach.", 3]);
         }
         if (bottlenecks.includes("EOL or shortage risk")) {
-          risks.push(["S1", "Component lifecycle or shortage risk may require alternate parts before quoting.", 2]);
+          risks.push(["Parts risk", "Component lifecycle or shortage risk may require alternate parts before quoting.", 2]);
         }
         if (bottlenecks.includes("CAD / Gerber mismatch")) {
-          risks.push(["S1", "CAD/Gerber mismatch can create rework. BLNKK may ask you to confirm the correct revision.", 3]);
+          risks.push(["Revision check", "CAD/Gerber mismatch can create rework. BLNKK may ask you to confirm the correct revision.", 3]);
         }
         if (!files.includes("Test notes") && !files.includes("Acceptance criteria")) {
-          risks.push(["S1", "Test notes or acceptance criteria are missing. BLNKK may ask how a successful build should be verified.", 3]);
+          risks.push(["Test criteria", "Test notes or acceptance criteria are missing. BLNKK may ask how a successful build should be verified.", 3]);
         }
         if (profile.must.timeline.includes("ASAP")) {
-          risks.push(["S2", "ASAP timeline needs a clear decision owner and fast answers to supplier questions.", 6]);
+          risks.push(["Fast timeline", "ASAP timeline needs a clear decision owner and fast answers to supplier questions.", 4]);
         }
         if (profile.must.requirements.includes("Sensitive hardware / defense-aware")) {
-          risks.push(["S2", "Sensitive hardware should go through NDA and origin review before supplier disclosure.", 6]);
+          risks.push(["NDA review", "Sensitive hardware should go through NDA and origin review before supplier disclosure.", 4]);
         }
         if (!risks.length) {
-          risks.push(["S3", "This has enough information for BLNKK to start a first-pass review.", 8]);
+          risks.push(["Ready", "This has enough information for BLNKK to start a first-pass review.", 5]);
         }
 
         const pod = [];
@@ -1789,7 +1758,7 @@
       function renderReadiness() {
         const profile = profileFromForm();
         const result = inferReadiness(profile);
-        readinessScore.textContent = result.score >= 68 ? "Ready for BLNKK review" : "Needs BLNKK review";
+        readinessScore.textContent = result.score >= 68 ? "Ready" : "Needs review";
         recommendedTrack.textContent = result.track;
         riskList.innerHTML = "";
         result.risks.forEach(([level, text, targetCard]) => {
@@ -1797,13 +1766,13 @@
           const main = document.createElement("div");
           main.className = "risk-main";
           const tag = document.createElement("b");
-          tag.textContent = level === "S3" ? "OK" : "Check";
+          tag.textContent = level;
           main.append(tag, document.createTextNode(text));
 
           const fix = document.createElement("button");
           fix.className = "fix-button";
           fix.type = "button";
-          fix.textContent = targetCard === 8 ? "Review" : "Fix";
+          fix.textContent = targetCard === 5 ? "Review" : "Add info";
           fix.addEventListener("click", () => setCard(targetCard));
 
           item.append(main, fix);
@@ -1938,13 +1907,13 @@
       function updateSummary() {
         const profile = profileFromForm();
         document.getElementById("summaryBuyer").textContent = [profile.buyer.companyName, profile.buyer.contactName].filter(Boolean).join(" / ") || "Company and contact";
-        document.getElementById("summaryBuilding").textContent = [profile.stage, profile.building.context, profile.building.system].filter(Boolean).join(" / ") || "EVT / DVT / PVT context";
-        document.getElementById("summaryBottleneck").textContent = [profile.bottlenecks.selected.join(", "), profile.bottlenecks.note].filter(Boolean).join(" / ") || "Current blockers";
+        document.getElementById("summaryBuilding").textContent = [profile.building.system, profile.stage, profile.building.context].filter(Boolean).join(" / ") || "Product and build context";
+        document.getElementById("summaryBottleneck").textContent = [profile.sourcing.need, profile.bottlenecks.selected.join(", "), profile.bottlenecks.note].filter(Boolean).join(" / ") || "Main need and blockers";
         document.getElementById("summaryFiles").textContent = [profile.files.ready.join(", "), profile.files.uploaded.length ? `${profile.files.uploaded.length} uploaded file${profile.files.uploaded.length === 1 ? "" : "s"}` : "", profile.files.missingInfo].filter(Boolean).join(" / ") || "Available files";
-        document.getElementById("summarySourcing").textContent = [profile.sourcing.category, profile.sourcing.workstreams.join(", "), profile.sourcing.need].filter(Boolean).join(" / ") || "Workstreams and module";
-        document.getElementById("summaryTrack").textContent = [profile.goal.serviceTrack, profile.goal.note, profile.must.quantity].filter(Boolean).join(" / ") || "Recommended output";
+        document.getElementById("summarySourcing").textContent = [profile.sourcing.category, profile.sourcing.workstreams.join(", ")].filter(Boolean).join(" / ") || "Main review area";
+        document.getElementById("summaryTrack").textContent = [profile.must.timeline, profile.must.quantity, profile.must.requirements.join(", "), profile.goal.note].filter(Boolean).join(" / ") || "Timeline and quantity";
         reviewText.textContent = formatProfile(profile);
-        if (current === 8) renderReadiness();
+        if (current === 5) renderReadiness();
       }
 
       function setCard(index) {
@@ -1952,7 +1921,7 @@
         cards.forEach((card, cardIndex) => card.classList.toggle("active", cardIndex === current));
         updateDots();
         updateSummary();
-        if (current === 8) {
+        if (current === 5) {
           renderReadiness();
           loadCandidates();
         }
@@ -1978,11 +1947,11 @@
       }
 
       async function submitProfile() {
-        if (submitting || !validateCard(8)) return;
+        if (submitting || !validateCard(5)) return;
         submitting = true;
         submitButton.disabled = true;
         statusText.className = "status";
-        statusText.textContent = "Submitting NPI-to-PVT package...";
+        statusText.textContent = "Submitting request...";
 
         try {
           await uploadSelectedFiles();
@@ -1998,8 +1967,8 @@
           }
           statusText.className = "status ok";
           statusText.textContent = "Submitted.";
-          successText.textContent = formatProfile(profile);
-          setCard(9);
+          successText.textContent = "BLNKK received your request. We will review the package privately and follow up with questions or recommended next steps.";
+          setCard(6);
         } catch (error) {
           statusText.className = "status error";
           statusText.textContent = error.message || "Submission failed. Please try again.";
@@ -2035,7 +2004,7 @@
           if (!validateCard(current) || uploadingFiles) return;
           button.disabled = true;
           try {
-            if (current === 4) await uploadSelectedFiles();
+            if (current === 3) await uploadSelectedFiles();
             setCard(current + 1);
           } catch (_) {
             // The upload card already shows the actionable error.
